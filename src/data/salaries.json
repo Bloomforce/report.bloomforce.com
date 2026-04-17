@@ -1,0 +1,174 @@
+{
+  "reportYear": 2025,
+  "roles": [
+    {
+      "roleId": "application-analyst",
+      "roleName": "Application Analyst",
+      "overall": { "low": 58000, "p25": 89000, "median": 104000, "average": 107400, "p75": 122500, "high": 195000 },
+      "breakdowns": [
+        {
+          "categoryName": "By Gender",
+          "categoryKey": "gender",
+          "gated": true,
+          "entries": [
+            { "label": "Female", "distribution": { "low": 65000, "p25": 88000, "median": 100000, "average": 106000, "p75": 119000, "high": 195000 } },
+            { "label": "Male", "distribution": { "low": 58000, "p25": 90000, "median": 110000, "average": 109200, "p75": 128000, "high": 178000 } }
+          ]
+        },
+        {
+          "categoryName": "By Years of Experience",
+          "categoryKey": "experience",
+          "gated": true,
+          "entries": [
+            { "label": "1-3 Years", "distribution": { "low": 58000, "p25": 78000, "median": 89000, "average": 90600, "p75": 100000, "high": 137000 } },
+            { "label": "4-8 Years", "distribution": { "low": 75000, "p25": 90000, "median": 101000, "average": 104600, "p75": 118000, "high": 165400 } },
+            { "label": "9+ Years", "distribution": { "low": 85000, "p25": 100800, "median": 120000, "average": 125000, "p75": 140300, "high": 195000 } }
+          ]
+        },
+        {
+          "categoryName": "By Education",
+          "categoryKey": "education",
+          "gated": true,
+          "entries": [
+            { "label": "High School / GED", "distribution": { "low": 65000, "p25": 87000, "median": 90000, "average": 99300, "p75": 111000, "high": 145600 } },
+            { "label": "Associate's Degree", "distribution": { "low": 60000, "p25": 83800, "median": 99300, "average": 99700, "p75": 112000, "high": 173200 } },
+            { "label": "Bachelor's Degree", "distribution": { "low": 58000, "p25": 92800, "median": 111000, "average": 114200, "p75": 132000, "high": 195000 } },
+            { "label": "Master's Degree", "distribution": { "low": 60000, "p25": 90000, "median": 102000, "average": 102900, "p75": 116000, "high": 155000 } }
+          ]
+        },
+        {
+          "categoryName": "By Work Location",
+          "categoryKey": "location",
+          "gated": true,
+          "entries": [
+            { "label": "Remote", "distribution": { "low": 65000, "p25": 98000, "median": 120000, "average": 121500, "p75": 137000, "high": 195000 } },
+            { "label": "Hybrid / In-Person", "distribution": { "low": 58000, "p25": 89000, "median": 97000, "average": 99400, "p75": 115000, "high": 165400 } }
+          ]
+        },
+        {
+          "categoryName": "By Geographic Region",
+          "categoryKey": "region",
+          "gated": true,
+          "entries": [
+            { "label": "West", "distribution": { "low": 75000, "p25": 97000, "median": 111000, "average": 117700, "p75": 134000, "high": 195000 } },
+            { "label": "Midwest", "distribution": { "low": 58000, "p25": 85500, "median": 97000, "average": 99900, "p75": 117500, "high": 161000 } },
+            { "label": "South", "distribution": { "low": 60000, "p25": 90000, "median": 115000, "average": 109700, "p75": 120000, "high": 150000 } },
+            { "label": "East", "distribution": { "low": 70000, "p25": 90000, "median": 109700, "average": 115000, "p75": 130000, "high": 178000 } }
+          ]
+        },
+        {
+          "categoryName": "By Organization Type",
+          "categoryKey": "orgType",
+          "gated": true,
+          "entries": [
+            { "label": "Academic Medical Center", "distribution": { "low": 58000, "p25": 91000, "median": 100000, "average": 111200, "p75": 132000, "high": 187200 } },
+            { "label": "Children's Hospital", "distribution": { "low": 70000, "p25": 85000, "median": 97800, "average": 103200, "p75": 122000, "high": 161000 } },
+            { "label": "Single-State Health System", "distribution": { "low": 60000, "p25": 89000, "median": 106000, "average": 111400, "p75": 137000, "high": 195000 } },
+            { "label": "Multi-State Health System", "distribution": { "low": 60000, "p25": 89000, "median": 107000, "average": 105200, "p75": 120000, "high": 178000 } },
+            { "label": "Independent Hospital", "distribution": { "low": 65000, "p25": 86500, "median": 96500, "average": 98300, "p75": 101500, "high": 152000 } }
+          ]
+        },
+        {
+          "categoryName": "By Functional Area",
+          "categoryKey": "functionalArea",
+          "gated": true,
+          "entries": [
+            { "label": "Clinical", "distribution": { "low": 58000, "p25": 89000, "median": 99500, "average": 103800, "p75": 117300, "high": 187200 } },
+            { "label": "Pop Health", "distribution": { "low": 70000, "p25": 83000, "median": 95000, "average": 104400, "p75": 130000, "high": 140000 } },
+            { "label": "Revenue Cycle", "distribution": { "low": 58000, "p25": 81300, "median": 87800, "average": 94100, "p75": 101900, "high": 165400 } },
+            { "label": "Beaker / Lab", "distribution": { "low": 85000, "p25": 91500, "median": 97000, "average": 114000, "p75": 119000, "high": 195000 } },
+            { "label": "Patient Access", "distribution": { "low": 60000, "p25": 83300, "median": 91000, "average": 98800, "p75": 107200, "high": 178000 } },
+            { "label": "Security & Deployment", "distribution": { "low": 89000, "p25": 99300, "median": 105500, "average": 109500, "p75": 123500, "high": 131000 } },
+            { "label": "Physician Builder", "distribution": { "low": 165000, "p25": 173800, "median": 195000, "average": 199300, "p75": 202900, "high": 275000 } },
+            { "label": "Willow (Non-Pharmacist)", "distribution": { "low": 85000, "p25": 88300, "median": 95000, "average": 104900, "p75": 124000, "high": 130000 } },
+            { "label": "Willow Pharmacist", "distribution": { "low": 98000, "p25": 130000, "median": 137000, "average": 141000, "p75": 150000, "high": 185000 } }
+          ]
+        }
+      ]
+    },
+    {
+      "roleId": "bi-developer",
+      "roleName": "BI Developer / Report Writer",
+      "overall": { "low": 60000, "p25": 64500, "median": 69000, "average": 73700, "p75": 80500, "high": 155000 },
+      "breakdowns": [
+        {
+          "categoryName": "By Years of Experience",
+          "categoryKey": "experience",
+          "gated": true,
+          "entries": [
+            { "label": "1-3 Years", "distribution": { "low": 60000, "p25": 64500, "median": 69000, "average": 73700, "p75": 80500, "high": 92000 } },
+            { "label": "4-8 Years", "distribution": { "low": 82000, "p25": 99400, "median": 110000, "average": 113000, "p75": 122500, "high": 155000 } },
+            { "label": "9+ Years", "distribution": { "low": 102000, "p25": 121500, "median": 127000, "average": 128000, "p75": 133500, "high": 150000 } }
+          ]
+        }
+      ]
+    },
+    {
+      "roleId": "data-analyst",
+      "roleName": "Data Analyst",
+      "overall": { "low": 74000, "p25": 87900, "median": 100300, "average": 101600, "p75": 114000, "high": 132000 },
+      "breakdowns": []
+    },
+    {
+      "roleId": "data-warehouse-developer",
+      "roleName": "Data Warehouse Developer",
+      "overall": { "low": 120000, "p25": 127100, "median": 142300, "average": 143900, "p75": 156800, "high": 170100 },
+      "breakdowns": []
+    },
+    {
+      "roleId": "principal-trainer",
+      "roleName": "Principal Trainer / Instructional Designer",
+      "overall": { "low": 65000, "p25": 85500, "median": 96600, "average": 98600, "p75": 114500, "high": 135000 },
+      "breakdowns": []
+    },
+    {
+      "roleId": "credentialed-trainer",
+      "roleName": "Credentialed Trainer",
+      "overall": { "low": 60000, "p25": 72000, "median": 78000, "average": 78500, "p75": 90000, "high": 98000 },
+      "breakdowns": []
+    },
+    {
+      "roleId": "project-manager",
+      "roleName": "Project Manager",
+      "overall": { "low": 93000, "p25": 105000, "median": 115500, "average": 117300, "p75": 130000, "high": 168000 },
+      "breakdowns": []
+    },
+    {
+      "roleId": "clinical-informatics",
+      "roleName": "Clinical Informatics Specialist",
+      "overall": { "low": 65000, "p25": 81700, "median": 87000, "average": 93300, "p75": 106500, "high": 199000 },
+      "breakdowns": [
+        {
+          "categoryName": "By Years of Experience (Without Doctorate)",
+          "categoryKey": "experience",
+          "gated": true,
+          "entries": [
+            { "label": "1-3 Years", "distribution": { "low": 65000, "p25": 81700, "median": 87000, "average": 93300, "p75": 106500, "high": 125000 } },
+            { "label": "4-8 Years", "distribution": { "low": 90000, "p25": 98000, "median": 106000, "average": 102000, "p75": 107000, "high": 108000 } },
+            { "label": "9+ Years", "distribution": { "low": 72800, "p25": 97300, "median": 112000, "average": 122200, "p75": 148000, "high": 160000 } }
+          ]
+        },
+        {
+          "categoryName": "With Doctorate",
+          "categoryKey": "doctorate",
+          "gated": true,
+          "entries": [
+            { "label": "With Doctorate", "distribution": { "low": 154000, "p25": 160800, "median": 171500, "average": 174000, "p75": 184800, "high": 199000 } }
+          ]
+        }
+      ]
+    },
+    {
+      "roleId": "ai-engineer",
+      "roleName": "AI Engineer",
+      "overall": { "low": 139500, "p25": 147900, "median": 162400, "average": 169200, "p75": 183600, "high": 212700 },
+      "breakdowns": []
+    },
+    {
+      "roleId": "ml-engineer",
+      "roleName": "ML Engineer (Other Industries)",
+      "overall": { "low": 130000, "p25": 152500, "median": 170100, "average": 171000, "p75": 188700, "high": 210800 },
+      "breakdowns": []
+    }
+  ]
+}

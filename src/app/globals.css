@@ -1,0 +1,56 @@
+@import "tailwindcss";
+
+@theme {
+  /* Teal palette — matches marketing site */
+  --color-primary: #00A896;
+  --color-primary-dark: #008F7F;
+  --color-primary-light: #3BC3B4;
+  --color-primary-50: #EDF9F7;
+  --color-primary-100: #D0F0EB;
+  --color-primary-200: #A1E1D7;
+
+  /* Navy palette */
+  --color-navy: #1A2332;
+  --color-navy-deep: #0F1724;
+  --color-navy-light: #243043;
+
+  /* Text */
+  --color-text: #1C1A14;
+  --color-text-muted: #524E44;
+  --color-text-light: #8B8880;
+
+  /* Backgrounds — cream tones from marketing site */
+  --color-bg: #F7F3ED;
+  --color-bg-subtle: #F2EDE5;
+  --color-bg-card: #FFFFFF;
+
+  /* Ink — for strong headings */
+  --color-ink: #1C1A14;
+  --color-ink-muted: #524E44;
+
+  --font-heading: "DM Serif Display", serif;
+  --font-body: "Inter", sans-serif;
+  --font-mono: "DM Mono", "JetBrains Mono", monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--color-text);
+  background-color: var(--color-bg);
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-heading);
+}
+
+/* Utility class for mono labels (matching marketing site pattern) */
+.font-mono-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+}

@@ -1,0 +1,148 @@
+{
+  "categories": [
+    {
+      "categoryId": "remote-work",
+      "categoryName": "Remote Work",
+      "headline": "Remote work leads the way for healthcare IT FTEs",
+      "headlineStat": 64,
+      "unit": "%",
+      "dataPoints": [
+        { "label": "Fully Remote", "value": 64 },
+        { "label": "Hybrid", "value": 31 },
+        { "label": "In-Office", "value": 5 }
+      ],
+      "gated": false
+    },
+    {
+      "categoryId": "remote-by-org",
+      "categoryName": "Remote by Organization Type",
+      "headline": "Academic Medical Centers lead remote hiring",
+      "headlineStat": 87,
+      "unit": "%",
+      "dataPoints": [
+        { "label": "Multi-State System", "value": 87 },
+        { "label": "Academic Medical Center", "value": 79 },
+        { "label": "Children's Hospital", "value": 75 },
+        { "label": "Single-State System", "value": 68 },
+        { "label": "Independent Hospital", "value": 65 }
+      ],
+      "gated": true
+    },
+    {
+      "categoryId": "manager-productivity",
+      "categoryName": "Manager Perspective on Remote",
+      "headline": "85% of managers say remote workers are equally or more productive",
+      "headlineStat": 85,
+      "unit": "%",
+      "dataPoints": [
+        { "label": "Just as Productive", "value": 48 },
+        { "label": "More Productive", "value": 37 },
+        { "label": "Less Productive", "value": 15 }
+      ],
+      "gated": false
+    },
+    {
+      "categoryId": "rto-response",
+      "categoryName": "Return to Office Response",
+      "headline": "Over 90% would resist a return-to-office mandate",
+      "headlineStat": 92,
+      "unit": "%",
+      "dataPoints": [
+        { "label": "Look for a New Job", "value": 50 },
+        { "label": "Negotiate for Hybrid", "value": 42 },
+        { "label": "Comply", "value": 8 }
+      ],
+      "gated": false
+    },
+    {
+      "categoryId": "work-life-balance",
+      "categoryName": "Work-Life Balance",
+      "headline": "84% satisfied with work-life balance, up from 72% in 2023",
+      "headlineStat": 84,
+      "unit": "%",
+      "dataPoints": [
+        { "label": "2024", "value": 84 },
+        { "label": "2023", "value": 72 }
+      ],
+      "gated": false
+    },
+    {
+      "categoryId": "wlb-by-role",
+      "categoryName": "Work-Life Balance by Role",
+      "headline": "Satisfaction varies significantly across roles",
+      "headlineStat": 88,
+      "unit": "%",
+      "dataPoints": [
+        { "label": "Application Analysts", "value": 88 },
+        { "label": "Clinical Informatics", "value": 84 },
+        { "label": "Project Managers", "value": 55 }
+      ],
+      "gated": true
+    },
+    {
+      "categoryId": "recognition",
+      "categoryName": "Recognition",
+      "headline": "Not feeling recognized is the #1 reason employees actively job search",
+      "headlineStat": 74,
+      "unit": "%",
+      "dataPoints": [
+        { "label": "Feel Recognized", "value": 74 },
+        { "label": "Don't Feel Recognized", "value": 26 }
+      ],
+      "gated": false
+    },
+    {
+      "categoryId": "recognition-impact",
+      "categoryName": "Recognition & Job Search",
+      "headline": "Unrecognized employees are 2.2x more likely to job search",
+      "headlineStat": 28.6,
+      "unit": "%",
+      "dataPoints": [
+        { "label": "Not Feeling Recognized", "value": 28.6 },
+        { "label": "Work-Life Balance", "value": 12.9 },
+        { "label": "Compensation", "value": 10 }
+      ],
+      "gated": true
+    },
+    {
+      "categoryId": "career-progression",
+      "categoryName": "Career Progression",
+      "headline": "Over 70% say path to promotion is unclear or requires management",
+      "headlineStat": 70,
+      "unit": "%",
+      "dataPoints": [
+        { "label": "Performance", "value": 43 },
+        { "label": "Networking & Relationships", "value": 25 },
+        { "label": "Tenure", "value": 20 },
+        { "label": "Technical Skills", "value": 12 }
+      ],
+      "gated": true
+    },
+    {
+      "categoryId": "compensation-sentiment",
+      "categoryName": "Compensation Sentiment",
+      "headline": "Only 49% of non-managers feel fairly compensated",
+      "headlineStat": 49,
+      "unit": "%",
+      "dataPoints": [
+        { "label": "Feel Fairly Compensated", "value": 49 },
+        { "label": "With $1K+ Bonus", "value": 64 }
+      ],
+      "gated": true
+    },
+    {
+      "categoryId": "job-search-factors",
+      "categoryName": "What Matters When Job Searching",
+      "headline": "Work-life balance edges out compensation as top priority",
+      "headlineStat": 39,
+      "unit": "%",
+      "dataPoints": [
+        { "label": "Work-Life Balance", "value": 39 },
+        { "label": "Compensation", "value": 38 },
+        { "label": "Culture", "value": 14 },
+        { "label": "Career Growth", "value": 9 }
+      ],
+      "gated": true
+    }
+  ]
+}

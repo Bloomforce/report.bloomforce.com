@@ -1,0 +1,18 @@
+{
+  "heroStats": [
+    { "id": "avg-salary", "value": 107400, "suffix": "", "prefix": "$", "label": "Avg Application Analyst Salary" },
+    { "id": "wlb-satisfied", "value": 84, "suffix": "%", "label": "Satisfied with Work-Life Balance" },
+    { "id": "remote", "value": 64, "suffix": "%", "label": "Working Fully Remote" },
+    { "id": "respondents", "value": 300, "suffix": "+", "label": "Survey Respondents" }
+  ],
+  "keyFindings": [
+    { "id": "wlb", "value": 84, "suffix": "%", "label": "satisfied with work-life balance — up from 72% in 2023", "icon": "heart" },
+    { "id": "remote", "value": 64, "suffix": "%", "label": "of healthcare IT professionals work fully remote", "icon": "laptop" },
+    { "id": "manager-remote", "value": 85, "suffix": "%", "label": "of managers say remote workers are equally or more productive", "icon": "thumbsUp" },
+    { "id": "rto", "value": 92, "suffix": "%", "label": "would negotiate or leave over an RTO mandate", "icon": "alertTriangle" },
+    { "id": "ai-positive", "value": 88, "suffix": "%", "label": "believe AI will not negatively impact their role", "icon": "cpu" },
+    { "id": "recognized", "value": 74, "suffix": "%", "label": "feel their skills are recognized by their manager", "icon": "award" },
+    { "id": "avg-salary-kf", "value": 107400, "suffix": "", "prefix": "$", "label": "average Application Analyst salary — up 4% YoY", "icon": "dollarSign" },
+    { "id": "promotion-unclear", "value": 70, "suffix": "%", "label": "say path to promotion is unclear without management", "icon": "trendingUp" }
+  ]
+}

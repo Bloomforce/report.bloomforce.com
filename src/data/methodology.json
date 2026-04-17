@@ -1,0 +1,19 @@
+{
+  "totalResponses": 300,
+  "epicPercentage": 92,
+  "healthSystemPercentage": 94,
+  "genderSplit": { "male": 41, "female": 59 },
+  "experienceDistribution": [
+    { "label": "1-3 Years", "value": 26 },
+    { "label": "4-8 Years", "value": 35 },
+    { "label": "9+ Years", "value": 39 }
+  ],
+  "educationDistribution": [
+    { "label": "Doctorate", "value": 5 },
+    { "label": "Master's Degree", "value": 31 },
+    { "label": "Bachelor's Degree", "value": 47 },
+    { "label": "Associate's Degree", "value": 9 },
+    { "label": "High School / GED", "value": 8 }
+  ],
+  "surveyPeriod": "November 2024 – January 2025"
+}

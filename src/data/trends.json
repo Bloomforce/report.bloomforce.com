@@ -1,0 +1,52 @@
+{
+  "trends": [
+    {
+      "trendId": "ai-adoption",
+      "title": "AI & Emerging Technology",
+      "headline": "88% believe AI won't negatively impact their role",
+      "headlineStat": 88,
+      "unit": "%",
+      "description": "Healthcare IT professionals are cautiously optimistic about AI integration.",
+      "details": [
+        "74% of leaders have or plan to have AI-focused team members",
+        "90% of leaders report deploying or planning ambient technology",
+        "53% of organizations have an AI governance committee",
+        "AI Engineer average salary: $135K–$185K",
+        "45% say AI will enhance their efficiency",
+        "43% say AI won't impact their job at all"
+      ]
+    },
+    {
+      "trendId": "mergers-acquisitions",
+      "title": "Mergers & Acquisitions",
+      "headline": "Over 1 in 3 experienced M&A in the last 3 years",
+      "headlineStat": 33,
+      "unit": "%",
+      "description": "M&A remains constant in healthcare, with the workforce feeling the greatest impact.",
+      "details": [
+        "43% feel in a stronger professional position after M&A",
+        "35% cite org structure changes as the biggest challenge",
+        "26% report job insecurity concerns",
+        "23% experienced increased workload",
+        "1/3 of M&A organizations conducted a RIF in 2024",
+        "Communication was the #1 factor in successful M&A transitions"
+      ]
+    },
+    {
+      "trendId": "org-structure",
+      "title": "IT Org Structure",
+      "headline": "55% use a hybrid project/product management model",
+      "headlineStat": 55,
+      "unit": "%",
+      "description": "Organizations are rethinking team structures to integrate AI and emerging technologies.",
+      "details": [
+        "41% use a project-based model, only 4% product-based",
+        "48% use hybrid AI talent structures",
+        "20% embed AI talent in departments",
+        "16% have a centralized AI Center of Excellence",
+        "15% outsource EHR management to a 3rd party",
+        "Average pay for a Head of AI role: $240K"
+      ]
+    }
+  ]
+}
