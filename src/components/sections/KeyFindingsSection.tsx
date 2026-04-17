@@ -51,7 +51,7 @@ export function KeyFindingsSection() {
           <p className="text-text-muted mb-4">
             Want detailed breakdowns by role, experience, and location?
           </p>
-          <Button onClick={showModal}>Unlock Detailed Data</Button>
+          <Button onClick={showModal}>Request Full Report</Button>
         </div>
       )}
     </SectionWrapper>

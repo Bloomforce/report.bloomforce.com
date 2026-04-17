@@ -51,10 +51,10 @@ export function LeadCaptureModal() {
             </button>
 
             <h3 className="text-2xl font-[family-name:var(--font-heading)] text-navy mb-2">
-              Unlock the Full Report
+              Get the Full Report
             </h3>
             <p className="text-text-muted text-sm mb-6">
-              Get detailed salary breakdowns by experience, location, education, and more — completely free.
+              Request access to detailed salary breakdowns, workforce sentiment data, and tailored market insights for your hiring needs.
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -103,7 +103,7 @@ export function LeadCaptureModal() {
                 className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
               <Button type="submit" className="w-full" disabled={submitting}>
-                {submitting ? 'Unlocking...' : 'Unlock Full Report — Free'}
+                {submitting ? 'Submitting...' : 'Request Full Report'}
               </Button>
             </form>
 

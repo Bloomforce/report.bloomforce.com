@@ -11,7 +11,7 @@ interface GatedContentProps {
   message?: string;
 }
 
-export function GatedContent({ children, className, message = 'Unlock detailed breakdowns for free' }: GatedContentProps) {
+export function GatedContent({ children, className, message = 'Request access to the full report' }: GatedContentProps) {
   const { isUnlocked, showModal } = useGate();
 
   if (isUnlocked) {
@@ -30,7 +30,7 @@ export function GatedContent({ children, className, message = 'Unlock detailed b
           </div>
           <p className="text-sm font-medium text-navy mb-3">{message}</p>
           <Button size="sm" onClick={showModal}>
-            Unlock Free Access
+            Request Access
           </Button>
         </div>
       </div>

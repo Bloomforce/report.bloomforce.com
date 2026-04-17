@@ -1,9 +1,8 @@
 import type { Metadata } from 'next';
-import { DM_Serif_Display, Inter, DM_Mono } from 'next/font/google';
+import { Plus_Jakarta_Sans, Inter, DM_Mono } from 'next/font/google';
 import './globals.css';
 
-const dmSerif = DM_Serif_Display({
-  weight: '400',
+const jakarta = Plus_Jakarta_Sans({
   subsets: ['latin'],
   variable: '--font-heading',
   display: 'swap',
@@ -40,7 +39,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${dmSerif.variable} ${inter.variable} ${dmMono.variable}`}>
+    <html lang="en" className={`${jakarta.variable} ${inter.variable} ${dmMono.variable}`}>
       <body className="antialiased">{children}</body>
     </html>
   );

@@ -12,7 +12,7 @@ export function MethodologySection() {
     { value: `${data.totalResponses}+`, label: 'Respondents' },
     { value: `${data.epicPercentage}%`, label: 'Work in Epic' },
     { value: `${data.healthSystemPercentage}%`, label: 'Health System Employees' },
-    { value: `${data.genderSplit.female}/${data.genderSplit.male}`, label: 'Female / Male' },
+    { value: `${data.genderSplit.female}%/${data.genderSplit.male}%`, label: 'Female / Male' },
   ];
 
   return (

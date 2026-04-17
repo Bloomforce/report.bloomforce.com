@@ -6,10 +6,10 @@ import { Button } from '@/components/ui/Button';
 import { SECTION_IDS, CALENDLY_URL } from '@/lib/constants';
 
 const valueProps = [
-  '100% Healthcare IT Focused — Epic, EHR, and beyond',
-  'Pre-vetted professionals from our curated network',
-  'Flexible: contract, contract-to-hire, or permanent',
-  'Deep salary and market intelligence to inform your hiring',
+  'Salary benchmarks tailored to your roles and market',
+  'Workforce sentiment trends shaping retention and hiring',
+  'Competitive positioning data for your open requisitions',
+  'Quarterly updates as new data comes in',
 ];
 
 export function CTASection() {
@@ -19,10 +19,10 @@ export function CTASection() {
         {/* Left - value prop */}
         <div>
           <h2 className="text-3xl md:text-4xl font-[family-name:var(--font-heading)] text-white mb-4">
-            Build your healthcare IT team with Bloomforce
+            Get market insights tailored to your team
           </h2>
           <p className="text-gray-400 mb-8 leading-relaxed">
-            Whether you need Epic analysts, AI engineers, or IT leadership — we connect health systems with the specialized talent they need.
+            We'll walk you through the data that matters for your open roles — salary ranges, candidate availability, and what's shifting in your market.
           </p>
 
           <ul className="space-y-4 mb-8">
@@ -36,7 +36,7 @@ export function CTASection() {
 
           <Button size="lg" href={CALENDLY_URL}>
             <Calendar className="w-4 h-4 mr-2" />
-            Schedule a Call
+            Get Tailored Insights
           </Button>
         </div>
 
@@ -46,16 +46,16 @@ export function CTASection() {
             <Calendar className="w-8 h-8 text-primary" />
           </div>
           <h3 className="text-xl font-[family-name:var(--font-heading)] text-white mb-2">
-            Let&apos;s talk about your hiring needs
+            20 minutes. Your roles. Your market.
           </h3>
           <p className="text-sm text-gray-400 mb-6">
-            Book a 15-minute call with our team. We&apos;ll share market insights tailored to your open roles and help you find the right talent.
+            Tell us what you&apos;re hiring for and we&apos;ll share the data that&apos;s most relevant — compensation benchmarks, candidate supply, and what we&apos;re seeing in real time.
           </p>
           <Button size="lg" href={CALENDLY_URL}>
-            Book a Meeting
+            Book a Call
           </Button>
           <p className="text-xs text-gray-500 mt-4">
-            Free consultation. No commitment required.
+            No pitch. Just data.
           </p>
         </div>
       </div>

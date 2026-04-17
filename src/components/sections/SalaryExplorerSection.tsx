@@ -32,7 +32,7 @@ export function SalaryExplorerSection() {
           How does your salary compare?
         </h2>
         <p className="text-text-muted max-w-2xl mx-auto">
-          Select a role to see the full salary distribution. Unlock free access for detailed breakdowns by experience, location, and more.
+          Select a role to see the full salary distribution. Request the full report for detailed breakdowns by experience, location, and more.
         </p>
       </div>
 
@@ -71,7 +71,7 @@ export function SalaryExplorerSection() {
 
       {/* Detailed breakdowns - GATED */}
       {gatedBreakdowns.length > 0 && (
-        <GatedContent message="Unlock salary breakdowns by experience, location, education, and more">
+        <GatedContent message="Request the full report for salary breakdowns by experience, location, and more">
           <div className="bg-white rounded-2xl border border-ink/10 shadow-sm shadow-ink/[0.03] p-6 md:p-8">
             <div className="flex flex-col md:flex-row md:items-center justify-between mb-6">
               <h3 className="text-lg font-[family-name:var(--font-heading)] text-navy mb-3 md:mb-0">

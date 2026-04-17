@@ -35,13 +35,13 @@ export function WorkforceSentimentSection() {
   const recognition = free.find((c) => c.categoryId === 'recognition');
 
   return (
-    <SectionWrapper id={SECTION_IDS.sentiment}>
+    <SectionWrapper id={SECTION_IDS.sentiment} dark>
       <div className="text-center mb-12">
         <Badge className="mb-4">Workforce Insights</Badge>
-        <h2 className="text-3xl md:text-4xl font-[family-name:var(--font-heading)] text-navy mb-4">
+        <h2 className="text-3xl md:text-4xl font-[family-name:var(--font-heading)] text-white mb-4">
           What the workforce is thinking
         </h2>
-        <p className="text-text-muted max-w-2xl mx-auto">
+        <p className="text-gray-400 max-w-2xl mx-auto">
           Remote work, satisfaction, recognition, and career sentiment from healthcare IT professionals.
         </p>
       </div>
@@ -129,7 +129,7 @@ export function WorkforceSentimentSection() {
       </motion.div>
 
       {/* Gated insights */}
-      <GatedContent message="Unlock deeper workforce breakdowns by role, tenure, and more">
+      <GatedContent message="Request the full report for deeper workforce breakdowns by role, tenure, and more">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {gated.map((category) => (
             <div key={category.categoryId} className="bg-white rounded-xl border border-ink/10 shadow-sm shadow-ink/[0.03] p-6">

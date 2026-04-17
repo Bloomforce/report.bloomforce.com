@@ -52,10 +52,10 @@ export function HeroSection() {
 
           <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-3 justify-center mb-16">
             <Button size="lg" href={`#${SECTION_IDS.salaryExplorer}`}>
-              Explore Salary Data
+              Explore the Data
             </Button>
             <Button size="lg" variant="secondary" href={`#${SECTION_IDS.keyFindings}`}>
-              View Key Findings
+              See Key Findings
             </Button>
           </motion.div>
         </motion.div>
