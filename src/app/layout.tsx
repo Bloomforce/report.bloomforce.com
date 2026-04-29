@@ -25,6 +25,9 @@ export const metadata: Metadata = {
   title: '2025 EHR Workforce Trends Report | Bloomforce',
   description:
     'Interactive salary benchmarks, workforce sentiment, and industry trends from 300+ healthcare IT professionals. Explore the data that shapes EHR hiring.',
+  icons: {
+    icon: '/favicon.png',
+  },
   openGraph: {
     title: '2025 EHR Workforce Trends Report | Bloomforce',
     description:
