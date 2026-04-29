@@ -37,7 +37,7 @@ export function SalaryExplorerSection() {
       </div>
 
       {/* Role selector */}
-      <div className="max-w-xs mx-auto mb-8">
+      <div className="max-w-sm mx-auto mb-10">
         <Select
           label="Select a Role"
           value={selectedRoleId}

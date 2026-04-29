@@ -52,12 +52,14 @@ export function IndustryTrendsSection() {
                 {trend.title}
               </h3>
 
-              <div className="flex items-baseline gap-1 mb-3">
+              <div className="flex items-baseline gap-1 mb-1">
                 <span className="text-3xl font-[family-name:var(--font-heading)] text-primary">
                   {trend.headlineStat}
                 </span>
                 <span className="text-lg text-primary">{trend.unit}</span>
               </div>
+
+              <p className="text-sm font-medium text-navy mb-3">{trend.headline}</p>
 
               <p className="text-sm text-text-muted mb-4">{trend.description}</p>
 
