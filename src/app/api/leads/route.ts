@@ -48,33 +48,38 @@ export async function POST(request: Request) {
       'https://formsubmit.co/7426275000499c11e9bf5cd4616c119d';
 
     if (formSubmitEndpoint) {
-      const formData = new FormData();
-      formData.append('_subject', 'Bloomforce report access request');
-      formData.append('_template', 'table');
-      formData.append('_captcha', 'false');
-      formData.append('_replyto', email);
-      formData.append('name', `${firstName} ${lastName}`);
-      formData.append('email', email);
-      formData.append('company', company);
-      formData.append('role', role);
-      formData.append('phone', phone || '');
-      formData.append('source', lead.source);
-      formData.append('submitted_at', lead.timestamp);
+      const formData = new URLSearchParams({
+        _subject: 'Bloomforce report access request',
+        _template: 'table',
+        _captcha: 'false',
+        _replyto: email,
+        name: `${firstName} ${lastName}`,
+        email,
+        company,
+        role,
+        phone: phone || '',
+        source: lead.source,
+        submitted_at: lead.timestamp,
+      });
 
       const formSubmitResponse = await fetch(formSubmitEndpoint, {
         method: 'POST',
-        headers: { Accept: 'application/json' },
-        body: formData,
+        headers: {
+          Accept: 'text/html,application/json',
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+          'User-Agent': 'Bloomforce report lead capture',
+        },
+        body: formData.toString(),
       }).catch(() => null);
       deliveries.push({
         target: 'formsubmit',
-        ok: Boolean(formSubmitResponse?.ok),
+        ok: Boolean(formSubmitResponse && formSubmitResponse.status < 400),
         status: formSubmitResponse?.status,
       });
     }
 
     if (!deliveries.some((delivery) => delivery.ok)) {
-      return NextResponse.json({ error: 'Lead delivery failed' }, { status: 502 });
+      return NextResponse.json({ error: 'Lead delivery failed', deliveries }, { status: 502 });
     }
 
     return NextResponse.json({ success: true });
