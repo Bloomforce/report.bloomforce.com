@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
-import { NAV_ITEMS, SECTION_IDS } from '@/lib/constants';
+import { BOOK_CALL_URL, NAV_ITEMS } from '@/lib/constants';
 import { Button } from '@/components/ui/Button';
 import { cn } from '@/lib/utils';
 
@@ -44,7 +44,7 @@ export function Navbar() {
 
         {/* Desktop CTA */}
         <div className="hidden md:block">
-          <Button size="sm" href={`#${SECTION_IDS.cta}`}>
+          <Button size="sm" href={BOOK_CALL_URL}>
             Talk to Us
           </Button>
         </div>
@@ -72,7 +72,7 @@ export function Navbar() {
                 {item.label}
               </a>
             ))}
-            <Button size="sm" href={`#${SECTION_IDS.cta}`} onClick={() => setMobileOpen(false)}>
+            <Button size="sm" href={BOOK_CALL_URL} onClick={() => setMobileOpen(false)}>
               Talk to Us
             </Button>
           </div>

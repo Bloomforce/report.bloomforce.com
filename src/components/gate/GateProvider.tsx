@@ -38,6 +38,16 @@ export function GateProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const unlock = useCallback(async (data: LeadFormData) => {
+    const response = await fetch('/api/leads', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      throw new Error('Lead submission failed');
+    }
+
     setLeadData(data);
     setIsUnlocked(true);
     setIsModalOpen(false);
@@ -45,14 +55,6 @@ export function GateProvider({ children }: { children: React.ReactNode }) {
     try {
       localStorage.setItem(LEAD_STORAGE_KEY, JSON.stringify(data));
       document.cookie = `bf_unlocked=1;max-age=${365 * 24 * 60 * 60};path=/;SameSite=Lax`;
-    } catch {}
-
-    try {
-      await fetch('/api/leads', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      });
     } catch {}
   }, []);
 

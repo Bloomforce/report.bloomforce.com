@@ -18,12 +18,19 @@ export function LeadCaptureModal() {
     phone: '',
   });
   const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
     setSubmitting(true);
-    await unlock(form);
-    setSubmitting(false);
+    try {
+      await unlock(form);
+    } catch {
+      setError('We could not submit your request. Please try again or book a call.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const update = (field: keyof LeadFormData, value: string) =>
@@ -106,6 +113,12 @@ export function LeadCaptureModal() {
                 {submitting ? 'Submitting...' : 'Request Full Report'}
               </Button>
             </form>
+
+            {error && (
+              <p className="mt-4 text-center text-sm text-red-600">
+                {error}
+              </p>
+            )}
 
             <p className="text-xs text-text-light text-center mt-4">
               No spam. Your data is used to personalize your experience.

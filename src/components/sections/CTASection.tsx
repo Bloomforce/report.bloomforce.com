@@ -3,7 +3,7 @@
 import { CheckCircle, Calendar } from 'lucide-react';
 import { SectionWrapper } from '@/components/layout/SectionWrapper';
 import { Button } from '@/components/ui/Button';
-import { SECTION_IDS, CALENDLY_URL } from '@/lib/constants';
+import { SECTION_IDS, BOOK_CALL_URL } from '@/lib/constants';
 
 const valueProps = [
   'Salary benchmarks tailored to your roles and market',
@@ -34,7 +34,7 @@ export function CTASection() {
             ))}
           </ul>
 
-          <Button size="lg" href={CALENDLY_URL}>
+          <Button size="lg" href={BOOK_CALL_URL}>
             <Calendar className="w-4 h-4 mr-2" />
             Get Tailored Insights
           </Button>
@@ -51,7 +51,7 @@ export function CTASection() {
           <p className="text-sm text-gray-400 mb-6">
             Tell us what you&apos;re hiring for and we&apos;ll share the data that&apos;s most relevant — compensation benchmarks, candidate supply, and what we&apos;re seeing in real time.
           </p>
-          <Button size="lg" href={CALENDLY_URL}>
+          <Button size="lg" href={BOOK_CALL_URL}>
             Book a Call
           </Button>
           <p className="text-xs text-gray-500 mt-4">
