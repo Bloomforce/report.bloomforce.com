@@ -25,7 +25,7 @@ export async function POST(request: Request) {
       timestamp: new Date().toISOString(),
     };
 
-    const deliveries: boolean[] = [];
+    const deliveries: Array<{ target: string; ok: boolean; status?: number }> = [];
 
     // Forward to CRM webhook if configured.
     const webhookUrl = process.env.CRM_WEBHOOK_URL;
@@ -35,13 +35,17 @@ export async function POST(request: Request) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(lead),
       }).catch(() => null);
-      deliveries.push(Boolean(webhookResponse?.ok));
+      deliveries.push({
+        target: 'crm',
+        ok: Boolean(webhookResponse?.ok),
+        status: webhookResponse?.status,
+      });
     }
 
     // Fallback inbox capture through FormSubmit, matching the main site setup.
     const formSubmitEndpoint =
       process.env.FORMSUBMIT_REPORT_ENDPOINT ||
-      'https://formsubmit.co/ajax/7426275000499c11e9bf5cd4616c119d';
+      'https://formsubmit.co/7426275000499c11e9bf5cd4616c119d';
 
     if (formSubmitEndpoint) {
       const formData = new FormData();
@@ -62,10 +66,14 @@ export async function POST(request: Request) {
         headers: { Accept: 'application/json' },
         body: formData,
       }).catch(() => null);
-      deliveries.push(Boolean(formSubmitResponse?.ok));
+      deliveries.push({
+        target: 'formsubmit',
+        ok: Boolean(formSubmitResponse?.ok),
+        status: formSubmitResponse?.status,
+      });
     }
 
-    if (!deliveries.some(Boolean)) {
+    if (!deliveries.some((delivery) => delivery.ok)) {
       return NextResponse.json({ error: 'Lead delivery failed' }, { status: 502 });
     }
 
