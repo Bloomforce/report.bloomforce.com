@@ -4,6 +4,8 @@ import { createContext, useCallback, useEffect, useState } from 'react';
 import type { LeadFormData } from '@/lib/types';
 import { LEAD_STORAGE_KEY } from '@/lib/constants';
 
+const FORM_SUBMIT_ENDPOINT = 'https://formsubmit.co/ajax/7426275000499c11e9bf5cd4616c119d';
+
 export interface GateContextType {
   isUnlocked: boolean;
   leadData: LeadFormData | null;
@@ -38,14 +40,35 @@ export function GateProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const unlock = useCallback(async (data: LeadFormData) => {
-    const response = await fetch('/api/leads', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    });
+    const formData = new FormData();
+    formData.append('_subject', 'Bloomforce report access request');
+    formData.append('_template', 'table');
+    formData.append('_captcha', 'false');
+    formData.append('_replyto', data.email);
+    formData.append('_url', window.location.href);
+    formData.append('name', `${data.firstName} ${data.lastName}`);
+    formData.append('first_name', data.firstName);
+    formData.append('last_name', data.lastName);
+    formData.append('email', data.email);
+    formData.append('company', data.company);
+    formData.append('role', data.role);
+    formData.append('phone', data.phone || '');
+    formData.append('source', 'bloomforce-insights-2025');
+    formData.append('page', window.location.href);
+    formData.append('submitted_at', new Date().toISOString());
 
-    if (!response.ok) {
-      throw new Error('Lead submission failed');
+    const response = await fetch(FORM_SUBMIT_ENDPOINT, {
+      method: 'POST',
+      headers: { Accept: 'application/json' },
+      body: formData,
+    });
+    const payload = (await response.json().catch(() => ({}))) as {
+      success?: string | boolean;
+      message?: string;
+    };
+
+    if (!response.ok || payload.success === false || payload.success === 'false') {
+      throw new Error(payload.message || 'Lead submission failed');
     }
 
     setLeadData(data);
