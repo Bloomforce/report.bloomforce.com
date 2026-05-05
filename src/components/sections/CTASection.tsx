@@ -19,7 +19,7 @@ export function CTASection() {
         {/* Left - value prop */}
         <div>
           <h2 className="text-3xl md:text-4xl font-[family-name:var(--font-heading)] text-white mb-4">
-            Get market insights tailored to your team
+            Turn the report into a useful conversation
           </h2>
           <p className="text-gray-400 mb-8 leading-relaxed">
             We'll walk you through the data that matters for your open roles — salary ranges, candidate availability, and what's shifting in your market.

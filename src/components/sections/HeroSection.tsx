@@ -27,7 +27,7 @@ export function HeroSection() {
   const { heroStats } = getHighlights();
 
   return (
-    <section id={SECTION_IDS.hero} className="relative pt-24 pb-12 md:pt-32 md:pb-20 px-4 overflow-hidden bg-bg">
+    <section id={SECTION_IDS.hero} className="relative pt-36 pb-12 md:pt-44 md:pb-20 px-4 overflow-hidden bg-bg">
       {/* Subtle background gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary-50/30 via-bg to-bg-subtle" />
 
@@ -43,7 +43,7 @@ export function HeroSection() {
           </motion.div>
 
           <motion.h1 variants={fadeInUp} className="text-4xl md:text-5xl lg:text-6xl font-[family-name:var(--font-heading)] text-navy leading-tight mb-6">
-            The data behind healthcare IT talent
+            What the healthcare IT market is telling us
           </motion.h1>
 
           <motion.p variants={fadeInUp} className="text-lg md:text-xl text-text-muted leading-relaxed mb-8 max-w-2xl mx-auto">

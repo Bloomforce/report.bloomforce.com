@@ -20,7 +20,7 @@ export function MethodologySection() {
       <div className="text-center mb-8">
         <Badge variant="muted" className="mb-4">Methodology</Badge>
         <h2 className="text-2xl md:text-3xl font-[family-name:var(--font-heading)] text-navy mb-3">
-          About this survey
+          How we built the benchmark
         </h2>
         <p className="text-sm text-text-muted max-w-xl mx-auto">
           The EHR Salary Insights Survey was completed online between {data.surveyPeriod}. Findings are indicative rather than conclusive.

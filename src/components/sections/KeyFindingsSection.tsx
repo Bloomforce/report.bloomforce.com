@@ -19,7 +19,7 @@ export function KeyFindingsSection() {
       <div className="text-center mb-12">
         <Badge className="mb-4">Key Findings</Badge>
         <h2 className="text-3xl md:text-4xl font-[family-name:var(--font-heading)] text-navy mb-4">
-          What 300+ healthcare IT professionals told us
+          The signals beneath the salary numbers
         </h2>
         <p className="text-text-muted max-w-2xl mx-auto">
           High-level insights from the 2025 EHR Workforce Trends survey covering compensation, satisfaction, and industry direction.

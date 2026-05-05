@@ -23,9 +23,44 @@ export function Navbar() {
         scrolled ? 'bg-white/95 backdrop-blur-md shadow-sm' : 'bg-transparent'
       )}
     >
+      <div className="overflow-hidden border-b border-white/10 bg-purple-600 py-2.5">
+        <div className="block px-4 text-center md:hidden">
+          <a
+            href="https://www.bloomforce.com/survey"
+            className="inline-flex items-center gap-2 rounded-full bg-white/12 px-4 py-1.5 text-[13px] font-semibold text-white ring-1 ring-white/20 transition-all hover:bg-white/18"
+          >
+            <span>2026 Survey</span>
+            <span className="text-white/70">5-7 min</span>
+            <span aria-hidden="true">→</span>
+          </a>
+        </div>
+
+        <div className="hidden md:block">
+          <div className="animate-marquee flex whitespace-nowrap">
+            {[...Array(4)].map((_, i) => (
+              <span
+                key={i}
+                className="mx-5 inline-flex items-center gap-3 rounded-full bg-white/10 px-4 py-1.5 text-sm font-semibold tracking-wide text-white ring-1 ring-white/15"
+              >
+                <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-white/65">
+                  2026 Workforce Survey
+                </span>
+                <span>Help shape the next report.</span>
+                <a
+                  href="https://www.bloomforce.com/survey"
+                  className="rounded-full bg-white px-3 py-1 text-xs font-bold text-purple-600 transition-all hover:bg-bg"
+                >
+                  Take 5-7 min →
+                </a>
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+
       <div className="max-w-6xl mx-auto flex items-center justify-between px-4 py-3">
         {/* Logo */}
-        <a href="#" className="inline-flex shrink-0">
+        <a href="https://www.bloomforce.com/" className="inline-flex shrink-0">
           <img src="/images/logo-color.svg" alt="Bloomforce" className="h-7" />
         </a>
 

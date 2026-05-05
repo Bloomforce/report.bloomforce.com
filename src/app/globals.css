@@ -47,6 +47,20 @@ h1, h2, h3, h4 {
   font-family: var(--font-heading);
 }
 
+.animate-marquee {
+  animation: marquee 24s linear infinite;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
 /* Utility class for mono labels (matching marketing site pattern) */
 .font-mono-label {
   font-family: var(--font-mono);

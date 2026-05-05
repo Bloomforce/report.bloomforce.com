@@ -39,7 +39,7 @@ export function WorkforceSentimentSection() {
       <div className="text-center mb-12">
         <Badge className="mb-4">Workforce Insights</Badge>
         <h2 className="text-3xl md:text-4xl font-[family-name:var(--font-heading)] text-white mb-4">
-          What the workforce is thinking
+          What people are feeling behind the work
         </h2>
         <p className="text-gray-400 max-w-2xl mx-auto">
           Remote work, satisfaction, recognition, and career sentiment from healthcare IT professionals.

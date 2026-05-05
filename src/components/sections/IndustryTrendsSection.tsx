@@ -22,7 +22,7 @@ export function IndustryTrendsSection() {
       <div className="text-center mb-12">
         <Badge className="mb-4">Industry Trends</Badge>
         <h2 className="text-3xl md:text-4xl font-[family-name:var(--font-heading)] text-navy mb-4">
-          What&apos;s shaping healthcare IT
+          The forces reshaping healthcare IT talent
         </h2>
         <p className="text-text-muted max-w-2xl mx-auto">
           AI adoption, M&amp;A impact, and evolving organizational structures in the EHR ecosystem.

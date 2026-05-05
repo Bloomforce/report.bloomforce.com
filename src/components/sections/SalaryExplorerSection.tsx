@@ -29,7 +29,7 @@ export function SalaryExplorerSection() {
       <div className="text-center mb-10">
         <Badge className="mb-4">Salary Explorer</Badge>
         <h2 className="text-3xl md:text-4xl font-[family-name:var(--font-heading)] text-navy mb-4">
-          How does your salary compare?
+          See where your role sits in the market
         </h2>
         <p className="text-text-muted max-w-2xl mx-auto">
           Select a role to see the full salary distribution. Request the full report for detailed breakdowns by experience, location, and more.
