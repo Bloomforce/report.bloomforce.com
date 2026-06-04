@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 
 const FORM_SUBMIT_EMAIL = 'hello@bloomforce.com';
 const DEFAULT_FROM_EMAIL = `Bloomforce <${FORM_SUBMIT_EMAIL}>`;
+const HUBSPOT_FORMS_API_URL = 'https://api.hsforms.com/submissions/v3/integration/submit';
 const NEWSLETTER_FALLBACK_URL = 'https://www.bloomforce.com/api/newsletter';
 const RESEND_API_URL = 'https://api.resend.com/emails';
 
@@ -106,6 +107,60 @@ function buildLeadEmailHtml(lead: Lead) {
   `;
 }
 
+function getCookie(request: Request, name: string) {
+  const cookie = request.headers.get('cookie') || '';
+  const match = cookie
+    .split(';')
+    .map((part) => part.trim())
+    .find((part) => part.startsWith(`${name}=`));
+
+  return match ? decodeURIComponent(match.slice(name.length + 1)) : '';
+}
+
+async function sendToHubSpot(lead: Lead, request: Request): Promise<Delivery | null> {
+  const portalId = process.env.HUBSPOT_PORTAL_ID;
+  const formId = process.env.HUBSPOT_REPORT_ACCESS_FORM_ID || process.env.HUBSPOT_LEAD_FORM_ID;
+
+  if (!portalId || !formId) {
+    return null;
+  }
+
+  const hutk = getCookie(request, 'hubspotutk');
+  const hubSpotResponse = await fetch(`${HUBSPOT_FORMS_API_URL}/${portalId}/${formId}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      fields: [
+        { name: 'firstname', value: lead.firstName },
+        { name: 'lastname', value: lead.lastName },
+        { name: 'email', value: lead.email },
+        { name: 'company', value: lead.company },
+        { name: 'jobtitle', value: lead.role },
+        { name: 'phone', value: lead.phone },
+        {
+          name: 'message',
+          value: buildLeadEmailText(lead),
+        },
+      ],
+      submittedAt: Date.parse(lead.timestamp),
+      context: {
+        ...(hutk ? { hutk } : {}),
+        pageUri: lead.page,
+        pageName: '2025 EHR Salary Report',
+      },
+    }),
+  }).catch(() => null);
+
+  const payload = await hubSpotResponse?.json().catch(() => ({}));
+
+  return {
+    target: 'hubspot',
+    ok: Boolean(hubSpotResponse?.ok),
+    status: hubSpotResponse?.status,
+    message: getErrorMessage(payload),
+  };
+}
+
 async function sendToResend(lead: Lead): Promise<Delivery | null> {
   const apiKey = process.env.RESEND_API_KEY;
 
@@ -170,6 +225,11 @@ export async function POST(request: Request) {
     };
 
     const deliveries: Delivery[] = [];
+
+    const hubSpotDelivery = await sendToHubSpot(lead, request);
+    if (hubSpotDelivery) {
+      deliveries.push(hubSpotDelivery);
+    }
 
     const resendDelivery = await sendToResend(lead);
     if (resendDelivery) {
