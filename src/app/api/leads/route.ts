@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server';
 const FORM_SUBMIT_EMAIL = 'hello@bloomforce.com';
 const DEFAULT_FROM_EMAIL = `Bloomforce <${FORM_SUBMIT_EMAIL}>`;
 const HUBSPOT_FORMS_API_URL = 'https://api.hsforms.com/submissions/v3/integration/submit';
+const WEBSITE_LEAD_API_URL = 'https://www.bloomforce.com/api/lead';
 const NEWSLETTER_FALLBACK_URL = 'https://www.bloomforce.com/api/newsletter';
 const RESEND_API_URL = 'https://api.resend.com/emails';
 
@@ -198,6 +199,35 @@ async function sendToResend(lead: Lead): Promise<Delivery | null> {
   };
 }
 
+async function sendToWebsiteLeadApi(lead: Lead): Promise<Delivery> {
+  const endpoint = process.env.WEBSITE_LEAD_API_URL || WEBSITE_LEAD_API_URL;
+  const websiteResponse = await fetch(endpoint, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      type: 'report_access_2025',
+      name: `${lead.firstName} ${lead.lastName}`,
+      email: lead.email,
+      organization: lead.company,
+      role: lead.role,
+      phone: lead.phone,
+      notes: buildLeadEmailText(lead),
+      page: lead.page,
+    }),
+  }).catch(() => null);
+  const payload = await websiteResponse?.json().catch(() => ({}));
+
+  return {
+    target: 'website-lead-api',
+    ok: Boolean(websiteResponse?.ok),
+    status: websiteResponse?.status,
+    message: getErrorMessage(payload),
+  };
+}
+
 export async function POST(request: Request) {
   try {
     const data = await request.json();
@@ -225,6 +255,9 @@ export async function POST(request: Request) {
     };
 
     const deliveries: Delivery[] = [];
+
+    const websiteLeadDelivery = await sendToWebsiteLeadApi(lead);
+    deliveries.push(websiteLeadDelivery);
 
     const hubSpotDelivery = await sendToHubSpot(lead, request);
     if (hubSpotDelivery) {
