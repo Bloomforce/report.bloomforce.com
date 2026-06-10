@@ -209,6 +209,8 @@ async function sendToWebsiteLeadApi(lead: Lead): Promise<Delivery> {
     },
     body: JSON.stringify({
       type: 'report_access_2025',
+      source: lead.source,
+      sourceDetail: 'report.bloomforce.com access form',
       name: `${lead.firstName} ${lead.lastName}`,
       email: lead.email,
       organization: lead.company,
