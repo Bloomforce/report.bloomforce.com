@@ -9,18 +9,18 @@ export const revalidate = 3600;
 // (see src/app/preview/page.tsx), restore layout.tsx metadata + Footer link,
 // and delete /preview and this teaser.
 export const metadata: Metadata = {
-  title: 'The Living EHR Talent Benchmark — Coming Soon | Bloomforce Insights',
+  title: 'The 2026 EHR Workforce Report — Something Different Is Coming | Bloomforce',
   description:
-    'We’re blending verified salaries with thousands of live Epic-IT job postings into a living benchmark. Take the 2026 survey to be counted in it.',
+    'This year’s EHR workforce report won’t look like anything we’ve published before. 500+ professionals are already counted — take the 2026 survey to be in it.',
   openGraph: {
-    title: 'The Living EHR Talent Benchmark — Coming Soon | Bloomforce Insights',
+    title: 'Something Different Is Coming | Bloomforce Insights',
     description:
-      'Pay, demand, and sentiment by role, level, and market — updated continuously, not annually. Compiling now.',
+      'The next EHR workforce report won’t look like anything we’ve published before. Take the 2026 survey to be counted.',
     type: 'website',
   },
 };
 
 export default async function Home() {
   const data = await getInsightsData();
-  return <ComingSoonPage freshness={data.freshness} />;
+  return <ComingSoonPage totalRespondents={data.freshness.totalRespondents} />;
 }

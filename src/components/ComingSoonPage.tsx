@@ -4,8 +4,6 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { LiveDot } from '@/components/live/LiveDot';
 import { Button } from '@/components/ui/Button';
-import { formatDate } from '@/lib/insights/format';
-import type { FreshnessMeta } from '@/lib/insights/types';
 
 const SURVEY_URL = 'https://www.bloomforce.com/survey';
 
@@ -29,19 +27,11 @@ function useCountUp(target: number, duration = 1800) {
   return value;
 }
 
-function Stat({ value, label }: { value: number; label: string }) {
-  const n = useCountUp(value);
-  return (
-    <div className="text-center">
-      <div className="text-3xl md:text-4xl font-bold text-white font-[family-name:var(--font-mono)] tabular-nums">
-        {n.toLocaleString()}
-      </div>
-      <div className="text-xs uppercase tracking-[0.15em] text-white/50 mt-1.5">{label}</div>
-    </div>
-  );
-}
+// Takes only the respondent count so nothing else about the new report
+// (cell counts, posting volumes) lands in the serialized page payload.
+export function ComingSoonPage({ totalRespondents }: { totalRespondents: number }) {
+  const respondents = useCountUp(totalRespondents);
 
-export function ComingSoonPage({ freshness }: { freshness: FreshnessMeta }) {
   return (
     <div className="min-h-screen bg-navy-deep text-white flex flex-col bg-[radial-gradient(900px_500px_at_50%_-15%,rgba(0,168,150,0.16),transparent)]">
       <header className="max-w-6xl w-full mx-auto px-4 pt-8">
@@ -59,15 +49,15 @@ export function ComingSoonPage({ freshness }: { freshness: FreshnessMeta }) {
           >
             <span className="inline-flex items-center gap-2 text-xs font-bold tracking-[0.14em] uppercase text-primary-light bg-white/5 ring-1 ring-white/10 px-4 py-2 rounded-full">
               <LiveDot size={7} />
-              Compiling now
+              In the works
             </span>
             <h1 className="text-4xl md:text-6xl font-[family-name:var(--font-heading)] font-bold mt-7 mb-5 leading-[1.05] tracking-tight">
-              The next EHR workforce report won&apos;t be a report.
+              This year, we&apos;re doing something different.
             </h1>
             <p className="text-lg md:text-xl text-white/65 max-w-2xl mx-auto">
-              We&apos;re blending verified professional salaries with thousands of live Epic-IT job
-              postings into a living benchmark — pay, demand, and sentiment by role, level, and
-              market. Updated continuously, not annually.
+              The next EHR workforce report won&apos;t look like anything we&apos;ve published
+              before — or anything anyone else has, either. That&apos;s all we&apos;re saying
+              for now.
             </p>
           </motion.div>
 
@@ -75,11 +65,14 @@ export function ComingSoonPage({ freshness }: { freshness: FreshnessMeta }) {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.15 }}
-            className="flex flex-wrap justify-center gap-x-14 gap-y-6 mt-12"
+            className="mt-12"
           >
-            <Stat value={freshness.totalRespondents} label="Verified professionals" />
-            <Stat value={freshness.postingsIngested} label="Job postings analyzed" />
-            <Stat value={freshness.benchmarkCells} label="Benchmark cells built" />
+            <div className="text-5xl md:text-6xl font-bold text-white font-[family-name:var(--font-mono)] tabular-nums">
+              {respondents.toLocaleString()}
+            </div>
+            <div className="text-xs uppercase tracking-[0.15em] text-white/50 mt-2">
+              EHR professionals counted so far
+            </div>
           </motion.div>
 
           <motion.div
@@ -89,11 +82,11 @@ export function ComingSoonPage({ freshness }: { freshness: FreshnessMeta }) {
             className="mt-12"
           >
             <p className="text-white/75 mb-5 max-w-xl mx-auto">
-              The 2026 survey is collecting now. Take 5–7 minutes and your data point is in the
-              benchmark on day one — anonymous, and you&apos;ll see exactly where you stand.
+              The 2026 survey is open now. Five to seven minutes, fully anonymous — and
+              you&apos;re in it the day it drops.
             </p>
             <Button size="lg" href={SURVEY_URL}>
-              Take the 2026 survey →
+              Make it {(totalRespondents + 1).toLocaleString()} — take the survey →
             </Button>
             <div className="mt-8">
               <a
@@ -107,11 +100,8 @@ export function ComingSoonPage({ freshness }: { freshness: FreshnessMeta }) {
         </div>
       </main>
 
-      <footer className="max-w-6xl w-full mx-auto px-4 pb-8 flex flex-col md:flex-row items-center justify-between gap-2 text-xs text-white/40">
+      <footer className="max-w-6xl w-full mx-auto px-4 pb-8 flex items-center justify-center text-xs text-white/40">
         <span>&copy; {new Date().getFullYear()} bloomforce, LLC. All Rights Reserved.</span>
-        <span className="font-[family-name:var(--font-mono)]">
-          data as of {formatDate(freshness.asOf)} · {freshness.windowLabel}
-        </span>
       </footer>
     </div>
   );
