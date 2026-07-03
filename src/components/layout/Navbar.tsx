@@ -6,7 +6,14 @@ import { BOOK_CALL_URL, NAV_ITEMS } from '@/lib/constants';
 import { Button } from '@/components/ui/Button';
 import { cn } from '@/lib/utils';
 
-export function Navbar() {
+interface NavbarProps {
+  /** Anchor items; defaults to the living-benchmark nav. */
+  items?: ReadonlyArray<{ label: string; href: string }>;
+  /** Set when a bar (e.g. FreshnessBar) is stacked above the nav. */
+  topClass?: string;
+}
+
+export function Navbar({ items = NAV_ITEMS, topClass = 'top-0' }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -19,7 +26,8 @@ export function Navbar() {
   return (
     <nav
       className={cn(
-        'fixed top-0 left-0 right-0 z-40 transition-all duration-300',
+        'fixed left-0 right-0 z-40 transition-all duration-300',
+        topClass,
         scrolled ? 'bg-white/95 backdrop-blur-md shadow-sm' : 'bg-transparent'
       )}
     >
@@ -66,7 +74,7 @@ export function Navbar() {
 
         {/* Desktop nav */}
         <div className="hidden md:flex items-center gap-6">
-          {NAV_ITEMS.map((item) => (
+          {items.map((item) => (
             <a
               key={item.href}
               href={item.href}
@@ -97,7 +105,7 @@ export function Navbar() {
       {mobileOpen && (
         <div className="md:hidden bg-white border-t border-ink/10 shadow-lg">
           <div className="flex flex-col p-4 gap-3">
-            {NAV_ITEMS.map((item) => (
+            {items.map((item) => (
               <a
                 key={item.href}
                 href={item.href}

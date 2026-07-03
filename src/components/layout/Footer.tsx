@@ -38,7 +38,8 @@ export function Footer() {
           <div>
             <h4 className="font-[family-name:var(--font-mono)] text-[10px] uppercase tracking-[0.2em] text-primary mb-4">Insights</h4>
             <ul className="space-y-2 text-sm text-gray-400">
-              <li><a href="#" className="hover:text-primary transition-colors">2025 EHR Workforce Report</a></li>
+              <li><a href="/" className="hover:text-primary transition-colors">The Living EHR Talent Benchmark</a></li>
+              <li><a href="/2025" className="hover:text-primary transition-colors">2025 EHR Workforce Report (archive)</a></li>
               <li><a href="https://bloomforce.com" className="hover:text-primary transition-colors">Blog</a></li>
             </ul>
           </div>

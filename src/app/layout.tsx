@@ -22,16 +22,16 @@ const dmMono = DM_Mono({
 });
 
 export const metadata: Metadata = {
-  title: '2025 EHR Workforce Trends Report | Bloomforce',
+  title: 'The Living EHR Talent Benchmark | Bloomforce Insights',
   description:
-    'Interactive salary benchmarks, workforce sentiment, and industry trends from 300+ healthcare IT professionals. Explore the data that shapes EHR hiring.',
+    'Real pay from verified EHR professionals, blended with the live job market. Salary benchmarks by role, level, and region — updated continuously, not annually.',
   icons: {
     icon: '/favicon.png',
   },
   openGraph: {
-    title: '2025 EHR Workforce Trends Report | Bloomforce',
+    title: 'The Living EHR Talent Benchmark | Bloomforce Insights',
     description:
-      'Interactive salary benchmarks and workforce insights from 300+ healthcare IT professionals.',
+      'Know where you stand — salary, demand, and workforce sentiment for Epic & EHR talent, updated continuously.',
     type: 'website',
   },
 };

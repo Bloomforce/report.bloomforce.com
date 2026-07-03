@@ -1,0 +1,2 @@
+insert into public.freshness_published (id,benchmark_cells,total_respondents,postings_ingested,last_survey_ingest,last_pulse_refresh,as_of,window_label) values
+(1,186,582,4143,'2025-01-31T16:45:44.000Z','2026-06-17T00:00:00Z','2026-07-03T04:08:20.317Z','rolling 12 months · Jun ''25 – Jul ''26');
