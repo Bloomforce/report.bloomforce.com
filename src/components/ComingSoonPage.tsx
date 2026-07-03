@@ -89,8 +89,10 @@ export function ComingSoonPage({ totalRespondents }: { totalRespondents: number 
               Make it {(totalRespondents + 1).toLocaleString()} — take the survey →
             </Button>
             <div className="mt-8">
+              {/* Absolute URL: this page is also reverse-proxied at www.bloomforce.com/report,
+                  where a root-relative /2025 would 404 against the marketing site. */}
               <a
-                href="/2025"
+                href="https://report.bloomforce.com/2025"
                 className="text-sm text-white/50 hover:text-primary-light underline underline-offset-4 transition-colors"
               >
                 Browse the 2025 report while you wait
