@@ -21,17 +21,19 @@ const dmMono = DM_Mono({
   display: 'swap',
 });
 
+// Temporary: 2025-report metadata while the living benchmark is in copy review
+// at /preview. Restore the evergreen "Living EHR Talent Benchmark" metadata at launch.
 export const metadata: Metadata = {
-  title: 'The Living EHR Talent Benchmark | Bloomforce Insights',
+  title: '2025 EHR Workforce Trends Report | Bloomforce',
   description:
-    'Real pay from verified EHR professionals, blended with the live job market. Salary benchmarks by role, level, and region — updated continuously, not annually.',
+    'Interactive salary benchmarks, workforce sentiment, and industry trends from 300+ healthcare IT professionals. Explore the data that shapes EHR hiring.',
   icons: {
     icon: '/favicon.png',
   },
   openGraph: {
-    title: 'The Living EHR Talent Benchmark | Bloomforce Insights',
+    title: '2025 EHR Workforce Trends Report | Bloomforce',
     description:
-      'Know where you stand — salary, demand, and workforce sentiment for Epic & EHR talent, updated continuously.',
+      'Interactive salary benchmarks and workforce insights from 300+ healthcare IT professionals.',
     type: 'website',
   },
 };

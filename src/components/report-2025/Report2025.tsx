@@ -29,10 +29,10 @@ function ArchiveBanner() {
   );
 }
 
-export function Report2025() {
+export function Report2025({ archiveBanner = true }: { archiveBanner?: boolean }) {
   return (
     <GateProvider>
-      <ArchiveBanner />
+      {archiveBanner && <ArchiveBanner />}
       <Navbar
         items={[
           { label: 'Key Findings', href: `#${SECTION_IDS.keyFindings}` },

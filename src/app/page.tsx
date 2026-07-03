@@ -1,9 +1,7 @@
-import { getInsightsData } from '@/lib/insights/client';
-import { InsightsPage } from '@/components/InsightsPage';
+import { Report2025 } from '@/components/report-2025/Report2025';
 
-export const revalidate = 3600;
-
-export default async function Home() {
-  const data = await getInsightsData();
-  return <InsightsPage data={data} />;
+// Temporary: the 2025 report holds the public page while the living-benchmark
+// copy is under review at /preview. Swap InsightsPage back in to launch.
+export default function Home() {
+  return <Report2025 archiveBanner={false} />;
 }
