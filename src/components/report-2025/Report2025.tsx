@@ -22,7 +22,7 @@ function ArchiveBanner() {
           You&apos;re viewing the archived 2025 report (surveyed Nov &apos;24 – Jan &apos;25).
         </span>
         <Link href="/" className="font-semibold text-primary-light underline underline-offset-2 hover:text-white transition-colors">
-          See the live benchmark →
+          See what&apos;s coming next →
         </Link>
       </div>
     </div>
