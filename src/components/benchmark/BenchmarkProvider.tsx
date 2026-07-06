@@ -3,6 +3,7 @@
 import { createContext, useCallback, useEffect, useMemo, useState } from 'react';
 import type { BenchmarkProfile, BenchmarkRow, InsightsData, Seniority } from '@/lib/insights/types';
 import { estimatePercentile } from '@/lib/insights/percentile';
+import { GUARDED_ROLE_LABELS } from '@/lib/constants';
 
 const PROFILE_STORAGE_KEY = 'bf_profile';
 
@@ -15,6 +16,8 @@ export interface BenchmarkContextValue {
   /** Set when the requested cell was thin and we fell back to a broader one. */
   fallbackNote: string | null;
   roleName: string;
+  /** True when the selected role's numbers are call-only (Director, VP). */
+  guardedRole: boolean;
   percentile: number | null;
   deltas: { vsMedian: number; vsP75: number } | null;
   /** Benchmark rows for the profile's role family (all cuts) — for sections. */
@@ -62,7 +65,7 @@ export function BenchmarkProvider({ data, children }: { data: InsightsData; chil
       const stored = localStorage.getItem(PROFILE_STORAGE_KEY);
       if (stored) {
         const parsed = JSON.parse(stored) as BenchmarkProfile;
-        if (data.roles.some((r) => r.roleKey === parsed.roleKey)) {
+        if (data.roles.some((r) => r.roleKey === parsed.roleKey) || parsed.roleKey in GUARDED_ROLE_LABELS) {
           setProfileState((prev) => ({ ...prev, ...parsed }));
         }
       }
@@ -81,15 +84,21 @@ export function BenchmarkProvider({ data, children }: { data: InsightsData; chil
   }, []);
 
   const value = useMemo<BenchmarkContextValue>(() => {
-    const { row, note } = findCell(data.benchmarks, profile.roleKey, profile.seniority, profile.region);
-    const roleName = data.roles.find((r) => r.roleKey === profile.roleKey)?.label ?? profile.roleKey;
+    const guardedRole = profile.roleKey in GUARDED_ROLE_LABELS;
+    const { row, note } = guardedRole
+      ? { row: null, note: null }
+      : findCell(data.benchmarks, profile.roleKey, profile.seniority, profile.region);
+    const roleName =
+      data.roles.find((r) => r.roleKey === profile.roleKey)?.label ??
+      GUARDED_ROLE_LABELS[profile.roleKey] ??
+      profile.roleKey;
     const percentile = row && profile.comp ? estimatePercentile(profile.comp, row.blended) : null;
     const deltas =
       row && profile.comp
         ? { vsMedian: profile.comp - row.blended.p50, vsP75: profile.comp - row.blended.p75 }
         : null;
     const familyRows = data.benchmarks.filter((r) => r.roleFamily === profile.roleKey);
-    return { data, profile, setProfile, row, fallbackNote: note, roleName, percentile, deltas, familyRows };
+    return { data, profile, setProfile, row, fallbackNote: note, roleName, guardedRole, percentile, deltas, familyRows };
   }, [data, profile, setProfile]);
 
   return <BenchmarkContext.Provider value={value}>{children}</BenchmarkContext.Provider>;

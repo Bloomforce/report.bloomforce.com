@@ -69,7 +69,10 @@ export async function fetchLiveInsightsData(): Promise<InsightsData> {
 
   const sentiment: SentimentCut[] = groupSentiment(sent.data as Record<string, any>[]);
 
-  const pulseItems: PulseItem[] = (pulse.data as Record<string, any>[]).map((r) => ({
+  // C-suite is fully hidden from the public surface, including demand and pulse.
+  const pulseItems: PulseItem[] = (pulse.data as Record<string, any>[])
+    .filter((r) => r.role_key !== 'EXEC')
+    .map((r) => ({
     id: r.id,
     ts: r.ts,
     kind: r.kind,
@@ -79,7 +82,9 @@ export async function fetchLiveInsightsData(): Promise<InsightsData> {
     deltaUnit: r.delta_unit ?? undefined,
   }));
 
-  const demandCells: DemandCell[] = (demand.data as Record<string, any>[]).map((r) => ({
+  const demandCells: DemandCell[] = (demand.data as Record<string, any>[])
+    .filter((r) => r.key !== 'EXEC')
+    .map((r) => ({
     key: r.key,
     label: ROLE_LABELS[r.key]?.label ?? r.label,
     share: Number(r.share),

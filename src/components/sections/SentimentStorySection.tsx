@@ -54,15 +54,21 @@ function deltaPts(cut: SentimentCut | null, option: string): number | null {
   return d === null || d === undefined ? null : Math.round(d * 100);
 }
 
-/** Cluster grid placement: lay a category's dots in a block around a center. */
-function clusterPlace(indexInGroup: number, groupSize: number, cx: number, cy: number, width: number) {
-  const cols = Math.max(3, Math.ceil(Math.sqrt(groupSize * 1.6)));
-  const row = Math.floor(indexInGroup / cols);
-  const col = indexInGroup % cols;
+/**
+ * Cluster grid placement: lay a category's dots in a centered block around a
+ * center point. Uses fixed cell spacing (not a fixed overall width) so a dense
+ * category can't pack its dots tight enough to overlap; the block grows instead.
+ */
+function clusterPlace(indexInGroup: number, groupSize: number, cx: number, cy: number) {
+  const cols = Math.max(3, Math.round(Math.sqrt(groupSize * 1.8)));
   const rows = Math.ceil(groupSize / cols);
+  const col = indexInGroup % cols;
+  const row = Math.floor(indexInGroup / cols);
+  const CELL_X = 0.0125;
+  const CELL_Y = 0.033;
   return {
-    x: cx + ((col - cols / 2) / cols) * width,
-    y: cy + ((row - rows / 2) / rows) * 0.42,
+    x: cx + (col - (cols - 1) / 2) * CELL_X,
+    y: cy + (row - (rows - 1) / 2) * CELL_Y,
   };
 }
 
@@ -129,7 +135,7 @@ export function SentimentStorySection() {
       place: (_d, i) => {
         const grp = g.groupOf[i];
         const c = centers[grp] ?? { x: 0.5, color: SLATE };
-        const p = clusterPlace(g.idx[i], g.sizes[grp] ?? 1, c.x, 0.5, 0.26);
+        const p = clusterPlace(g.idx[i], g.sizes[grp] ?? 1, c.x, 0.5);
         return { x: p.x, y: p.y, color: c.color, alpha: 1 };
       },
     });

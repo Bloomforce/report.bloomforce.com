@@ -22,13 +22,13 @@ function cutLabel(dimension: string, key: string): string {
 }
 
 export function MarketDetailSection() {
-  const { profile, roleName } = useBenchmark();
+  const { profile, roleName, guardedRole } = useBenchmark();
   const { isContributor } = useGate();
   const [detail, setDetail] = useState<MarketDetailRow | null>(null);
   const [status, setStatus] = useState<'idle' | 'loading' | 'error'>('idle');
 
   useEffect(() => {
-    if (!isContributor) return;
+    if (!isContributor || guardedRole) return;
     setStatus('loading');
     fetch(`/api/insights/market-detail?role=${encodeURIComponent(profile.roleKey)}`)
       .then((r) => {
@@ -40,7 +40,27 @@ export function MarketDetailSection() {
         setStatus('idle');
       })
       .catch(() => setStatus('error'));
-  }, [isContributor, profile.roleKey]);
+  }, [isContributor, guardedRole, profile.roleKey]);
+
+  // Director and VP market detail is call-only: no gate, no fetch, one door.
+  if (guardedRole) {
+    return (
+      <SectionWrapper id={SECTION_IDS.marketDetail} alt>
+        <div className="max-w-2xl mx-auto bg-navy rounded-2xl p-8 md:p-10 text-center">
+          <h2 className="text-2xl md:text-3xl font-[family-name:var(--font-heading)] text-white mb-3">
+            The {roleName.toLowerCase()} market, read live
+          </h2>
+          <p className="text-sm text-gray-400 max-w-lg mx-auto mb-6">
+            Demand, hotspots, and pay for leadership roles depend heavily on org type and market. We share
+            them in a 20-minute data review, matched to your situation.
+          </p>
+          <Button size="lg" href={`${BOOK_CALL_URL}?utm_source=insights&utm_content=market-detail-guarded-${profile.roleKey}`}>
+            <Phone className="w-4 h-4 mr-2" /> Book a data review
+          </Button>
+        </div>
+      </SectionWrapper>
+    );
+  }
 
   return (
     <SectionWrapper id={SECTION_IDS.marketDetail} alt>

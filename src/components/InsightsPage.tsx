@@ -26,8 +26,8 @@ export function InsightsPage({ data }: { data: InsightsData }) {
         <Navbar topClass="top-[38px]" />
         <main>
           <HeroBenchmarkSection />
-          <MarketTerminalSection />
           <OrgTypeSection />
+          <MarketTerminalSection />
           <MarketDetailSection />
           <SentimentStorySection />
           <TrendStorySection />

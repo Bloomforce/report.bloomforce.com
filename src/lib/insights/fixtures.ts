@@ -28,9 +28,8 @@ const ROLES: { key: string; name: string; group: string; median: number; seniori
   { key: 'PM', name: 'Project / Program Manager', group: 'Individual contributors', median: 116000, seniorities: { L2: 108000, L3: 128000 } },
   { key: 'CI', name: 'Clinical Informatics', group: 'Individual contributors', median: 110000, seniorities: { L2: 102000, L3: 122000 } },
   { key: 'MGR', name: 'IT Manager', group: 'Leadership', median: 132000, seniorities: { M1: 132000 } },
-  { key: 'DIR', name: 'IT Director', group: 'Leadership', median: 158000, seniorities: { M2: 158000 } },
-  { key: 'VP', name: 'VP of IT / IS', group: 'Leadership', median: 205000, seniorities: { M3: 205000 } },
-  { key: 'EXEC', name: 'CIO / CMIO / CNIO', group: 'Leadership', median: 268000, seniorities: { exec: 268000 } },
+  // Director, VP, and C-suite are call-only: they never appear in the public
+  // dataset, so the fixtures mirror the guarded benchmark_public view.
 ];
 
 const REGIONS = ['National', 'Northeast', 'Southeast', 'Midwest', 'Southwest', 'West'];

@@ -25,6 +25,15 @@ export const NAV_ITEMS = [
 export const BOOK_CALL_URL = 'https://www.bloomforce.com/book';
 export const SURVEY_URL = 'https://www.bloomforce.com/survey';
 
+/**
+ * Roles a visitor can select whose numbers are never rendered: the page shows
+ * a blurred panel and a data-review CTA instead. C-suite is hidden entirely.
+ */
+export const GUARDED_ROLE_LABELS: Record<string, string> = {
+  DIR: 'IT Director',
+  VP: 'VP of IT / IS',
+};
+
 export const LEAD_STORAGE_KEY = 'bf_lead';
 export const CONTRIBUTION_STORAGE_KEY = 'bf_contribution';
 export const PROFILE_STORAGE_KEY = 'bf_profile';

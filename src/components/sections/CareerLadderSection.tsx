@@ -21,9 +21,8 @@ const IC_LADDER: { level: Seniority; label: string }[] = [
 
 const LEADERSHIP: { family: string; level: Seniority; label: string; guarded?: boolean }[] = [
   { family: 'MGR', level: 'M1', label: 'Manager / Supervisor' },
-  { family: 'DIR', level: 'M2', label: 'Director', guarded: true },
-  { family: 'VP', level: 'M3', label: 'VP', guarded: true },
-  { family: 'EXEC', level: 'exec', label: 'CIO / CMIO / CNIO', guarded: true },
+  { family: 'DIR', level: 'M2', label: 'IT Director', guarded: true },
+  { family: 'VP', level: 'M3', label: 'VP of IT / IS', guarded: true },
 ];
 
 function nationalCell(rows: BenchmarkRow[], family: string, level: Seniority | 'ALL') {
@@ -110,13 +109,19 @@ export function CareerLadderSection() {
             </span>
           )}
         </div>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 mt-4">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 mt-4">
           {leadCells.map((rung) =>
             rung.guarded ? (
-              <a
+              <button
                 key={rung.family}
-                href={`#${SECTION_IDS.cta}`}
-                className="rounded-xl border border-dashed border-ink/20 p-5 text-left transition-colors hover:border-primary/50 group"
+                onClick={() => {
+                  setProfile({ roleKey: rung.family, seniority: 'ALL' });
+                  document.getElementById(SECTION_IDS.hero)?.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className={cn(
+                  'rounded-xl border border-dashed p-5 text-left transition-colors group',
+                  profile.roleKey === rung.family ? 'border-primary bg-primary-50' : 'border-ink/20 hover:border-primary/50',
+                )}
               >
                 <div className="text-sm font-semibold text-navy flex items-center gap-1.5">
                   <Lock className="w-3.5 h-3.5 text-text-light" /> {rung.label}
@@ -126,9 +131,9 @@ export function CareerLadderSection() {
                 </div>
                 <div className="text-xs text-text-muted mt-1">Shared in a data review</div>
                 <div className="text-xs text-primary font-semibold mt-2 group-hover:underline underline-offset-2">
-                  Book 20 minutes
+                  See what we hold
                 </div>
-              </a>
+              </button>
             ) : (
               <button
                 key={rung.family}
