@@ -70,7 +70,7 @@ export function MethodologyLiveSection() {
       </div>
 
       <div className="mt-6 bg-white rounded-2xl border border-dashed border-ink/20 p-5 text-sm text-text-muted max-w-3xl mx-auto text-center">
-        Rolling 12-month window. When a cut is too thin to trust, it is{' '}
+        Rolling 12-month window. When there aren&apos;t enough reports to trust a number, it is{' '}
         <span className="font-semibold text-navy">hidden, not guessed</span>, and estimates are always labeled
         as estimates. Updated {formatDate(f.asOf)}.
       </div>

@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Pencil } from 'lucide-react';
 import { useBenchmark } from '@/hooks/useBenchmark';
-import { ordinal } from '@/lib/insights/percentile';
 import { SECTION_IDS } from '@/lib/constants';
 
 /** Persistent profile pill — appears once the hero is scrolled past. */
@@ -34,7 +33,7 @@ export function FloatingBenchmarkChip() {
             {roleName}
             {profile.region !== 'National' && ` · ${profile.region}`}
             {percentile !== null && (
-              <span className="text-primary-light font-bold"> · {ordinal(Math.round(percentile))} pctile</span>
+              <span className="text-primary-light font-bold"> · ahead of {Math.round(percentile)}% of peers</span>
             )}
           </span>
           <Pencil className="w-3.5 h-3.5 opacity-70" />

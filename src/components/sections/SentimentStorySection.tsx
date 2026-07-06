@@ -54,15 +54,21 @@ function deltaPts(cut: SentimentCut | null, option: string): number | null {
   return d === null || d === undefined ? null : Math.round(d * 100);
 }
 
-/** Cluster grid placement: lay a category's dots in a block around a center. */
-function clusterPlace(indexInGroup: number, groupSize: number, cx: number, cy: number, width: number) {
-  const cols = Math.max(3, Math.ceil(Math.sqrt(groupSize * 1.6)));
-  const row = Math.floor(indexInGroup / cols);
-  const col = indexInGroup % cols;
+/**
+ * Cluster grid placement: lay a category's dots in a centered block around a
+ * center point. Uses fixed cell spacing (not a fixed overall width) so a dense
+ * category can't pack its dots tight enough to overlap; the block grows instead.
+ */
+function clusterPlace(indexInGroup: number, groupSize: number, cx: number, cy: number) {
+  const cols = Math.max(3, Math.round(Math.sqrt(groupSize * 1.8)));
   const rows = Math.ceil(groupSize / cols);
+  const col = indexInGroup % cols;
+  const row = Math.floor(indexInGroup / cols);
+  const CELL_X = 0.0125;
+  const CELL_Y = 0.033;
   return {
-    x: cx + ((col - cols / 2) / cols) * width,
-    y: cy + ((row - rows / 2) / rows) * 0.42,
+    x: cx + (col - (cols - 1) / 2) * CELL_X,
+    y: cy + (row - (rows - 1) / 2) * CELL_Y,
   };
 }
 
@@ -129,7 +135,7 @@ export function SentimentStorySection() {
       place: (_d, i) => {
         const grp = g.groupOf[i];
         const c = centers[grp] ?? { x: 0.5, color: SLATE };
-        const p = clusterPlace(g.idx[i], g.sizes[grp] ?? 1, c.x, 0.5, 0.26);
+        const p = clusterPlace(g.idx[i], g.sizes[grp] ?? 1, c.x, 0.5);
         return { x: p.x, y: p.y, color: c.color, alpha: 1 };
       },
     });
@@ -140,7 +146,7 @@ export function SentimentStorySection() {
         caption: (
           <>
             <span className="text-white font-semibold">{totalN.toLocaleString()} EHR professionals</span> told us
-            what they earn and how work actually feels — across two survey waves. Each dot is roughly{' '}
+            what they earn and how work actually feels, across two survey waves. Each dot is roughly{' '}
             {Math.max(1, Math.round(totalN / N_DOTS))} of them.
           </>
         ),
@@ -164,7 +170,7 @@ export function SentimentStorySection() {
             <span className="text-white font-semibold">{Math.round(pct(wlb, 'satisfied') * 100)}% are satisfied
             with their work-life balance</span>
             {deltaPts(wlb, 'satisfied') !== null && (
-              <> — {deltaPts(wlb, 'satisfied')! >= 0 ? 'up' : 'down'} {Math.abs(deltaPts(wlb, 'satisfied')!)} points
+              <>, {deltaPts(wlb, 'satisfied')! >= 0 ? 'up' : 'down'} {Math.abs(deltaPts(wlb, 'satisfied')!)} points
               from the previous wave</>
             )}
             . Remote flexibility is doing a lot of that work.
@@ -182,7 +188,7 @@ export function SentimentStorySection() {
           <>
             <span className="text-white font-semibold">{Math.round(pct(wm, 'remote') * 100)}% are fully remote</span>
             , {Math.round(pct(wm, 'hybrid') * 100)}% hybrid, {Math.round(pct(wm, 'onsite') * 100)}% in the office.
-            Remote isn&apos;t a perk in this market — it&apos;s the baseline.
+            Remote isn&apos;t a perk in this market. It&apos;s the baseline.
           </>
         ),
         layout: columns(wmG, {
@@ -192,14 +198,14 @@ export function SentimentStorySection() {
         }),
       },
       {
-        kicker: 'The RTO test',
+        kicker: 'The return-to-office test',
         caption: (
           <>
             Force a return to the office, and{' '}
             <span className="text-white font-semibold">
               {Math.round((pct(rto, 'look') + pct(rto, 'negotiate')) * 100)}% would push back
-            </span>{' '}
-            — {Math.round(pct(rto, 'look') * 100)}% would start looking, {Math.round(pct(rto, 'negotiate') * 100)}%
+            </span>
+            : {Math.round(pct(rto, 'look') * 100)}% would start looking, {Math.round(pct(rto, 'negotiate') * 100)}%
             would negotiate. Only {Math.round(pct(rto, 'comply') * 100)}% would simply comply.
           </>
         ),
@@ -214,11 +220,11 @@ export function SentimentStorySection() {
         caption: (
           <>
             The ground is moving underneath them:{' '}
-            <span className="text-white font-semibold">{Math.round(pct(ma, 'yes') * 100)}% went through M&A</span>{' '}
+            <span className="text-white font-semibold">{Math.round(pct(ma, 'yes') * 100)}% went through a merger or acquisition</span>{' '}
             in the last three years, and{' '}
             <span className="text-white font-semibold">{Math.round(pct(rif, 'yes') * 100)}% watched their org run
             a layoff</span>{' '}
-            in the last year{deltaPts(rif, 'yes') !== null && deltaPts(rif, 'yes')! > 0 && <> — up {deltaPts(rif, 'yes')} points year over year</>}.
+            in the last year{deltaPts(rif, 'yes') !== null && deltaPts(rif, 'yes')! > 0 && <>, up {deltaPts(rif, 'yes')} points year over year</>}.
           </>
         ),
         layout: columns(rifG, {
@@ -284,7 +290,7 @@ export function SentimentStorySection() {
         <h2 className="text-3xl md:text-4xl font-[family-name:var(--font-heading)] text-white mb-3">
           The workforce, in motion
         </h2>
-        <p className="text-gray-400 max-w-2xl mx-auto">Scroll — each dot is a real group of professionals from the survey.</p>
+        <p className="text-gray-400 max-w-2xl mx-auto">Scroll through. Each dot is a real group of professionals from the survey.</p>
       </div>
 
       <ScrollyStage

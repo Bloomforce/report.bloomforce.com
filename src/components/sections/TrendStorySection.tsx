@@ -36,7 +36,7 @@ function FrameView({ frame }: { frame: Frame }) {
       <div className="flex items-center gap-2.5 mb-5">
         <Icon className="w-5 h-5 text-primary" />
         <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-primary">{frame.kicker}</span>
-        <span className="ml-auto text-[11px] text-text-light font-[family-name:var(--font-mono)]">n={frame.n}</span>
+        <span className="ml-auto text-[11px] text-text-light font-[family-name:var(--font-mono)]">{frame.n} reports</span>
       </div>
       <div className="flex items-baseline gap-3 mb-1">
         <span className="text-5xl md:text-6xl font-bold text-navy font-[family-name:var(--font-mono)] tabular-nums tracking-tight">
@@ -84,25 +84,25 @@ export function TrendStorySection() {
         icon: Brain,
         kicker: 'AI, on the ground',
         headlineValue: `${Math.round((v(ai, 'no_impact') + v(ai, 'enhance')) * 100)}%`,
-        headlineLabel: 'expect AI to leave their role intact — or make it better',
+        headlineLabel: 'expect AI to leave their role intact, or make it better',
         bars: ai?.values.map((x) => ({ label: x.label, value: x.value })) ?? [],
-        note: 'The people who run the EHR aren’t bracing for replacement — they expect AI to absorb the busywork first. The tell: watch which orgs staff for it (next).',
+        note: 'The people who run the EHR aren’t bracing for replacement. They expect AI to absorb the busywork first. The tell: watch which orgs staff for it (next).',
         n: ai?.n ?? 0,
       },
       {
         icon: Users,
         kicker: 'AI, in the org chart',
         headlineValue: `${Math.round(v(aiOrg, 'have') * 100)}%`,
-        headlineLabel: 'of organizations already have people dedicated to AI/ML',
+        headlineLabel: 'of organizations already have people dedicated to AI',
         bars: aiOrg?.values.map((x) => ({ label: x.label, value: x.value })) ?? [],
-        note: 'Adoption is running ahead of staffing — most orgs are deploying AI features faster than they’re hiring for them. That gap is where new roles (and premiums) come from.',
+        note: 'Adoption is running ahead of staffing. Most orgs are deploying AI features faster than they’re hiring for them. That gap is where new roles (and premiums) come from.',
         n: aiOrg?.n ?? 0,
       },
       {
         icon: Compass,
         kicker: 'The market’s posture',
         headlineValue: `${Math.round((v(seeking, 'passive') + v(seeking, 'planning') + v(seeking, 'active')) * 100)}%`,
-        headlineLabel: 'are open to a move — most of them quietly',
+        headlineLabel: 'are open to a move, most of them quietly',
         bars: seeking?.values.map((x) => ({ label: x.label, value: x.value })) ?? [],
         note: fair
           ? `And compensation is the pressure point: ${Math.round(v(fair, 'no') * 100)}% don’t feel fairly paid. A market that looks stable on paper is one good offer away from moving.`
@@ -128,8 +128,8 @@ export function TrendStorySection() {
           What&apos;s actually changing
         </h2>
         <p className="text-text-muted max-w-2xl mx-auto">
-          Not the hype cycle — what {data.freshness.totalRespondents.toLocaleString()} professionals report from
-          inside the industry.
+          Not the hype cycle. Just what {data.freshness.totalRespondents.toLocaleString()} professionals report
+          from inside the industry.
         </p>
       </div>
 

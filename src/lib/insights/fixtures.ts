@@ -28,9 +28,8 @@ const ROLES: { key: string; name: string; group: string; median: number; seniori
   { key: 'PM', name: 'Project / Program Manager', group: 'Individual contributors', median: 116000, seniorities: { L2: 108000, L3: 128000 } },
   { key: 'CI', name: 'Clinical Informatics', group: 'Individual contributors', median: 110000, seniorities: { L2: 102000, L3: 122000 } },
   { key: 'MGR', name: 'IT Manager', group: 'Leadership', median: 132000, seniorities: { M1: 132000 } },
-  { key: 'DIR', name: 'IT Director', group: 'Leadership', median: 158000, seniorities: { M2: 158000 } },
-  { key: 'VP', name: 'VP of IT / IS', group: 'Leadership', median: 205000, seniorities: { M3: 205000 } },
-  { key: 'EXEC', name: 'CIO / CMIO / CNIO', group: 'Leadership', median: 268000, seniorities: { exec: 268000 } },
+  // Director, VP, and C-suite are call-only: they never appear in the public
+  // dataset, so the fixtures mirror the guarded benchmark_public view.
 ];
 
 const REGIONS = ['National', 'Northeast', 'Southeast', 'Midwest', 'Southwest', 'West'];
@@ -62,6 +61,17 @@ function sparkFrom(median: number, seed: number): number[] {
   return out;
 }
 
+// Plausible per-level sample sizes so ladder rungs don't all report the same
+// count. Career pipelines fan in toward the top; taper by role index too.
+const NATIONAL_LEVEL_N: Partial<Record<Seniority, number>> = {
+  L1: 41, L2: 63, L3: 49, L4: 18, M1: 46, M2: 27, M3: 12,
+};
+function nationalN(seniority: Seniority | 'ALL', ri: number): number {
+  if (seniority === 'ALL') return Math.max(30, 120 - ri * 9);
+  const base = NATIONAL_LEVEL_N[seniority as Seniority] ?? 24;
+  return Math.max(6, Math.round(base * (1 - ri * 0.07)) + ((ri * 3 + 1) % 5) - 2);
+}
+
 function buildBenchmarks(): BenchmarkRow[] {
   const rows: BenchmarkRow[] = [];
   ROLES.forEach((role, ri) => {
@@ -80,7 +90,7 @@ function buildBenchmarks(): BenchmarkRow[] {
           region,
           workModel: 'all',
           employerType: 'all',
-          n: region === 'National' ? (seniority === 'ALL' ? 120 - ri * 9 : 34) : thin ? 9 : 22,
+          n: region === 'National' ? nationalN(seniority, ri) : thin ? 9 + ((ri + 1) % 4) : 18 + ((ri * 2 + 3) % 9),
           blended: spread(median),
           remoteShare: role.group === 'Leadership' ? 0.41 : 0.64,
           confidenceTier: region === 'National' ? (ri < 4 ? 'direct' : 'blended') : thin ? 'modeled' : 'blended',
@@ -294,7 +304,7 @@ const SENTIMENT: SentimentCut[] = [
 const PULSE: PulseItem[] = [
   { id: 'p1', ts: '2026-06-29T00:00:00Z', kind: 'demand_shift', text: 'Remote share of new Application Analyst postings up 4 pts this month', roleKey: 'AA', deltaValue: 4, deltaUnit: 'pts' },
   { id: 'p2', ts: '2026-06-26T00:00:00Z', kind: 'benchmark_move', text: 'Integration Analyst benchmark moved up on 28 fresh data points', roleKey: 'INT', deltaValue: 2100, deltaUnit: '$' },
-  { id: 'p3', ts: '2026-06-24T00:00:00Z', kind: 'demand_shift', text: 'Willow demand up 12% — pharmacy go-lives driving new postings', deltaValue: 12, deltaUnit: '%' },
+  { id: 'p3', ts: '2026-06-24T00:00:00Z', kind: 'demand_shift', text: 'Pharmacy system demand up 12% as new rollouts drive fresh postings', deltaValue: 12, deltaUnit: '%' },
   { id: 'p4', ts: '2026-06-19T00:00:00Z', kind: 'new_data', text: '31 new survey responses folded into the rolling benchmark this week' },
   { id: 'p5', ts: '2026-06-15T00:00:00Z', kind: 'benchmark_move', text: 'Director postings hit a 12-month high median', roleKey: 'DIR', deltaValue: 3100, deltaUnit: '$' },
 ];

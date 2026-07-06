@@ -4,18 +4,19 @@ import { motion } from 'framer-motion';
 import { Badge } from '@/components/ui/Badge';
 import { SectionWrapper } from '@/components/layout/SectionWrapper';
 import { SectionCTABand } from '@/components/sections/SectionCTABand';
+import { GatedContent } from '@/components/gate/GatedContent';
 import { useBenchmark } from '@/hooks/useBenchmark';
 import { formatK } from '@/lib/insights/format';
 import { EMPLOYER_TYPE_LABELS } from '@/lib/insights/employer-types';
 import { SECTION_IDS } from '@/lib/constants';
 
 /**
- * Same role, different employer: blended medians by organization type for the
- * hero-selected role family (National, all levels). Level- and region-specific
- * org-type cuts are call-only by design.
+ * Same role, different employer: benchmark medians by organization type for
+ * the hero-selected role family (National, all levels). Gated behind the
+ * email unlock; level- and region-specific org-type cuts stay call-only.
  */
 export function OrgTypeSection() {
-  const { familyRows, roleName } = useBenchmark();
+  const { familyRows, roleName, guardedRole } = useBenchmark();
 
   const cuts = familyRows
     .filter(
@@ -27,9 +28,11 @@ export function OrgTypeSection() {
     )
     .sort((a, b) => b.blended.p50 - a.blended.p50);
 
-  if (cuts.length < 2) return null;
+  if (guardedRole || cuts.length < 2) return null;
 
-  const spread = cuts[0].blended.p50 - cuts[cuts.length - 1].blended.p50;
+  const top = cuts[0].blended.p50;
+  const bottom = cuts[cuts.length - 1].blended.p50;
+  const spread = top - bottom;
 
   return (
     <SectionWrapper id={SECTION_IDS.orgType}>
@@ -40,32 +43,56 @@ export function OrgTypeSection() {
         </h2>
         <p className="text-text-muted max-w-2xl mx-auto">
           The same {roleName.toLowerCase()} role pays differently at a children&apos;s hospital than at an
-          academic medical center or a multi-state system. Right now the gap runs about{' '}
+          academic medical center or a multi-state system. Right now that gap runs about{' '}
           <span className="font-semibold text-navy">{formatK(spread)}</span> at the median.
         </p>
       </div>
 
-      <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-3 max-w-5xl mx-auto">
-        {cuts.map((c, i) => (
-          <motion.div
-            key={c.employerType}
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: i * 0.06 }}
-            className="bg-white rounded-2xl border border-ink/10 shadow-sm shadow-ink/[0.03] p-5 text-center"
-          >
-            <div className="text-xs text-text-muted font-semibold min-h-[32px] flex items-center justify-center">
-              {EMPLOYER_TYPE_LABELS[c.employerType] ?? c.employerType}
+      <div className="max-w-3xl mx-auto">
+        <GatedContent message="Unlock the org-type breakdown for every role on this page">
+          <div className="bg-white rounded-2xl border border-ink/10 shadow-sm shadow-ink/[0.03] p-6 md:p-8">
+            <div className="flex items-center justify-between mb-5">
+              <h3 className="text-lg font-[family-name:var(--font-heading)] font-semibold text-navy">
+                {roleName} · median by organization type
+              </h3>
+              <span className="text-[11px] text-text-light font-[family-name:var(--font-mono)] uppercase tracking-wider">
+                national · all levels
+              </span>
             </div>
-            <div className="text-2xl font-bold text-navy font-[family-name:var(--font-mono)] tabular-nums mt-1.5">
-              {formatK(c.blended.p50)}
+            <div className="flex flex-col gap-3.5">
+              {cuts.map((c, i) => {
+                const rel = c.blended.p50 / top;
+                return (
+                  <div key={c.employerType} className="grid grid-cols-[150px_1fr_86px] sm:grid-cols-[200px_1fr_92px] items-center gap-3">
+                    <span className="text-[13px] text-navy truncate">
+                      {EMPLOYER_TYPE_LABELS[c.employerType] ?? c.employerType}
+                    </span>
+                    <span className="h-6 rounded-md bg-bg-subtle overflow-hidden">
+                      <motion.span
+                        className="block h-full rounded-md bg-gradient-to-r from-primary to-primary-light"
+                        initial={{ width: 0 }}
+                        whileInView={{ width: `${Math.round(rel * 100)}%` }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.7, delay: i * 0.07, ease: 'easeOut' }}
+                      />
+                    </span>
+                    <span className="text-right">
+                      <span className="block text-[15px] font-bold text-navy font-[family-name:var(--font-mono)] tabular-nums">
+                        {formatK(c.blended.p50)}
+                      </span>
+                      <span className="block text-[10px] text-text-light">
+                        {c.n} reports{c.n < 10 ? ' · small sample' : ''}
+                      </span>
+                    </span>
+                  </div>
+                );
+              })}
             </div>
-            <div className="text-[11px] text-text-light mt-1.5">
-              median · {c.n} reports{c.n < 10 ? ' · small sample' : ''}
-            </div>
-          </motion.div>
-        ))}
+            <p className="text-[11px] text-text-light mt-5">
+              Medians combine verified professional reports with live market data for the selected role.
+            </p>
+          </div>
+        </GatedContent>
       </div>
 
       <SectionCTABand

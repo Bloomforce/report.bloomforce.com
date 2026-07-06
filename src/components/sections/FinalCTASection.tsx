@@ -7,7 +7,7 @@ import { useBenchmark } from '@/hooks/useBenchmark';
 import { SECTION_IDS, BOOK_CALL_URL, SURVEY_URL } from '@/lib/constants';
 
 const VALUE_PROPS = [
-  'The full dataset, including every cut we hold back from this page',
+  'The full dataset, including cuts not published on this page',
   'Director, VP, and C-suite numbers, by market and org type',
   'A read tailored to your team, your roles, and your market',
   'Which employers are competing for the same people. We name them on the call.',

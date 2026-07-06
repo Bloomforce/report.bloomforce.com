@@ -2,7 +2,9 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Lock } from 'lucide-react';
 import { Select } from '@/components/ui/Select';
+import { Button } from '@/components/ui/Button';
 import { PercentileTrack } from '@/components/charts/PercentileTrack';
 import { FreshnessPill } from '@/components/live/FreshnessPill';
 import { LiveDot } from '@/components/live/LiveDot';
@@ -11,37 +13,26 @@ import { Sparkline } from '@/components/charts/Sparkline';
 import { useBenchmark } from '@/hooks/useBenchmark';
 import { formatK } from '@/lib/insights/format';
 import { percentileLabel } from '@/lib/insights/percentile';
-import { SECTION_IDS } from '@/lib/constants';
+import { SECTION_IDS, BOOK_CALL_URL, GUARDED_ROLE_LABELS } from '@/lib/constants';
 import type { Seniority } from '@/lib/insights/types';
 
-const LEVEL_OPTIONS: { value: Seniority | 'ALL'; label: string; guarded?: boolean }[] = [
+const LEVEL_OPTIONS: { value: Seniority | 'ALL'; label: string }[] = [
   { value: 'ALL', label: 'All levels' },
   { value: 'L1', label: 'Early career (0–3 yrs)' },
   { value: 'L2', label: 'Mid (4–8 yrs)' },
   { value: 'L3', label: 'Senior (9+ yrs)' },
   { value: 'L4', label: 'Lead / Principal / Architect' },
   { value: 'M1', label: 'Manager / Supervisor' },
-  { value: 'M2', label: 'Director · shared in a data review', guarded: true },
-  { value: 'M3', label: 'VP · shared in a data review', guarded: true },
-  { value: 'exec', label: 'C-suite · shared in a data review', guarded: true },
-];
-
-/** Director and above are call-only: visible in the picker, never priced on the page. */
-const GUARDED_ROLES = [
-  { roleKey: 'DIR', label: 'IT Director · shared in a data review' },
-  { roleKey: 'VP', label: 'VP of IT / IS · shared in a data review' },
-  { roleKey: 'EXEC', label: 'CIO / CMIO / CNIO · shared in a data review' },
 ];
 
 export function HeroBenchmarkSection() {
-  const { data, profile, setProfile, row, fallbackNote, roleName, percentile, deltas } = useBenchmark();
+  const { data, profile, setProfile, row, fallbackNote, roleName, guardedRole, percentile, deltas } = useBenchmark();
   const [compInput, setCompInput] = useState(profile.comp ? String(profile.comp) : '');
 
   const roleGroups = [...new Set(data.roles.map((r) => r.group))];
   const availableLevels = LEVEL_OPTIONS.filter(
     (l) =>
       l.value === 'ALL' ||
-      l.guarded ||
       data.benchmarks.some((b) => b.roleFamily === profile.roleKey && b.seniority === l.value),
   );
 
@@ -58,7 +49,7 @@ export function HeroBenchmarkSection() {
           The living EHR talent benchmark
         </span>
         <h1 className="text-4xl md:text-5xl font-[family-name:var(--font-heading)] font-bold text-navy mt-5 mb-3 max-w-3xl leading-[1.08] tracking-tight">
-          Know where you stand — <em className="not-italic text-primary">as of this week</em>.
+          Know where you stand, <em className="not-italic text-primary">as of this week</em>.
         </h1>
         <p className="text-lg text-text-muted max-w-2xl mb-8">
           Real pay from verified professionals, kept current with live market data. One number per role,
@@ -77,18 +68,16 @@ export function HeroBenchmarkSection() {
                 ...roleGroups.flatMap((g) =>
                   data.roles.filter((r) => r.group === g).map((r) => ({ value: r.roleKey, label: r.label })),
                 ),
-                ...GUARDED_ROLES.filter((gr) => !data.roles.some((r) => r.roleKey === gr.roleKey)).map((gr) => ({
-                  value: gr.roleKey,
-                  label: gr.label,
-                  disabled: true,
-                })),
+                ...Object.entries(GUARDED_ROLE_LABELS)
+                  .filter(([key]) => !data.roles.some((r) => r.roleKey === key))
+                  .map(([key, label]) => ({ value: key, label })),
               ]}
             />
             <Select
               label="Level"
               value={profile.seniority}
               onChange={(e) => setProfile({ seniority: e.target.value as Seniority | 'ALL' })}
-              options={availableLevels.map((l) => ({ value: l.value, label: l.label, disabled: l.guarded }))}
+              options={availableLevels.map((l) => ({ value: l.value, label: l.label }))}
             />
             <Select
               label="Market"
@@ -114,16 +103,47 @@ export function HeroBenchmarkSection() {
             <div className="ml-auto hidden lg:block">
               {row && <FreshnessPill n={row.n} confidenceTier={row.confidenceTier} updatedAt={row.updatedAt} />}
             </div>
-            <p className="w-full text-xs text-text-light">
-              Director, VP, and C-suite numbers never appear on this page. We share them in a{' '}
-              <a href={`#${SECTION_IDS.cta}`} className="text-primary underline underline-offset-2">
-                data review
-              </a>
-              .
-            </p>
           </div>
 
-          {row ? (
+          {guardedRole ? (
+            <div className="relative overflow-hidden rounded-b-2xl">
+              {/* Plausible but fake panel, blurred behind the call CTA. */}
+              <div className="p-6 md:p-8 blur-md select-none pointer-events-none" aria-hidden="true">
+                <div className="flex flex-wrap gap-x-10 gap-y-4 mb-2">
+                  <div>
+                    <div className="text-xs text-text-muted uppercase tracking-wide font-semibold mb-1">Market median</div>
+                    <span className="text-3xl font-bold text-navy font-[family-name:var(--font-mono)]">$1•8k</span>
+                  </div>
+                  <div>
+                    <div className="text-xs text-text-muted uppercase tracking-wide font-semibold mb-1">Typical range (middle half)</div>
+                    <span className="text-3xl font-bold text-navy font-[family-name:var(--font-mono)]">$1•2k–$2•4k</span>
+                  </div>
+                  <div>
+                    <div className="text-xs text-text-muted uppercase tracking-wide font-semibold mb-1">Fully remote</div>
+                    <span className="text-3xl font-bold text-navy font-[family-name:var(--font-mono)]">••%</span>
+                  </div>
+                </div>
+                <div className="h-24 mt-4 rounded-xl bg-gradient-to-r from-primary/15 via-primary/30 to-primary/10" />
+              </div>
+              <div className="absolute inset-0 flex items-center justify-center bg-white/55 backdrop-blur-[2px]">
+                <div className="text-center px-6 max-w-md">
+                  <div className="w-12 h-12 rounded-full bg-primary-50 ring-1 ring-primary/20 flex items-center justify-center mx-auto mb-3">
+                    <Lock className="w-5 h-5 text-primary" />
+                  </div>
+                  <p className="text-navy font-[family-name:var(--font-heading)] font-semibold text-lg mb-1.5">
+                    Leadership data is available on request
+                  </p>
+                  <p className="text-sm text-text-muted mb-4">
+                    Our {roleName.toLowerCase()} benchmarks, by market and org type, are shared in a 20-minute
+                    data review.
+                  </p>
+                  <Button href={`${BOOK_CALL_URL}?utm_source=insights&utm_content=guarded-${profile.roleKey}`}>
+                    Request access to the leadership data set
+                  </Button>
+                </div>
+              </div>
+            </div>
+          ) : row ? (
             <div className="p-6 md:p-8">
               {/* headline numbers */}
               <div className="flex flex-wrap gap-x-10 gap-y-4 mb-2">
@@ -137,7 +157,7 @@ export function HeroBenchmarkSection() {
                   </div>
                 </div>
                 <div>
-                  <div className="text-xs text-text-muted uppercase tracking-wide font-semibold mb-1">Typical range (p25–p75)</div>
+                  <div className="text-xs text-text-muted uppercase tracking-wide font-semibold mb-1">Typical range (middle half)</div>
                   <span className="text-3xl font-bold text-navy font-[family-name:var(--font-mono)] tabular-nums">
                     {formatK(row.blended.p25)}–{formatK(row.blended.p75)}
                   </span>
@@ -168,7 +188,7 @@ export function HeroBenchmarkSection() {
                     exit={{ opacity: 0 }}
                     className="text-navy text-[15px] mt-1"
                   >
-                    You&apos;re {percentileLabel(percentile)} —{' '}
+                    You&apos;re {percentileLabel(percentile)},{' '}
                     <span className={deltas.vsMedian >= 0 ? 'text-primary font-semibold' : 'text-[var(--color-down)] font-semibold'}>
                       {formatK(Math.abs(deltas.vsMedian))} {deltas.vsMedian >= 0 ? 'above' : 'below'} the median
                     </span>{' '}
@@ -190,7 +210,8 @@ export function HeroBenchmarkSection() {
             </div>
           ) : (
             <div className="p-8 text-text-muted text-sm">
-              Not enough data yet for this exact cut — it publishes automatically once enough observations land.
+              We don&apos;t have enough reports for this exact role, level, and market yet. It publishes
+              automatically as soon as enough people share their numbers.
             </div>
           )}
         </div>
