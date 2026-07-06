@@ -61,6 +61,17 @@ function sparkFrom(median: number, seed: number): number[] {
   return out;
 }
 
+// Plausible per-level sample sizes so ladder rungs don't all report the same
+// count. Career pipelines fan in toward the top; taper by role index too.
+const NATIONAL_LEVEL_N: Partial<Record<Seniority, number>> = {
+  L1: 41, L2: 63, L3: 49, L4: 18, M1: 46, M2: 27, M3: 12,
+};
+function nationalN(seniority: Seniority | 'ALL', ri: number): number {
+  if (seniority === 'ALL') return Math.max(30, 120 - ri * 9);
+  const base = NATIONAL_LEVEL_N[seniority as Seniority] ?? 24;
+  return Math.max(6, Math.round(base * (1 - ri * 0.07)) + ((ri * 3 + 1) % 5) - 2);
+}
+
 function buildBenchmarks(): BenchmarkRow[] {
   const rows: BenchmarkRow[] = [];
   ROLES.forEach((role, ri) => {
@@ -79,7 +90,7 @@ function buildBenchmarks(): BenchmarkRow[] {
           region,
           workModel: 'all',
           employerType: 'all',
-          n: region === 'National' ? (seniority === 'ALL' ? 120 - ri * 9 : 34) : thin ? 9 : 22,
+          n: region === 'National' ? nationalN(seniority, ri) : thin ? 9 + ((ri + 1) % 4) : 18 + ((ri * 2 + 3) % 9),
           blended: spread(median),
           remoteShare: role.group === 'Leadership' ? 0.41 : 0.64,
           confidenceTier: region === 'National' ? (ri < 4 ? 'direct' : 'blended') : thin ? 'modeled' : 'blended',

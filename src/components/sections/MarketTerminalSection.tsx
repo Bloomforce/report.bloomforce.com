@@ -114,13 +114,15 @@ export function MarketTerminalSection() {
                     const cut = wmCuts.find((c) => c.workModel === wm);
                     const Icon = WM_META[wm].icon;
                     return (
-                      <div key={wm} className="rounded-xl bg-white/[0.04] ring-1 ring-white/10 p-4 text-center">
-                        <Icon className="w-4 h-4 text-primary-light mx-auto mb-1.5" />
-                        <div className={cn('font-bold text-white font-[family-name:var(--font-mono)] tabular-nums', cut ? 'text-lg' : 'text-xs text-white/40 font-normal')}>
-                          {cut ? formatK(cut.blended.p50) : 'not enough data yet'}
+                      <div key={wm} className="flex flex-col items-center text-center rounded-xl bg-white/[0.04] ring-1 ring-white/10 p-4">
+                        <Icon className="w-4 h-4 text-primary-light mb-2" />
+                        <div className="flex items-center justify-center h-7">
+                          <span className={cn('font-bold text-white font-[family-name:var(--font-mono)] tabular-nums leading-none', cut ? 'text-lg' : 'text-[11px] text-white/40 font-normal')}>
+                            {cut ? formatK(cut.blended.p50) : 'no data yet'}
+                          </span>
                         </div>
-                        <div className="text-xs text-white/50 mt-0.5">{WM_META[wm].label}</div>
-                        {cut && <div className="text-[10px] text-white/35 mt-1">{cut.n} reports</div>}
+                        <div className="text-xs text-white/50 mt-1">{WM_META[wm].label}</div>
+                        <div className="text-[10px] text-white/35 mt-1 h-3 leading-3">{cut ? `${cut.n} reports` : ''}</div>
                       </div>
                     );
                   })}
