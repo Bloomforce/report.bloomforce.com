@@ -129,9 +129,9 @@ export function CareerLadderSection() {
                 <div className="text-2xl font-bold text-text-light/40 font-[family-name:var(--font-mono)] mt-2 blur-[1px] select-none" aria-hidden>
                   $•••k
                 </div>
-                <div className="text-xs text-text-muted mt-1">Shared in a data review</div>
+                <div className="text-xs text-text-muted mt-1">Available on request</div>
                 <div className="text-xs text-primary font-semibold mt-2 group-hover:underline underline-offset-2">
-                  See what we hold
+                  Request access
                 </div>
               </button>
             ) : (

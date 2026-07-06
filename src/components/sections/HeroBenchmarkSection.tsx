@@ -131,14 +131,14 @@ export function HeroBenchmarkSection() {
                     <Lock className="w-5 h-5 text-primary" />
                   </div>
                   <p className="text-navy font-[family-name:var(--font-heading)] font-semibold text-lg mb-1.5">
-                    We benchmark {roleName}s. We just don&apos;t publish it.
+                    Leadership data is available on request
                   </p>
                   <p className="text-sm text-text-muted mb-4">
-                    Leadership compensation is too situational for a public number. We walk through the full
-                    {' '}{roleName.toLowerCase()} dataset live, matched to your market and org type.
+                    Our {roleName.toLowerCase()} benchmarks, by market and org type, are shared in a 20-minute
+                    data review.
                   </p>
                   <Button href={`${BOOK_CALL_URL}?utm_source=insights&utm_content=guarded-${profile.roleKey}`}>
-                    Book a 20-min data review
+                    Request access to the leadership data set
                   </Button>
                 </div>
               </div>

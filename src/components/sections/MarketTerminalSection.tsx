@@ -73,14 +73,14 @@ export function MarketTerminalSection() {
                 <div className="flex items-start gap-3 py-2">
                   <Lock className="w-4 h-4 text-primary-light mt-0.5 shrink-0" />
                   <p className="text-sm text-white/70">
-                    {roleName} market data is call-only.{' '}
+                    {roleName} market data is available on request.{' '}
                     <a
                       href={`${BOOK_CALL_URL}?utm_source=insights&utm_content=terminal-guarded`}
                       className="text-primary-light underline underline-offset-2 hover:text-white transition-colors"
                     >
-                      Book a data review
-                    </a>{' '}
-                    and we bring all of it.
+                      Request access to the leadership data set
+                    </a>
+                    .
                   </p>
                 </div>
               ) : national ? (

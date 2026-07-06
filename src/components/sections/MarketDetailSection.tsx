@@ -48,14 +48,14 @@ export function MarketDetailSection() {
       <SectionWrapper id={SECTION_IDS.marketDetail} alt>
         <div className="max-w-2xl mx-auto bg-navy rounded-2xl p-8 md:p-10 text-center">
           <h2 className="text-2xl md:text-3xl font-[family-name:var(--font-heading)] text-white mb-3">
-            The {roleName.toLowerCase()} market, read live
+            Request access to our leadership data set
           </h2>
           <p className="text-sm text-gray-400 max-w-lg mx-auto mb-6">
-            Demand, hotspots, and pay for leadership roles depend heavily on org type and market. We share
-            them in a 20-minute data review, matched to your situation.
+            Demand, hiring hotspots, and pay for {roleName.toLowerCase()}s, by market and org type, shared in
+            a 20-minute data review.
           </p>
           <Button size="lg" href={`${BOOK_CALL_URL}?utm_source=insights&utm_content=market-detail-guarded-${profile.roleKey}`}>
-            <Phone className="w-4 h-4 mr-2" /> Book a data review
+            <Phone className="w-4 h-4 mr-2" /> Request access
           </Button>
         </div>
       </SectionWrapper>
@@ -145,9 +145,9 @@ export function MarketDetailSection() {
                     This is the summary view.
                   </h3>
                   <p className="text-sm text-gray-400 max-w-xl">
-                    The full dataset, every cut we hold back, and which employers are competing for the same
-                    people in your market: that is a 20-minute call with the person who actually works this
-                    market. Not a hand-off.
+                    The full dataset, including cuts not published on this page, and which employers are
+                    competing for the same people in your market: that is a 20-minute call with the person
+                    who actually works this market. Not a hand-off.
                   </p>
                 </div>
                 <Button size="lg" href={`${BOOK_CALL_URL}?utm_source=insights&utm_content=market-detail-${profile.roleKey}`} className="shrink-0">
