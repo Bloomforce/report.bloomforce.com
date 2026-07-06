@@ -1,11 +1,11 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { Lock } from 'lucide-react';
 import { Badge } from '@/components/ui/Badge';
 import { SectionWrapper } from '@/components/layout/SectionWrapper';
 import { FreshnessPill } from '@/components/live/FreshnessPill';
 import { SectionCTABand } from '@/components/sections/SectionCTABand';
-import { GatedContent } from '@/components/gate/GatedContent';
 import { useBenchmark } from '@/hooks/useBenchmark';
 import { formatK, formatSignedK } from '@/lib/insights/format';
 import { SECTION_IDS } from '@/lib/constants';
@@ -19,11 +19,11 @@ const IC_LADDER: { level: Seniority; label: string }[] = [
   { level: 'L4', label: 'Lead / Architect' },
 ];
 
-const LEADERSHIP: { family: string; level: Seniority; label: string }[] = [
-  { family: 'MGR', level: 'M1', label: 'Manager' },
-  { family: 'DIR', level: 'M2', label: 'Director' },
-  { family: 'VP', level: 'M3', label: 'VP' },
-  { family: 'EXEC', level: 'exec', label: 'CIO / CMIO / CNIO' },
+const LEADERSHIP: { family: string; level: Seniority; label: string; guarded?: boolean }[] = [
+  { family: 'MGR', level: 'M1', label: 'Manager / Supervisor' },
+  { family: 'DIR', level: 'M2', label: 'Director', guarded: true },
+  { family: 'VP', level: 'M3', label: 'VP', guarded: true },
+  { family: 'EXEC', level: 'exec', label: 'CIO / CMIO / CNIO', guarded: true },
 ];
 
 function nationalCell(rows: BenchmarkRow[], family: string, level: Seniority | 'ALL') {
@@ -57,8 +57,7 @@ export function CareerLadderSection() {
           Where the real jumps happen
         </h2>
         <p className="text-text-muted max-w-2xl mx-auto">
-          The ladder from {roleName.toLowerCase()} to the C-suite — every rung a blended market number.
-          Click a rung to benchmark it above.
+          Every rung on the ladder is a real market number. Click one to benchmark it above.
         </p>
       </div>
 
@@ -106,14 +105,31 @@ export function CareerLadderSection() {
           {mgmtJump !== null && (
             <span className="text-sm text-text-muted">
               Stepping from senior IC to manager is worth{' '}
-              <span className="font-semibold text-primary">{formatSignedK(mgmtJump)}</span> at the median — the
+              <span className="font-semibold text-primary">{formatSignedK(mgmtJump)}</span> at the median. The
               bigger jumps come later.
             </span>
           )}
         </div>
-        <GatedContent message="Unlock the full leadership breakdown — Manager through CIO, with ranges and regional cuts">
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 mt-4">
-            {leadCells.map((rung) => (
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 mt-4">
+          {leadCells.map((rung) =>
+            rung.guarded ? (
+              <a
+                key={rung.family}
+                href={`#${SECTION_IDS.cta}`}
+                className="rounded-xl border border-dashed border-ink/20 p-5 text-left transition-colors hover:border-primary/50 group"
+              >
+                <div className="text-sm font-semibold text-navy flex items-center gap-1.5">
+                  <Lock className="w-3.5 h-3.5 text-text-light" /> {rung.label}
+                </div>
+                <div className="text-2xl font-bold text-text-light/40 font-[family-name:var(--font-mono)] mt-2 blur-[1px] select-none" aria-hidden>
+                  $•••k
+                </div>
+                <div className="text-xs text-text-muted mt-1">Shared in a data review</div>
+                <div className="text-xs text-primary font-semibold mt-2 group-hover:underline underline-offset-2">
+                  Book 20 minutes
+                </div>
+              </a>
+            ) : (
               <button
                 key={rung.family}
                 onClick={() => {
@@ -139,17 +155,17 @@ export function CareerLadderSection() {
                     </div>
                   </>
                 ) : (
-                  <div className="text-sm text-text-light mt-2">Awaiting enough public data — not guessed.</div>
+                  <div className="text-sm text-text-light mt-2">Waiting on enough data. We never guess.</div>
                 )}
               </button>
-            ))}
-          </div>
-        </GatedContent>
+            ),
+          )}
+        </div>
       </div>
 
       <SectionCTABand
         title="Planning your next move?"
-        subtitle={`Talk through the ${roleName.toLowerCase()} market with the person who actually works it — no pitch, just data.`}
+        subtitle="Talk it through with the person who actually works this market. No pitch, just data."
         buttonLabel="Book a 20-min data review"
         href={`#${SECTION_IDS.cta}`}
       />

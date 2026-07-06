@@ -8,8 +8,7 @@ import { ScrollyStage } from '@/components/scrolly/ScrollyStage';
 import { DotSwarm, type SwarmDot, type SwarmLayout } from '@/components/scrolly/DotSwarm';
 import { SectionCTABand } from '@/components/sections/SectionCTABand';
 import { useBenchmark } from '@/hooks/useBenchmark';
-import { useGate } from '@/hooks/useGate';
-import { SECTION_IDS } from '@/lib/constants';
+import { SECTION_IDS, SURVEY_URL } from '@/lib/constants';
 import type { SentimentCut } from '@/lib/insights/types';
 
 const TEAL = '#3BC3B4';
@@ -37,10 +36,12 @@ function assign(i: number, dim: number, options: { key: string; share: number }[
 function metricCut(sentiment: SentimentCut[], key: string, year = 2025, family = 'all'): SentimentCut | null {
   return (
     sentiment.find(
-      (s) => s.metricKey === key && s.surveyYear === year && (family === 'all' ? !s.cohort.roleFamily : s.cohort.roleFamily === family) && s.id.endsWith('|all'),
-    ) ??
-    sentiment.find((s) => s.metricKey === key && s.surveyYear === year && (family === 'all' ? !s.cohort.roleFamily : s.cohort.roleFamily === family)) ??
-    null
+      (s) =>
+        s.metricKey === key &&
+        s.surveyYear === year &&
+        !s.cohort.workModel &&
+        (family === 'all' ? !s.cohort.roleFamily : s.cohort.roleFamily === family),
+    ) ?? null
   );
 }
 
@@ -68,8 +69,7 @@ function clusterPlace(indexInGroup: number, groupSize: number, cx: number, cy: n
 const N_DOTS = 420;
 
 export function SentimentStorySection() {
-  const { data, profile, roleName } = useBenchmark();
-  const { showModal } = useGate();
+  const { data, profile } = useBenchmark();
   const sentiment = data.sentiment;
 
   const wlb = metricCut(sentiment, 'satisfaction_wlb');
@@ -230,16 +230,16 @@ export function SentimentStorySection() {
         kicker: 'People like you',
         caption: (
           <>
-            Among <span className="text-white font-semibold">{roleName}s</span>
+            The brighter dots are the people in the role you picked above
             {myWlb ? (
               <>
-                , <span className="text-white font-semibold">{Math.round(pct(myWlb, 'satisfied') * 100)}% are satisfied
-                with work-life balance</span> (n={myWlb.n})
+                : <span className="text-white font-semibold">{Math.round(pct(myWlb, 'satisfied') * 100)}% of them
+                are satisfied with work-life balance</span> ({myWlb.n} reports)
               </>
             ) : (
-              <> the cohort cut is still collecting</>
+              <> (this group is still collecting responses)</>
             )}
-            . This is your peer group — the same people behind your benchmark above.
+            . This is your peer group, and these are the same people behind your benchmark.
           </>
         ),
         layout: {
@@ -258,7 +258,7 @@ export function SentimentStorySection() {
         },
       },
     ];
-  }, [dots, wlb, wm, rto, rif, ma, myWlb, roleName, profile.roleKey, totalN]);
+  }, [dots, wlb, wm, rto, rif, ma, myWlb, profile.roleKey, totalN]);
 
   const mobileFallback = (
     <div className="flex flex-col gap-4">
@@ -323,10 +323,10 @@ export function SentimentStorySection() {
 
       <SectionCTABand
         className="border-l-primary bg-navy-light !border-white/10 [&_p]:!text-white [&_.text-navy]:!text-white"
-        title={`Track how ${roleName}s are feeling`}
-        subtitle="Get the alert when your role's sentiment or benchmark moves — a few times a year, never noise."
-        buttonLabel="Get benchmark alerts"
-        onClick={showModal}
+        title="Your experience belongs in this data"
+        subtitle="The 2026 survey is open now. Five to seven minutes, fully anonymous, and it sharpens every number on this page."
+        buttonLabel="Take the 2026 survey"
+        href={SURVEY_URL}
       />
     </SectionWrapper>
   );

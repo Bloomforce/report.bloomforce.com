@@ -12,7 +12,11 @@ import { SECTION_IDS } from '@/lib/constants';
 import type { SentimentCut } from '@/lib/insights/types';
 
 function cut(sentiment: SentimentCut[], key: string): SentimentCut | null {
-  return sentiment.find((s) => s.metricKey === key && s.surveyYear === 2025 && !s.cohort.roleFamily) ?? null;
+  return (
+    sentiment.find(
+      (s) => s.metricKey === key && s.surveyYear === 2025 && !s.cohort.roleFamily && !s.cohort.workModel,
+    ) ?? null
+  );
 }
 
 interface Frame {

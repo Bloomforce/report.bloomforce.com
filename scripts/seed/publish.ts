@@ -320,7 +320,52 @@ export function publishBenchmark(obs: Observation[], jobs: JobRecord[], asOf: Da
       if (c) cells.push(c);
     }
   }
-  return cells;
+
+  // Monotonicity guard: when a thin/modeled cell prices a rung below the rung
+  // beneath it (e.g. Lead paid less than Senior in one region), that's sample
+  // noise, not signal — suppress the weak side of the inversion. Two strong
+  // cells that invert are left alone: that's the market talking.
+  const LEVEL_SERIES = ['L1', 'L2', 'L3', 'L4'];
+  const LEADERSHIP_SERIES = ['MGR', 'DIR', 'VP', 'EXEC'];
+  const weak = (c: BenchmarkCell) => c.confidence_tier === 'modeled' || c.n_observations < DIRECT_N;
+  const baseCut = (c: BenchmarkCell) => c.work_model === 'all' && c.employer_type === 'all' && c.credential === 'all';
+  const dropped = new Set<BenchmarkCell>();
+
+  function guardSeries(order: string[], pick: (rank: string) => BenchmarkCell | undefined) {
+    for (let pass = 0; pass < order.length; pass++) {
+      let changed = false;
+      let prev: BenchmarkCell | undefined;
+      for (const rank of order) {
+        const cell = pick(rank);
+        if (!cell || dropped.has(cell)) continue;
+        if (prev && cell.blended_median < prev.blended_median) {
+          if (weak(cell)) { dropped.add(cell); changed = true; continue; }
+          if (weak(prev)) { dropped.add(prev); changed = true; }
+        }
+        prev = cell;
+      }
+      if (!changed) break;
+    }
+  }
+
+  for (const family of families) {
+    for (const region of regions) {
+      guardSeries(LEVEL_SERIES, (lvl) =>
+        cells.find((c) => c.role_family === family && c.seniority_level === lvl && c.region === region && baseCut(c)),
+      );
+    }
+  }
+  for (const region of regions) {
+    guardSeries(LEADERSHIP_SERIES, (fam) =>
+      cells.find((c) => c.role_family === fam && c.seniority_level !== 'all' && c.region === region && baseCut(c)) ??
+      cells.find((c) => c.role_family === fam && c.seniority_level === 'all' && c.region === region && baseCut(c)),
+    );
+  }
+  if (dropped.size) {
+    console.log(`  monotonicity guard suppressed ${dropped.size} inverted thin cell(s):`);
+    for (const c of dropped) console.log(`    - ${c.role_family}/${c.seniority_level}/${c.region} (n=${c.n_observations}, ${c.confidence_tier}, $${c.blended_median})`);
+  }
+  return cells.filter((c) => !dropped.has(c));
 }
 
 // ---------------------------------------------------------------------------

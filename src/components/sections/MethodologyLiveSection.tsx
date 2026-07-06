@@ -15,23 +15,23 @@ export function MethodologyLiveSection() {
   const layers = [
     {
       icon: ClipboardList,
-      name: 'Survey spine',
+      name: 'Our workforce surveys',
       trust: 'Highest trust',
-      body: `${f.totalRespondents.toLocaleString()} verified responses from EHR professionals across two survey waves. Self-reported base + bonus, screened for outliers and duplicates. The citable number.`,
+      body: `${f.totalRespondents.toLocaleString()} verified responses from EHR professionals across two survey waves, screened for outliers and duplicates. The industry-leading survey in this space, and the backbone of every number here.`,
       fresh: f.lastSurveyIngest ? `last response ${formatDate(f.lastSurveyIngest)}` : null,
     },
     {
       icon: Radio,
       name: 'Market pulse',
       trust: 'Directional',
-      body: `${f.postingsIngested.toLocaleString()} job postings with disclosed pay, ingested continuously, classified by role, level, module, and market. Weighted at half a survey response in the blend — advertised ranges run wide.`,
-      fresh: f.lastPulseRefresh ? `last posting ${formatDate(f.lastPulseRefresh)}` : null,
+      body: 'Recent job postings and live hiring demand across the market, read continuously by role, level, and region. This is how the benchmark stays current between survey waves.',
+      fresh: f.lastPulseRefresh ? `last refresh ${formatDate(f.lastPulseRefresh)}` : null,
     },
     {
       icon: Landmark,
-      name: 'Public records',
+      name: 'Verification layer',
       trust: 'Verified',
-      body: 'Publicly disclosed salaries from institutions required to report — real paid comp, capped so no single employer dominates any benchmark cell.',
+      body: 'Additional verified pay records keep the numbers honest, and no single employer is allowed to dominate any published figure.',
       fresh: null,
     },
   ];
@@ -41,11 +41,11 @@ export function MethodologyLiveSection() {
       <div className="text-center mb-10">
         <Badge className="mb-4">Methodology</Badge>
         <h2 className="text-3xl md:text-4xl font-[family-name:var(--font-heading)] text-navy mb-4">
-          One number, three sources — and the receipts
+          Where these numbers come from
         </h2>
         <p className="text-text-muted max-w-2xl mx-auto">
-          Every benchmark blends what people report earning with what the market advertises and what public
-          records verify. Every number carries its sample size, confidence, and date.
+          Every benchmark starts with what real professionals told us they earn, kept current by what the
+          market is actually hiring for. Every number carries its sample size, confidence, and date.
         </p>
       </div>
 
@@ -70,9 +70,9 @@ export function MethodologyLiveSection() {
       </div>
 
       <div className="mt-6 bg-white rounded-2xl border border-dashed border-ink/20 p-5 text-sm text-text-muted max-w-3xl mx-auto text-center">
-        Rolling 12-month window · {f.benchmarkCells} published benchmark cells · cells with fewer than 5
-        observations are <span className="font-semibold text-navy">hidden, not guessed</span> — and modeled cells
-        are always labeled. Updated {formatDate(f.asOf)}.
+        Rolling 12-month window. When a cut is too thin to trust, it is{' '}
+        <span className="font-semibold text-navy">hidden, not guessed</span>, and estimates are always labeled
+        as estimates. Updated {formatDate(f.asOf)}.
       </div>
     </SectionWrapper>
   );

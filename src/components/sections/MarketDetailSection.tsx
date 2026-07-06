@@ -50,8 +50,8 @@ export function MarketDetailSection() {
           How hard is your market working against you?
         </h2>
         <p className="text-text-muted max-w-2xl mx-auto">
-          Exact demand, where the hiring concentrates, and the deep pay cuts for {roleName}s — unlocked by
-          adding your own (anonymous) data point.
+          Exact demand, where the hiring concentrates, and the deeper pay cuts for your role. It unlocks when
+          you add your own anonymous data point.
         </p>
       </div>
 
@@ -126,9 +126,9 @@ export function MarketDetailSection() {
                     This is the summary view.
                   </h3>
                   <p className="text-sm text-gray-400 max-w-xl">
-                    The full dataset — every cut, plus which employers are competing for {roleName}s in your
-                    market and where your offer lands — is a 20-minute call with the person who actually works
-                    this market. Not a hand-off.
+                    The full dataset, every cut we hold back, and which employers are competing for the same
+                    people in your market: that is a 20-minute call with the person who actually works this
+                    market. Not a hand-off.
                   </p>
                 </div>
                 <Button size="lg" href={`${BOOK_CALL_URL}?utm_source=insights&utm_content=market-detail-${profile.roleKey}`} className="shrink-0">

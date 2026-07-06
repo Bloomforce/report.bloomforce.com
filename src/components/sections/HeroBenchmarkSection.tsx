@@ -14,16 +14,23 @@ import { percentileLabel } from '@/lib/insights/percentile';
 import { SECTION_IDS } from '@/lib/constants';
 import type { Seniority } from '@/lib/insights/types';
 
-const LEVEL_OPTIONS: { value: Seniority | 'ALL'; label: string }[] = [
+const LEVEL_OPTIONS: { value: Seniority | 'ALL'; label: string; guarded?: boolean }[] = [
   { value: 'ALL', label: 'All levels' },
   { value: 'L1', label: 'Early career (0–3 yrs)' },
   { value: 'L2', label: 'Mid (4–8 yrs)' },
   { value: 'L3', label: 'Senior (9+ yrs)' },
   { value: 'L4', label: 'Lead / Principal / Architect' },
   { value: 'M1', label: 'Manager / Supervisor' },
-  { value: 'M2', label: 'Director' },
-  { value: 'M3', label: 'VP' },
-  { value: 'exec', label: 'C-suite (CIO / CMIO / CNIO)' },
+  { value: 'M2', label: 'Director · shared in a data review', guarded: true },
+  { value: 'M3', label: 'VP · shared in a data review', guarded: true },
+  { value: 'exec', label: 'C-suite · shared in a data review', guarded: true },
+];
+
+/** Director and above are call-only: visible in the picker, never priced on the page. */
+const GUARDED_ROLES = [
+  { roleKey: 'DIR', label: 'IT Director · shared in a data review' },
+  { roleKey: 'VP', label: 'VP of IT / IS · shared in a data review' },
+  { roleKey: 'EXEC', label: 'CIO / CMIO / CNIO · shared in a data review' },
 ];
 
 export function HeroBenchmarkSection() {
@@ -34,6 +41,7 @@ export function HeroBenchmarkSection() {
   const availableLevels = LEVEL_OPTIONS.filter(
     (l) =>
       l.value === 'ALL' ||
+      l.guarded ||
       data.benchmarks.some((b) => b.roleFamily === profile.roleKey && b.seniority === l.value),
   );
 
@@ -53,8 +61,8 @@ export function HeroBenchmarkSection() {
           Know where you stand — <em className="not-italic text-primary">as of this week</em>.
         </h1>
         <p className="text-lg text-text-muted max-w-2xl mb-8">
-          Real pay from verified professionals, blended with the live job market into one number per role,
-          level, and region. Pick yours — the whole page follows.
+          Real pay from verified professionals, kept current with live market data. One number per role,
+          level, and market. Pick yours and see where you stand.
         </p>
 
         <div className="bg-white rounded-2xl border border-ink/10 shadow-sm shadow-ink/[0.03]">
@@ -65,15 +73,22 @@ export function HeroBenchmarkSection() {
               className="min-w-[260px]"
               value={profile.roleKey}
               onChange={(e) => setProfile({ roleKey: e.target.value, seniority: 'ALL' })}
-              options={roleGroups.flatMap((g) =>
-                data.roles.filter((r) => r.group === g).map((r) => ({ value: r.roleKey, label: r.label })),
-              )}
+              options={[
+                ...roleGroups.flatMap((g) =>
+                  data.roles.filter((r) => r.group === g).map((r) => ({ value: r.roleKey, label: r.label })),
+                ),
+                ...GUARDED_ROLES.filter((gr) => !data.roles.some((r) => r.roleKey === gr.roleKey)).map((gr) => ({
+                  value: gr.roleKey,
+                  label: gr.label,
+                  disabled: true,
+                })),
+              ]}
             />
             <Select
               label="Level"
               value={profile.seniority}
               onChange={(e) => setProfile({ seniority: e.target.value as Seniority | 'ALL' })}
-              options={availableLevels.map((l) => ({ value: l.value, label: l.label }))}
+              options={availableLevels.map((l) => ({ value: l.value, label: l.label, disabled: l.guarded }))}
             />
             <Select
               label="Market"
@@ -99,6 +114,13 @@ export function HeroBenchmarkSection() {
             <div className="ml-auto hidden lg:block">
               {row && <FreshnessPill n={row.n} confidenceTier={row.confidenceTier} updatedAt={row.updatedAt} />}
             </div>
+            <p className="w-full text-xs text-text-light">
+              Director, VP, and C-suite numbers never appear on this page. We share them in a{' '}
+              <a href={`#${SECTION_IDS.cta}`} className="text-primary underline underline-offset-2">
+                data review
+              </a>
+              .
+            </p>
           </div>
 
           {row ? (

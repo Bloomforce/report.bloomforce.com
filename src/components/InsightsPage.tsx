@@ -10,6 +10,7 @@ import { FloatingBenchmarkChip } from '@/components/benchmark/FloatingBenchmarkC
 import { MarketDetailSection } from '@/components/sections/MarketDetailSection';
 import { HeroBenchmarkSection } from '@/components/sections/HeroBenchmarkSection';
 import { MarketTerminalSection } from '@/components/sections/MarketTerminalSection';
+import { OrgTypeSection } from '@/components/sections/OrgTypeSection';
 import { SentimentStorySection } from '@/components/sections/SentimentStorySection';
 import { TrendStorySection } from '@/components/sections/TrendStorySection';
 import { CareerLadderSection } from '@/components/sections/CareerLadderSection';
@@ -26,6 +27,7 @@ export function InsightsPage({ data }: { data: InsightsData }) {
         <main>
           <HeroBenchmarkSection />
           <MarketTerminalSection />
+          <OrgTypeSection />
           <MarketDetailSection />
           <SentimentStorySection />
           <TrendStorySection />

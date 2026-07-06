@@ -1,23 +1,20 @@
 'use client';
 
-import { CheckCircle, Calendar, Bell } from 'lucide-react';
+import { CheckCircle, Calendar, ClipboardList } from 'lucide-react';
 import { SectionWrapper } from '@/components/layout/SectionWrapper';
 import { Button } from '@/components/ui/Button';
 import { useBenchmark } from '@/hooks/useBenchmark';
-import { useGate } from '@/hooks/useGate';
-import { SECTION_IDS, BOOK_CALL_URL } from '@/lib/constants';
+import { SECTION_IDS, BOOK_CALL_URL, SURVEY_URL } from '@/lib/constants';
+
+const VALUE_PROPS = [
+  'The full dataset, including every cut we hold back from this page',
+  'Director, VP, and C-suite numbers, by market and org type',
+  'A read tailored to your team, your roles, and your market',
+  'Which employers are competing for the same people. We name them on the call.',
+];
 
 export function FinalCTASection() {
-  const { roleName, profile } = useBenchmark();
-  const { showModal, isUnlocked } = useGate();
-  const subscribed = isUnlocked;
-
-  const valueProps = [
-    `The full ${roleName.toLowerCase()} dataset — every cut we publish, and the ones we don't`,
-    'A read tailored to your team, your reqs, and your market',
-    'Which employers are competing for the same people (we name them on the call)',
-    'What we’re seeing in real time from placements and conversations',
-  ];
+  const { profile } = useBenchmark();
 
   return (
     <SectionWrapper id={SECTION_IDS.cta} dark className="py-16 md:py-24">
@@ -27,12 +24,11 @@ export function FinalCTASection() {
             The summary is free. The full picture is a conversation.
           </h2>
           <p className="text-gray-400 mb-8 leading-relaxed">
-            Everything on this page is the open layer. The tailored layer — your roles, your market, named
-            competition, candidate supply — is 20 minutes with the person who actually works this market.
-            Not a hand-off.
+            Everything on this page is the open layer. The tailored layer is 20 minutes with the person who
+            actually works this market. Not a hand-off.
           </p>
           <ul className="space-y-4 mb-8">
-            {valueProps.map((prop) => (
+            {VALUE_PROPS.map((prop) => (
               <li key={prop} className="flex items-start gap-3">
                 <CheckCircle className="w-5 h-5 text-primary shrink-0 mt-0.5" />
                 <span className="text-sm text-gray-300">{prop}</span>
@@ -48,25 +44,19 @@ export function FinalCTASection() {
 
         <div className="bg-navy-light rounded-2xl border border-white/10 p-8">
           <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-            <Bell className="w-7 h-7 text-primary" />
+            <ClipboardList className="w-7 h-7 text-primary" />
           </div>
           <h3 className="text-xl font-[family-name:var(--font-heading)] text-white mb-2">
-            Track the {roleName} benchmark
+            Be counted in the next refresh
           </h3>
           <p className="text-sm text-gray-400 mb-6">
-            We&apos;ll email you when your role&apos;s number moves — new survey data, market shifts, fresh
-            cuts. A few times a year, never noise.
+            The 2026 survey is collecting now. Five to seven minutes, fully anonymous, and your answers shape
+            the numbers on this page.
           </p>
-          {subscribed ? (
-            <p className="text-primary font-semibold text-sm flex items-center gap-2">
-              <CheckCircle className="w-4 h-4" /> You&apos;re on the list — we&apos;ll ping you when it moves.
-            </p>
-          ) : (
-            <Button size="lg" variant="secondary" onClick={showModal}>
-              Get benchmark alerts
-            </Button>
-          )}
-          <p className="text-xs text-gray-500 mt-4">Unlocks the detailed breakdowns on this page, too.</p>
+          <Button size="lg" variant="secondary" href={SURVEY_URL}>
+            Take the 2026 survey
+          </Button>
+          <p className="text-xs text-gray-500 mt-4">Every number here started with someone taking it.</p>
         </div>
       </div>
     </SectionWrapper>

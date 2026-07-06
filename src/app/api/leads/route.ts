@@ -5,7 +5,7 @@ export async function POST(request: Request) {
   try {
     const data = await request.json();
 
-    const { firstName, lastName, email, company, role, phone, page } = data;
+    const { firstName, lastName, email, company, role, phone, page, intent } = data;
     if (!firstName || !lastName || !email || !company || !role) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
@@ -25,6 +25,9 @@ export async function POST(request: Request) {
       page: page || request.headers.get('referer') || 'https://report.bloomforce.com',
       source: 'bloomforce-insights-2025',
       timestamp: new Date().toISOString(),
+      ...(typeof intent === 'string' && intent
+        ? { notes: `Looking at the data for: ${intent === 'career' ? 'their own career' : intent === 'team' ? 'a team they are building' : 'their career and their team'}` }
+        : {}),
     };
 
     const { ok, deliveries } = await deliverLead(lead, request);

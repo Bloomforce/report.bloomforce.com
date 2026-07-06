@@ -48,7 +48,7 @@ export interface SentimentCut {
   metricKey: string;
   question: string;
   surveyYear: number;
-  cohort: { roleFamily?: string; region?: string; seniority?: Seniority | 'ALL' };
+  cohort: { roleFamily?: string; workModel?: string; region?: string; seniority?: Seniority | 'ALL' };
   n: number;
   values: { key: string; label: string; value: number; deltaYoY?: number | null }[];
   updatedAt: string;

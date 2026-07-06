@@ -16,6 +16,7 @@ export function LeadCaptureModal() {
     company: '',
     role: '',
     phone: '',
+    intent: '',
   });
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
@@ -33,7 +34,7 @@ export function LeadCaptureModal() {
     }
   };
 
-  const update = (field: keyof LeadFormData, value: string) =>
+  const update = <K extends keyof LeadFormData>(field: K, value: LeadFormData[K]) =>
     setForm((prev) => ({ ...prev, [field]: value }));
 
   return (
@@ -109,6 +110,38 @@ export function LeadCaptureModal() {
                 onChange={(e) => update('phone', e.target.value)}
                 className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
+              <fieldset>
+                <legend className="text-sm font-semibold text-navy mb-2">I&apos;m looking at this data for</legend>
+                <div className="grid grid-cols-3 gap-2">
+                  {(
+                    [
+                      { value: 'career', label: 'My career' },
+                      { value: 'team', label: 'My team' },
+                      { value: 'both', label: 'Both' },
+                    ] as const
+                  ).map((opt) => (
+                    <label
+                      key={opt.value}
+                      className={`cursor-pointer rounded-xl border px-3 py-2.5 text-center text-sm transition-colors ${
+                        form.intent === opt.value
+                          ? 'border-primary bg-primary-50 text-primary-dark font-semibold'
+                          : 'border-gray-200 text-text-muted hover:border-primary/50'
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        name="intent"
+                        required
+                        value={opt.value}
+                        checked={form.intent === opt.value}
+                        onChange={() => update('intent', opt.value)}
+                        className="sr-only"
+                      />
+                      {opt.label}
+                    </label>
+                  ))}
+                </div>
+              </fieldset>
               <Button type="submit" className="w-full" disabled={submitting}>
                 {submitting ? 'Submitting...' : 'Request Full Report'}
               </Button>

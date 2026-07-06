@@ -129,6 +129,7 @@ function groupSentiment(rows: Record<string, any>[]): SentimentCut[] {
         surveyYear: r.survey_year,
         cohort: {
           roleFamily: r.role_family === 'all' ? undefined : r.role_family,
+          workModel: r.work_model === 'all' ? undefined : r.work_model,
         },
         n: r.n,
         values: [],

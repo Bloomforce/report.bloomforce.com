@@ -14,6 +14,10 @@ export async function GET(request: NextRequest) {
   }
 
   const roleKey = request.nextUrl.searchParams.get('role') ?? 'AA';
+  // Director+ comp is call-only; it never rides in any self-serve payload.
+  if (['DIR', 'VP', 'EXEC'].includes(roleKey)) {
+    return NextResponse.json({ error: 'call_only' }, { status: 403 });
+  }
   const db = supabaseAdmin();
 
   const [cellsRes, jobsRes] = await Promise.all([

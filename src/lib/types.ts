@@ -84,6 +84,8 @@ export interface LeadFormData {
   company: string;
   role: string;
   phone: string;
+  /** Why they want the data: their own career, a team they're building, or both. */
+  intent: 'career' | 'team' | 'both' | '';
 }
 
 // ─── Highlights for Hero ───────────────────────────────────

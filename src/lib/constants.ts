@@ -1,6 +1,7 @@
 export const SECTION_IDS = {
   hero: 'hero',
   terminal: 'market',
+  orgType: 'org-type',
   marketDetail: 'market-detail',
   sentimentStory: 'workforce-insights',
   trends: 'industry-trends',
@@ -22,6 +23,7 @@ export const NAV_ITEMS = [
 ] as const;
 
 export const BOOK_CALL_URL = 'https://www.bloomforce.com/book';
+export const SURVEY_URL = 'https://www.bloomforce.com/survey';
 
 export const LEAD_STORAGE_KEY = 'bf_lead';
 export const CONTRIBUTION_STORAGE_KEY = 'bf_contribution';
