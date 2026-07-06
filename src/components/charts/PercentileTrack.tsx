@@ -26,9 +26,9 @@ export function PercentileTrack({ percentiles: p, comp }: PercentileTrackProps) 
   const youX = comp !== undefined ? x(Math.min(Math.max(comp, domainLo), domainHi)) : null;
 
   const ticks = [
-    { v: p.p25, label: 'p25', strong: false },
+    { v: p.p25, label: 'lower', strong: false },
     { v: p.p50, label: 'median', strong: true },
-    { v: p.p75, label: 'p75', strong: false },
+    { v: p.p75, label: 'upper', strong: false },
   ];
 
   return (
@@ -88,8 +88,8 @@ export function PercentileTrack({ percentiles: p, comp }: PercentileTrackProps) 
       </div>
 
       {/* domain ends */}
-      <div className="absolute bottom-1 left-0 text-[11px] text-text-light">p10 {formatK(p.p10)}</div>
-      <div className="absolute bottom-1 right-0 text-[11px] text-text-light">p90 {formatK(p.p90)}</div>
+      <div className="absolute bottom-1 left-0 text-[11px] text-text-light">low {formatK(p.p10)}</div>
+      <div className="absolute bottom-1 right-0 text-[11px] text-text-light">high {formatK(p.p90)}</div>
     </div>
   );
 }

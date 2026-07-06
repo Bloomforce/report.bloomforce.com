@@ -410,7 +410,7 @@ const METRICS: { key: string; label: string; year: 2024 | 2025 | 'both'; map: Op
       const v = (r.mobility_role || '').toLowerCase();
       if (!v) return null;
       if (v.startsWith('yes')) return ['clear', 'Clear path up'];
-      if (v.includes('person above me')) return ['blocked', 'Blocked — waiting on a seat to open'];
+      if (v.includes('person above me')) return ['blocked', 'Blocked, waiting on a seat to open'];
       if (v.startsWith('no')) return ['unclear', 'No clear path'];
       return null;
     },
@@ -614,7 +614,7 @@ export function publishPulse(cells: BenchmarkCell[], jobs: JobRecord[], surveys:
     items.push({
       ts: iso(1),
       kind: 'new_data',
-      text: `${last30.length} new Epic-IT postings ingested in the last 30 days — ${Math.round(remote30 * 100)}% fully remote`,
+      text: `${last30.length} new Epic-IT job postings in the last 30 days, ${Math.round(remote30 * 100)}% fully remote`,
       role_key: null,
       delta_value: null,
       delta_unit: null,
@@ -624,7 +624,7 @@ export function publishPulse(cells: BenchmarkCell[], jobs: JobRecord[], surveys:
   items.push({
     ts: iso(9),
     kind: 'new_data',
-    text: `${surveyN} verified survey responses anchor the current benchmark — the 2026 survey is collecting now`,
+    text: `${surveyN} verified survey responses anchor the current benchmark. The 2026 survey is collecting now`,
     role_key: null,
     delta_value: null,
     delta_unit: null,
