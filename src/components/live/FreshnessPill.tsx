@@ -7,6 +7,12 @@ const TIER_STYLES: Record<string, string> = {
   modeled: 'bg-bg-subtle text-text-muted',
 };
 
+const TIER_LABELS: Record<string, string> = {
+  direct: 'verified sample',
+  blended: 'strong sample',
+  modeled: 'estimate',
+};
+
 interface FreshnessPillProps {
   n?: number;
   confidenceTier?: 'direct' | 'blended' | 'modeled';
@@ -23,10 +29,10 @@ export function FreshnessPill({ n, confidenceTier, updatedAt, note, className }:
         className,
       )}
     >
-      {typeof n === 'number' && <span className="font-[family-name:var(--font-mono)] tabular-nums">n={n.toLocaleString()}</span>}
+      {typeof n === 'number' && <span className="font-[family-name:var(--font-mono)] tabular-nums">{n.toLocaleString()} reports</span>}
       {confidenceTier && (
-        <span className={cn('rounded px-1.5 py-0.5 font-semibold uppercase tracking-wide text-[9.5px]', TIER_STYLES[confidenceTier])}>
-          {confidenceTier}
+        <span className={cn('rounded px-1.5 py-0.5 font-semibold uppercase tracking-wide text-[9.5px] whitespace-nowrap', TIER_STYLES[confidenceTier])}>
+          {TIER_LABELS[confidenceTier] ?? confidenceTier}
         </span>
       )}
       {updatedAt && <span>updated {formatDate(updatedAt)}</span>}

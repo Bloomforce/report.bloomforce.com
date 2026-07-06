@@ -58,7 +58,7 @@ export function HeroBenchmarkSection() {
           The living EHR talent benchmark
         </span>
         <h1 className="text-4xl md:text-5xl font-[family-name:var(--font-heading)] font-bold text-navy mt-5 mb-3 max-w-3xl leading-[1.08] tracking-tight">
-          Know where you stand — <em className="not-italic text-primary">as of this week</em>.
+          Know where you stand, <em className="not-italic text-primary">as of this week</em>.
         </h1>
         <p className="text-lg text-text-muted max-w-2xl mb-8">
           Real pay from verified professionals, kept current with live market data. One number per role,
@@ -137,7 +137,7 @@ export function HeroBenchmarkSection() {
                   </div>
                 </div>
                 <div>
-                  <div className="text-xs text-text-muted uppercase tracking-wide font-semibold mb-1">Typical range (p25–p75)</div>
+                  <div className="text-xs text-text-muted uppercase tracking-wide font-semibold mb-1">Typical range (middle half)</div>
                   <span className="text-3xl font-bold text-navy font-[family-name:var(--font-mono)] tabular-nums">
                     {formatK(row.blended.p25)}–{formatK(row.blended.p75)}
                   </span>
@@ -168,7 +168,7 @@ export function HeroBenchmarkSection() {
                     exit={{ opacity: 0 }}
                     className="text-navy text-[15px] mt-1"
                   >
-                    You&apos;re {percentileLabel(percentile)} —{' '}
+                    You&apos;re {percentileLabel(percentile)},{' '}
                     <span className={deltas.vsMedian >= 0 ? 'text-primary font-semibold' : 'text-[var(--color-down)] font-semibold'}>
                       {formatK(Math.abs(deltas.vsMedian))} {deltas.vsMedian >= 0 ? 'above' : 'below'} the median
                     </span>{' '}
@@ -190,7 +190,8 @@ export function HeroBenchmarkSection() {
             </div>
           ) : (
             <div className="p-8 text-text-muted text-sm">
-              Not enough data yet for this exact cut — it publishes automatically once enough observations land.
+              We don&apos;t have enough reports for this exact role, level, and market yet. It publishes
+              automatically as soon as enough people share their numbers.
             </div>
           )}
         </div>

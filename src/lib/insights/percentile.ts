@@ -32,9 +32,9 @@ export function estimatePercentile(comp: number, p: Percentiles): number {
 }
 
 export function percentileLabel(pct: number): string {
-  if (pct <= 10) return 'below the 10th percentile';
-  if (pct >= 90) return 'above the 90th percentile';
-  return `≈ ${ordinal(Math.round(pct))} percentile`;
+  if (pct <= 10) return 'below the typical range';
+  if (pct >= 90) return 'above the typical range';
+  return `higher than ${Math.round(pct)} of every 100 peers`;
 }
 
 export function ordinal(n: number): string {

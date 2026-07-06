@@ -294,7 +294,7 @@ const SENTIMENT: SentimentCut[] = [
 const PULSE: PulseItem[] = [
   { id: 'p1', ts: '2026-06-29T00:00:00Z', kind: 'demand_shift', text: 'Remote share of new Application Analyst postings up 4 pts this month', roleKey: 'AA', deltaValue: 4, deltaUnit: 'pts' },
   { id: 'p2', ts: '2026-06-26T00:00:00Z', kind: 'benchmark_move', text: 'Integration Analyst benchmark moved up on 28 fresh data points', roleKey: 'INT', deltaValue: 2100, deltaUnit: '$' },
-  { id: 'p3', ts: '2026-06-24T00:00:00Z', kind: 'demand_shift', text: 'Willow demand up 12% — pharmacy go-lives driving new postings', deltaValue: 12, deltaUnit: '%' },
+  { id: 'p3', ts: '2026-06-24T00:00:00Z', kind: 'demand_shift', text: 'Pharmacy system demand up 12% as new rollouts drive fresh postings', deltaValue: 12, deltaUnit: '%' },
   { id: 'p4', ts: '2026-06-19T00:00:00Z', kind: 'new_data', text: '31 new survey responses folded into the rolling benchmark this week' },
   { id: 'p5', ts: '2026-06-15T00:00:00Z', kind: 'benchmark_move', text: 'Director postings hit a 12-month high median', roleKey: 'DIR', deltaValue: 3100, deltaUnit: '$' },
 ];

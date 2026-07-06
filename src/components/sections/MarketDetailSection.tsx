@@ -60,14 +60,13 @@ export function MarketDetailSection() {
       ) : (
         <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
           <p className="flex items-center gap-2 text-sm text-primary font-semibold mb-5">
-            <CheckCircle className="w-4 h-4" /> Your data point is in the benchmark quarantine — thanks for
-            making the number better.
+            <CheckCircle className="w-4 h-4" /> Your number is in. Thank you for making the benchmark better.
           </p>
 
           {status === 'loading' && <p className="text-text-muted text-sm">Loading the market detail…</p>}
           {status === 'error' && (
             <p className="text-text-muted text-sm">
-              Couldn&apos;t load the detail view — refresh, or re-enter your code above.
+              We couldn&apos;t load the detail view. Refresh the page, or re-enter your code above.
             </p>
           )}
 
@@ -93,7 +92,7 @@ export function MarketDetailSection() {
                         {h.label} · {h.openings} openings
                       </span>
                     ))}
-                    {!detail.hotspots.length && <span className="text-sm text-text-muted">Mostly remote — demand isn&apos;t geographically concentrated.</span>}
+                    {!detail.hotspots.length && <span className="text-sm text-text-muted">Mostly remote. Demand isn&apos;t concentrated in any one place.</span>}
                   </div>
                 </div>
               </div>
@@ -111,7 +110,7 @@ export function MarketDetailSection() {
                           {formatK(c.blended.p50)}
                         </div>
                         <div className="text-[11px] text-text-light mt-0.5">
-                          {formatK(c.blended.p25)}–{formatK(c.blended.p75)} · n={c.n}
+                          {formatK(c.blended.p25)}–{formatK(c.blended.p75)} · {c.n} reports
                         </div>
                       </div>
                     ))}

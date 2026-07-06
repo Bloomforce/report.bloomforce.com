@@ -140,7 +140,7 @@ export function SentimentStorySection() {
         caption: (
           <>
             <span className="text-white font-semibold">{totalN.toLocaleString()} EHR professionals</span> told us
-            what they earn and how work actually feels — across two survey waves. Each dot is roughly{' '}
+            what they earn and how work actually feels, across two survey waves. Each dot is roughly{' '}
             {Math.max(1, Math.round(totalN / N_DOTS))} of them.
           </>
         ),
@@ -164,7 +164,7 @@ export function SentimentStorySection() {
             <span className="text-white font-semibold">{Math.round(pct(wlb, 'satisfied') * 100)}% are satisfied
             with their work-life balance</span>
             {deltaPts(wlb, 'satisfied') !== null && (
-              <> — {deltaPts(wlb, 'satisfied')! >= 0 ? 'up' : 'down'} {Math.abs(deltaPts(wlb, 'satisfied')!)} points
+              <>, {deltaPts(wlb, 'satisfied')! >= 0 ? 'up' : 'down'} {Math.abs(deltaPts(wlb, 'satisfied')!)} points
               from the previous wave</>
             )}
             . Remote flexibility is doing a lot of that work.
@@ -182,7 +182,7 @@ export function SentimentStorySection() {
           <>
             <span className="text-white font-semibold">{Math.round(pct(wm, 'remote') * 100)}% are fully remote</span>
             , {Math.round(pct(wm, 'hybrid') * 100)}% hybrid, {Math.round(pct(wm, 'onsite') * 100)}% in the office.
-            Remote isn&apos;t a perk in this market — it&apos;s the baseline.
+            Remote isn&apos;t a perk in this market. It&apos;s the baseline.
           </>
         ),
         layout: columns(wmG, {
@@ -192,14 +192,14 @@ export function SentimentStorySection() {
         }),
       },
       {
-        kicker: 'The RTO test',
+        kicker: 'The return-to-office test',
         caption: (
           <>
             Force a return to the office, and{' '}
             <span className="text-white font-semibold">
               {Math.round((pct(rto, 'look') + pct(rto, 'negotiate')) * 100)}% would push back
-            </span>{' '}
-            — {Math.round(pct(rto, 'look') * 100)}% would start looking, {Math.round(pct(rto, 'negotiate') * 100)}%
+            </span>
+            : {Math.round(pct(rto, 'look') * 100)}% would start looking, {Math.round(pct(rto, 'negotiate') * 100)}%
             would negotiate. Only {Math.round(pct(rto, 'comply') * 100)}% would simply comply.
           </>
         ),
@@ -214,11 +214,11 @@ export function SentimentStorySection() {
         caption: (
           <>
             The ground is moving underneath them:{' '}
-            <span className="text-white font-semibold">{Math.round(pct(ma, 'yes') * 100)}% went through M&A</span>{' '}
+            <span className="text-white font-semibold">{Math.round(pct(ma, 'yes') * 100)}% went through a merger or acquisition</span>{' '}
             in the last three years, and{' '}
             <span className="text-white font-semibold">{Math.round(pct(rif, 'yes') * 100)}% watched their org run
             a layoff</span>{' '}
-            in the last year{deltaPts(rif, 'yes') !== null && deltaPts(rif, 'yes')! > 0 && <> — up {deltaPts(rif, 'yes')} points year over year</>}.
+            in the last year{deltaPts(rif, 'yes') !== null && deltaPts(rif, 'yes')! > 0 && <>, up {deltaPts(rif, 'yes')} points year over year</>}.
           </>
         ),
         layout: columns(rifG, {
@@ -284,7 +284,7 @@ export function SentimentStorySection() {
         <h2 className="text-3xl md:text-4xl font-[family-name:var(--font-heading)] text-white mb-3">
           The workforce, in motion
         </h2>
-        <p className="text-gray-400 max-w-2xl mx-auto">Scroll — each dot is a real group of professionals from the survey.</p>
+        <p className="text-gray-400 max-w-2xl mx-auto">Scroll through. Each dot is a real group of professionals from the survey.</p>
       </div>
 
       <ScrollyStage

@@ -90,7 +90,7 @@ export function MarketTerminalSection() {
                         {cut ? formatK(cut.blended.p50) : 'not enough data yet'}
                       </div>
                       <div className="text-xs text-text-muted mt-0.5">{WM_META[wm].label}</div>
-                      {cut && <div className="text-[10px] text-text-light mt-1">n={cut.n}</div>}
+                      {cut && <div className="text-[10px] text-text-light mt-1">{cut.n} reports</div>}
                     </div>
                   );
                 })}

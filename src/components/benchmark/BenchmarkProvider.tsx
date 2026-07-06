@@ -38,13 +38,13 @@ function findCell(
 
   if (seniority !== 'ALL') {
     row = match('ALL', region);
-    if (row) return { row, note: `Showing all levels — ${region === 'National' ? 'this level' : `${region} at this level`} needs more data` };
+    if (row) return { row, note: `Showing all levels. ${region === 'National' ? 'This level' : `${region} at this level`} needs more data` };
   }
   if (region !== 'National') {
     row = match(seniority, 'National');
-    if (row) return { row, note: `Showing National — ${region} needs more data for this cut` };
+    if (row) return { row, note: `Showing the national market. ${region} needs more data` };
     row = match('ALL', 'National');
-    if (row) return { row, note: `Showing National, all levels — this cut needs more data` };
+    if (row) return { row, note: `Showing the national market, all levels. This exact combination needs more data` };
   }
   return { row: null, note: null };
 }

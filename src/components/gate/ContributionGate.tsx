@@ -57,7 +57,7 @@ export function ContributionGate() {
       await contribute(form as ContributionFormData);
     } catch (e) {
       setStatus('error');
-      setError(e instanceof Error ? e.message : 'Something went wrong — try again');
+      setError(e instanceof Error ? e.message : 'Something went wrong. Please try again.');
       return;
     }
     setStatus('idle');
@@ -100,7 +100,7 @@ export function ContributionGate() {
           This benchmark is built by the people in it
         </h3>
         <p className="text-sm text-text-muted mb-6 max-w-xl">
-          Add your comp — anonymously — and the market detail opens right away. We store the number and the
+          Add your number, anonymously, and the market detail opens right away. We store the number and the
           role, never your name. Your email is only for your return-visit code.
         </p>
 
@@ -155,13 +155,13 @@ export function ContributionGate() {
               <input
                 className={`${inputCls} lg:col-span-2`}
                 type="email"
-                placeholder="Work email — for your access code *"
+                placeholder="Work email for your access code *"
                 onChange={(e) => set('email', e.target.value)}
               />
             </div>
             {error && <p className="text-sm text-[var(--color-down)] mb-3">{error}</p>}
             <Button onClick={submit} disabled={status === 'submitting'} className="w-full sm:w-auto">
-              {status === 'submitting' ? 'Adding your data point…' : 'Add my comp & unlock →'}
+              {status === 'submitting' ? 'Adding your data point…' : 'Add my number & unlock →'}
             </Button>
             <p className="text-xs text-text-light mt-3">
               Anonymous by design. New contributions are quarantined and cleaned before they touch any published

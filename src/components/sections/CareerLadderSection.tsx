@@ -90,7 +90,7 @@ export function CareerLadderSection() {
                   {jump !== null && jump > 0 && (
                     <div className="text-[11px] font-semibold text-primary mt-1">{formatSignedK(jump)} vs prior rung</div>
                   )}
-                  <div className="text-[10px] text-text-light mt-1">n={rung.cell!.n}</div>
+                  <div className="text-[10px] text-text-light mt-1">{rung.cell!.n} reports</div>
                 </motion.button>
               );
             })}
@@ -104,7 +104,7 @@ export function CareerLadderSection() {
           <h3 className="text-lg font-[family-name:var(--font-heading)] font-semibold text-navy">The leadership ladder</h3>
           {mgmtJump !== null && (
             <span className="text-sm text-text-muted">
-              Stepping from senior IC to manager is worth{' '}
+              Moving from a senior individual-contributor role into management is worth{' '}
               <span className="font-semibold text-primary">{formatSignedK(mgmtJump)}</span> at the median. The
               bigger jumps come later.
             </span>

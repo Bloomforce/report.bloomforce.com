@@ -22,7 +22,7 @@ export function DeltaTag({ value, unit = '$', period, className }: DeltaTagProps
         className,
       )}
     >
-      <span aria-hidden="true">{flat ? '—' : up ? '▲' : '▼'}</span>
+      <span aria-hidden="true">{flat ? '±0' : up ? '▲' : '▼'}</span>
       <span className="sr-only">{flat ? 'unchanged' : up ? 'up' : 'down'}</span>
       {!flat && magnitude}
       {period && <span className="text-text-light">· {period}</span>}
