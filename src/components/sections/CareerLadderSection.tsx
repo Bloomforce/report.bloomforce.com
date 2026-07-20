@@ -29,6 +29,7 @@ function nationalCell(rows: BenchmarkRow[], family: string, level: Seniority | '
   return rows.find(
     (r) =>
       r.roleFamily === family &&
+      r.module === 'all' &&
       r.seniority === level &&
       r.region === 'National' &&
       r.workModel === 'all' &&

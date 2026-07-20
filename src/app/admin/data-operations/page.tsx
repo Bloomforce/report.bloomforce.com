@@ -1,10 +1,12 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import {
   AlertTriangle,
   CheckCircle2,
   CircleDot,
   Database,
   FileClock,
+  FileUp,
   RefreshCw,
 } from 'lucide-react';
 import { supabaseAdmin } from '@/lib/supabase/admin';
@@ -168,25 +170,26 @@ export default async function DataOperationsPage({ searchParams }: { searchParam
     ];
 
     return (
-      <main className="min-h-screen bg-[#f6f8f8] text-[#152033]">
-        <header className="border-b border-slate-200 bg-white">
-          <div className="mx-auto flex max-w-[1500px] items-center justify-between px-5 py-5 lg:px-8">
+      <main className="mx-auto max-w-[1600px] px-4 py-5 text-[#152033] sm:px-6 sm:py-7">
+        <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase text-[#007f74]">
+              <div className="mb-1 flex items-center gap-2 text-xs font-semibold uppercase text-[#007f74]">
                 <Database size={15} aria-hidden="true" /> Bloomforce Insights
               </div>
-              <h1 className="text-2xl font-semibold lg:text-3xl">Market Data Operations</h1>
+              <h1 className="text-2xl font-semibold sm:text-3xl">Data Operations</h1>
+              <p className="mt-1 text-sm text-slate-500">Review incoming records, monitor sources, and protect the published benchmark.</p>
             </div>
-            <div className="text-right text-sm text-slate-500">
-              <div className="flex items-center justify-end gap-2 font-medium text-slate-700">
-                <CircleDot size={14} className="text-emerald-600" aria-hidden="true" /> Published
+            <div className="flex items-center gap-3">
+              <div className="text-right text-xs text-slate-500">
+                <div className="flex items-center justify-end gap-2 font-medium text-slate-700">
+                  <CircleDot size={14} className="text-emerald-600" aria-hidden="true" /> Published
+                </div>
+                <div>{dateTime(data.freshness?.as_of)}</div>
               </div>
-              <div>{dateTime(data.freshness?.as_of)}</div>
+              <Link href="/admin/data-operations/intake" className="inline-flex h-9 items-center gap-2 bg-[#152033] px-3 text-sm font-semibold text-white hover:bg-[#243043]"><FileUp size={14} /> Add data</Link>
             </div>
-          </div>
-        </header>
+        </div>
 
-        <div className="mx-auto max-w-[1500px] px-5 py-6 lg:px-8">
           <section className="grid grid-cols-2 border border-slate-200 bg-white md:grid-cols-3 xl:grid-cols-6">
             {tiles.map(([label, count, note], index) => (
               <div
@@ -299,12 +302,11 @@ export default async function DataOperationsPage({ searchParams }: { searchParam
             <span className="inline-flex items-center gap-2"><AlertTriangle size={15} className="text-amber-600" aria-hidden="true" /> Review: {data.counts.review}</span>
             <span className="text-slate-400">Rejected: {data.counts.rejected}</span>
           </section>
-        </div>
       </main>
     );
   } catch (error) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-[#f6f8f8] p-6">
+      <main className="flex min-h-[70vh] items-center justify-center p-6">
         <section className="w-full max-w-xl border border-rose-200 bg-white p-6">
           <div className="flex items-center gap-2 font-semibold text-rose-800"><AlertTriangle size={18} /> Market Data Operations is unavailable</div>
           <p className="mt-3 text-sm text-slate-600">{error instanceof Error ? error.message : 'Unable to load market data.'}</p>

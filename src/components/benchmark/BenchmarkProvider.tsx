@@ -32,7 +32,7 @@ function findCell(
   seniority: Seniority | 'ALL',
   region: string,
 ): { row: BenchmarkRow | null; note: string | null } {
-  const base = rows.filter((r) => r.workModel === 'all' && r.employerType === 'all');
+  const base = rows.filter((r) => r.module === 'all' && r.workModel === 'all' && r.employerType === 'all');
   const match = (s: Seniority | 'ALL', reg: string) =>
     base.find((r) => r.roleFamily === roleKey && r.seniority === s && r.region === reg) ?? null;
 
@@ -97,7 +97,7 @@ export function BenchmarkProvider({ data, children }: { data: InsightsData; chil
       row && profile.comp
         ? { vsMedian: profile.comp - row.blended.p50, vsP75: profile.comp - row.blended.p75 }
         : null;
-    const familyRows = data.benchmarks.filter((r) => r.roleFamily === profile.roleKey);
+    const familyRows = data.benchmarks.filter((r) => r.roleFamily === profile.roleKey && r.module === 'all');
     return { data, profile, setProfile, row, fallbackNote: note, roleName, guardedRole, percentile, deltas, familyRows };
   }, [data, profile, setProfile]);
 

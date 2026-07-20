@@ -13,6 +13,7 @@ export interface BenchmarkRow {
   roleKey: string;
   roleFamily: string;
   roleName: string;
+  module: string;
   seniority: Seniority | 'ALL';
   region: string;
   workModel: WorkModel | 'all';

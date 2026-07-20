@@ -74,6 +74,18 @@ function nationalN(seniority: Seniority | 'ALL', ri: number): number {
 
 function buildBenchmarks(): BenchmarkRow[] {
   const rows: BenchmarkRow[] = [];
+  const orgCuts = [
+    ['academic_medical_center', 1.05, 38],
+    ['childrens_hospital', 1.12, 16],
+    ['independent_hospital', 0.94, 21],
+    ['multi_state_system', 1.07, 29],
+    ['single_state_system', 0.98, 33],
+  ] as const;
+  const workCuts = [
+    ['remote', 1.06, 54],
+    ['hybrid', 0.98, 36],
+    ['onsite', 0.94, 27],
+  ] as const;
   ROLES.forEach((role, ri) => {
     const levels: (Seniority | 'ALL')[] = ['ALL', ...(Object.keys(role.seniorities) as Seniority[])];
     for (const region of REGIONS) {
@@ -86,6 +98,7 @@ function buildBenchmarks(): BenchmarkRow[] {
           roleKey: seniority === 'ALL' ? role.key : `${role.key}.${seniority}`,
           roleFamily: role.key,
           roleName: role.name,
+          module: 'all',
           seniority,
           region,
           workModel: 'all',
@@ -99,6 +112,47 @@ function buildBenchmarks(): BenchmarkRow[] {
           updatedAt: AS_OF,
         });
       }
+    }
+    for (const [workModel, factor, n] of workCuts) {
+      const median = Math.round(role.median * factor);
+      rows.push({
+        roleKey: role.key,
+        roleFamily: role.key,
+        roleName: role.name,
+        module: 'all',
+        seniority: 'ALL',
+        region: 'National',
+        workModel,
+        employerType: 'all',
+        n: Math.max(9, n - ri * 3),
+        blended: spread(median),
+        remoteShare: workModel === 'remote' ? 1 : 0,
+        confidenceTier: n - ri * 3 >= 15 ? 'blended' : 'modeled',
+        medianDelta90d: null,
+        spark: sparkFrom(median, ri + 2),
+        updatedAt: AS_OF,
+      });
+    }
+    for (const [employerType, factor, n] of orgCuts) {
+      const adjustedN = Math.max(6, n - ri * 2);
+      const median = Math.round(role.median * factor);
+      rows.push({
+        roleKey: role.key,
+        roleFamily: role.key,
+        roleName: role.name,
+        module: 'all',
+        seniority: 'ALL',
+        region: 'National',
+        workModel: 'all',
+        employerType,
+        n: adjustedN,
+        blended: spread(median),
+        remoteShare: null,
+        confidenceTier: adjustedN >= 15 ? 'blended' : 'modeled',
+        medianDelta90d: null,
+        spark: sparkFrom(median, ri + 4),
+        updatedAt: AS_OF,
+      });
     }
   });
   return rows;

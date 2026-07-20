@@ -17,6 +17,7 @@ export interface SurveyRecord {
   submitted_at: string;
   survey_year: number;
   role_family: string | null;
+  module: string | null;
   seniority_level: string | null;
   role_key: string | null;
   region: string | null;
@@ -122,6 +123,7 @@ export function loadSurveys(paths: { y2024: string; y2025: string }): SurveyReco
       submitted_at: new Date(r[2]).toISOString(),
       survey_year: 2024,
       role_family: family,
+      module: null,
       seniority_level: level,
       role_key: family ? roleKey(family, level) : null,
       region: state ? stateToRegion(state) : null,
@@ -172,6 +174,7 @@ export function loadSurveys(paths: { y2024: string; y2025: string }): SurveyReco
       submitted_at: new Date(r[2]).toISOString(),
       survey_year: 2025,
       role_family: family,
+      module: null,
       seniority_level: level,
       role_key: family ? roleKey(family, level) : null,
       region: state ? stateToRegion(state) : null,

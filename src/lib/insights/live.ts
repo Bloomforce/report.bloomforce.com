@@ -48,6 +48,7 @@ export async function fetchLiveInsightsData(): Promise<InsightsData> {
       roleKey: r.role_key,
       roleFamily: r.role_family,
       roleName: ROLE_LABELS[r.role_family]?.label ?? r.role_family,
+      module: r.module ?? 'all',
       seniority: r.seniority_level === 'all' ? 'ALL' : (r.seniority_level as Seniority),
       region: r.region,
       workModel: r.work_model ?? 'all',
@@ -157,7 +158,7 @@ function groupSentiment(rows: Record<string, any>[]): SentimentCut[] {
 function buildWorkModels(benchmarks: BenchmarkRow[]): WorkModelCut[] {
   const out: WorkModelCut[] = [];
   const cuts = benchmarks.filter(
-    (b) => b.roleFamily === 'AA' && b.seniority === 'ALL' && b.region === 'National' && b.workModel !== 'all' && b.employerType === 'all',
+    (b) => b.roleFamily === 'AA' && b.module === 'all' && b.seniority === 'ALL' && b.region === 'National' && b.workModel !== 'all' && b.employerType === 'all',
   );
   const totalN = cuts.reduce((s, c) => s + c.n, 0);
   for (const wm of ['remote', 'hybrid', 'onsite'] as const) {

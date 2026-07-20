@@ -13,6 +13,7 @@ type SurveyRow = Record<string, unknown> & {
   id: string;
   submitted_at: string;
   role_family: string | null;
+  module: string | null;
   role_key: string | null;
   seniority_level: string | null;
   region: string | null;
@@ -175,6 +176,7 @@ export async function promotePendingSurveyResponses(
         observation_type: 'actual',
         role_family: family,
         role_key: row.role_key,
+        module: row.module,
         seniority_level: row.seniority_level,
         region: row.region,
         work_model: row.work_model,

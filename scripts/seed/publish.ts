@@ -12,6 +12,7 @@ export interface Observation {
   observation_type: 'posted' | 'actual';
   role_family: string;
   role_key: string;
+  module: string | null;
   seniority_level: string | null;
   region: string | null;
   work_model: string | null;
@@ -57,6 +58,7 @@ export function buildObservations(
       observation_type: 'actual',
       role_family: s.role_family,
       role_key: s.role_key,
+      module: s.module,
       seniority_level: s.seniority_level,
       region: s.region,
       work_model: s.work_model,
@@ -86,6 +88,7 @@ export function buildObservations(
       observation_type: 'actual',
       role_family: u.role_family,
       role_key: u.role_key,
+      module: null,
       seniority_level: u.seniority_level,
       region: u.region,
       work_model: null,
@@ -124,6 +127,7 @@ export function buildObservations(
       observation_type: 'posted',
       role_family: c.family,
       role_key: c.level ? `${c.family}.${c.level}` : c.family,
+      module: c.module,
       seniority_level: c.level,
       region: j.region,
       work_model: j.workplace_type,
@@ -238,18 +242,24 @@ export function publishBenchmark(obs: Observation[], jobs: JobRecord[], asOf: Da
   const epicJobs = jobs.filter((j) => j.classification.isEpicIt && j.classification.family && !j.is_contractish);
   const cutoff12 = monthsBack(asOf, 12);
   const demandByFamily = new Map<string, number>();
+  const demandByFamilyModule = new Map<string, number>();
   for (const j of epicJobs) {
     if (!j.posted_date || j.posted_date < cutoff12) continue;
     demandByFamily.set(j.classification.family!, (demandByFamily.get(j.classification.family!) ?? 0) + 1);
+    if (j.classification.module) {
+      const key = `${j.classification.family}|${j.classification.module}`;
+      demandByFamilyModule.set(key, (demandByFamilyModule.get(key) ?? 0) + 1);
+    }
   }
 
   const cells: BenchmarkCell[] = [];
 
   function makeCell(opts: {
-    family: string; level: string | null; region: string; workModel: string; employerType: string; credential: string;
+    family: string; module: string; level: string | null; region: string; workModel: string; employerType: string; credential: string;
   }): BenchmarkCell | null {
-    const { family, level, region, workModel, employerType, credential } = opts;
+    const { family, module, level, region, workModel, employerType, credential } = opts;
     let rows = bench.filter((o) => o.role_family === family);
+    if (module !== 'all') rows = rows.filter((o) => o.module === module);
     if (level) rows = rows.filter((o) => o.seniority_level === level);
     if (region !== 'National') rows = rows.filter((o) => o.region === region);
     if (workModel !== 'all') rows = rows.filter((o) => o.work_model === workModel);
@@ -263,7 +273,11 @@ export function publishBenchmark(obs: Observation[], jobs: JobRecord[], asOf: Da
     if (n < MIN_CELL_N) return null;
 
     const blended = blendPercentiles(actual, posted);
-    const tier = actual.length >= DIRECT_N ? 'direct' : n >= DIRECT_N ? 'blended' : 'modeled';
+    const tier = actual.length >= DIRECT_N
+      ? 'direct'
+      : actual.length > 0 && n >= DIRECT_N
+        ? 'blended'
+        : 'modeled';
 
     // Work-model share among rows with a known model
     const withWm = rows.filter((o) => o.work_model);
@@ -274,7 +288,12 @@ export function publishBenchmark(obs: Observation[], jobs: JobRecord[], asOf: Da
     let spark: number[] | null = null;
     let demandDelta30: number | null = null;
     if (region === 'National' && !level && workModel === 'all' && employerType === 'all' && credential === 'all') {
-      const famPosted = obs.filter((o) => o.role_family === family && o.observation_type === 'posted' && o.in_benchmark);
+      const famPosted = obs.filter((o) =>
+        o.role_family === family &&
+        o.observation_type === 'posted' &&
+        o.in_benchmark &&
+        (module === 'all' || o.module === module),
+      );
       const last90 = famPosted.filter((o) => o.period >= monthsBack(asOf, 3)).map((o) => o.value);
       const prev90 = famPosted.filter((o) => o.period >= monthsBack(asOf, 6) && o.period < monthsBack(asOf, 3)).map((o) => o.value);
       if (last90.length >= MIN_CELL_N && prev90.length >= MIN_CELL_N) {
@@ -291,7 +310,11 @@ export function publishBenchmark(obs: Observation[], jobs: JobRecord[], asOf: Da
       }
       spark = months.length >= 4 ? months : null;
 
-      const jobsFam = epicJobs.filter((j) => j.classification.family === family && j.posted_date);
+      const jobsFam = epicJobs.filter((j) =>
+        j.classification.family === family &&
+        j.posted_date &&
+        (module === 'all' || j.classification.module === module),
+      );
       const d30 = jobsFam.filter((j) => j.posted_date! >= monthsBack(asOf, 1)).length;
       const dPrev = jobsFam.filter((j) => j.posted_date! >= monthsBack(asOf, 2) && j.posted_date! < monthsBack(asOf, 1)).length;
       demandDelta30 = d30 - dPrev;
@@ -300,7 +323,7 @@ export function publishBenchmark(obs: Observation[], jobs: JobRecord[], asOf: Da
     return {
       role_key: level ? `${family}.${level}` : family,
       role_family: family,
-      module: 'all',
+      module,
       seniority_level: level ?? 'all',
       region,
       work_model: workModel,
@@ -316,7 +339,9 @@ export function publishBenchmark(obs: Observation[], jobs: JobRecord[], asOf: Da
       posted_median: posted.length ? Math.round(median(posted)!) : null,
       actual_median: actual.length ? Math.round(median(actual)!) : null,
       remote_share: remoteShare === null ? null : Math.round(remoteShare * 100) / 100,
-      demand_count: demandByFamily.get(family) ?? 0,
+      demand_count: module === 'all'
+        ? demandByFamily.get(family) ?? 0
+        : demandByFamilyModule.get(`${family}|${module}`) ?? 0,
       confidence_tier: tier,
       median_delta_90d: medianDelta90,
       demand_delta_30d: demandDelta30,
@@ -327,26 +352,50 @@ export function publishBenchmark(obs: Observation[], jobs: JobRecord[], asOf: Da
   for (const family of families) {
     const levels = [...new Set(bench.filter((o) => o.role_family === family && o.seniority_level).map((o) => o.seniority_level!))];
     for (const region of regions) {
-      const all = makeCell({ family, level: null, region, workModel: 'all', employerType: 'all', credential: 'all' });
+      const all = makeCell({ family, module: 'all', level: null, region, workModel: 'all', employerType: 'all', credential: 'all' });
       if (all) cells.push(all);
       for (const level of levels) {
-        const c = makeCell({ family, level, region, workModel: 'all', employerType: 'all', credential: 'all' });
+        const c = makeCell({ family, module: 'all', level, region, workModel: 'all', employerType: 'all', credential: 'all' });
         if (c) cells.push(c);
       }
     }
     for (const wm of ['remote', 'hybrid', 'onsite']) {
-      const c = makeCell({ family, level: null, region: 'National', workModel: wm, employerType: 'all', credential: 'all' });
+      const c = makeCell({ family, module: 'all', level: null, region: 'National', workModel: wm, employerType: 'all', credential: 'all' });
       if (c) cells.push(c);
     }
     const ets = [...new Set(bench.filter((o) => o.role_family === family && o.employer_type).map((o) => o.employer_type!))];
     for (const et of ets) {
-      const c = makeCell({ family, level: null, region: 'National', workModel: 'all', employerType: et, credential: 'all' });
+      const c = makeCell({ family, module: 'all', level: null, region: 'National', workModel: 'all', employerType: et, credential: 'all' });
       if (c) cells.push(c);
     }
     const creds = [...new Set(bench.filter((o) => o.role_family === family && o.credential).map((o) => o.credential!))];
     for (const cred of creds) {
-      const c = makeCell({ family, level: null, region: 'National', workModel: 'all', employerType: 'all', credential: cred });
+      const c = makeCell({ family, module: 'all', level: null, region: 'National', workModel: 'all', employerType: 'all', credential: cred });
       if (c) cells.push(c);
+    }
+
+    const modules = [...new Set(
+      bench
+        .filter((o) => o.role_family === family && o.module)
+        .map((o) => o.module!),
+    )];
+    for (const module of modules) {
+      const national = makeCell({ family, module, level: null, region: 'National', workModel: 'all', employerType: 'all', credential: 'all' });
+      if (!national) continue;
+      cells.push(national);
+
+      for (const level of levels) {
+        const c = makeCell({ family, module, level, region: 'National', workModel: 'all', employerType: 'all', credential: 'all' });
+        if (c) cells.push(c);
+      }
+      for (const region of regions.filter((item) => item !== 'National')) {
+        const c = makeCell({ family, module, level: null, region, workModel: 'all', employerType: 'all', credential: 'all' });
+        if (c) cells.push(c);
+      }
+      for (const workModel of ['remote', 'hybrid', 'onsite']) {
+        const c = makeCell({ family, module, level: null, region: 'National', workModel, employerType: 'all', credential: 'all' });
+        if (c) cells.push(c);
+      }
     }
   }
 
@@ -357,7 +406,7 @@ export function publishBenchmark(obs: Observation[], jobs: JobRecord[], asOf: Da
   const LEVEL_SERIES = ['L1', 'L2', 'L3', 'L4'];
   const LEADERSHIP_SERIES = ['MGR', 'DIR', 'VP', 'EXEC'];
   const weak = (c: BenchmarkCell) => c.confidence_tier === 'modeled' || c.n_observations < DIRECT_N;
-  const baseCut = (c: BenchmarkCell) => c.work_model === 'all' && c.employer_type === 'all' && c.credential === 'all';
+  const baseCut = (c: BenchmarkCell) => c.module === 'all' && c.work_model === 'all' && c.employer_type === 'all' && c.credential === 'all';
   const dropped = new Set<BenchmarkCell>();
 
   function guardSeries(order: string[], pick: (rank: string) => BenchmarkCell | undefined) {
@@ -621,7 +670,7 @@ export function publishPulse(cells: BenchmarkCell[], jobs: JobRecord[], surveys:
   const iso = (d: number) => new Date(asOf.getTime() - d * 86400000).toISOString();
 
   const movers = cells
-    .filter((c) => c.region === 'National' && c.seniority_level === 'all' && c.work_model === 'all' && c.employer_type === 'all' && c.credential === 'all' && c.median_delta_90d !== null && Math.abs(c.median_delta_90d) >= 1000)
+    .filter((c) => c.module === 'all' && c.region === 'National' && c.seniority_level === 'all' && c.work_model === 'all' && c.employer_type === 'all' && c.credential === 'all' && c.median_delta_90d !== null && Math.abs(c.median_delta_90d) >= 1000)
     .sort((a, b) => Math.abs(b.median_delta_90d!) - Math.abs(a.median_delta_90d!))
     .slice(0, 3);
   movers.forEach((c, i) => {

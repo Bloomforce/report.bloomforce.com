@@ -65,6 +65,7 @@ async function main() {
       return {
         submitted_at: survey.submitted_at,
         role_family: survey.role_family,
+        module: survey.module,
         seniority_level: survey.seniority_level,
         role_key: survey.role_key,
         region: survey.region,
@@ -160,6 +161,7 @@ async function main() {
       observation_type: observation.observation_type,
       role_family: observation.role_family,
       role_key: observation.role_key,
+      module: observation.module,
       seniority_level: observation.seniority_level,
       region: observation.region,
       work_model: observation.work_model,

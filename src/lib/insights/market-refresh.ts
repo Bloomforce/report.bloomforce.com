@@ -78,12 +78,12 @@ async function loadCanonicalData(db: SupabaseClient, asOf: Date) {
     allRows(
       db,
       'comp_observations',
-      'id,source,observation_type,role_family,role_key,seniority_level,region,work_model,employer_type,credential,period,value,low,high,in_benchmark,survey_year,external_ref,raw_job_id,benchmark_cohort,measure_type,quality_flags',
+      'id,source,observation_type,role_family,role_key,module,seniority_level,region,work_model,employer_type,credential,period,value,low,high,in_benchmark,survey_year,external_ref,raw_job_id,benchmark_cohort,measure_type,quality_flags',
     ),
     allRows(
       db,
       'survey_responses',
-      'external_id,submitted_at,survey_year,role_family,seniority_level,role_key,region,state,years_experience,employer_type,work_model,base_comp,bonus_comp,credential,raw',
+      'external_id,submitted_at,survey_year,role_family,module,seniority_level,role_key,region,state,years_experience,employer_type,work_model,base_comp,bonus_comp,credential,raw',
       (query) => query.eq('status', 'accepted'),
     ),
   ]);
@@ -138,6 +138,11 @@ async function loadCanonicalData(db: SupabaseClient, asOf: Date) {
         observation_type: observationType,
         role_family: String(row.role_family),
         role_key: String(row.role_key),
+        module: stringOrNull(row.module) ?? (
+          row.raw_job_id
+            ? stringOrNull(classByJob.get(String(row.raw_job_id))?.module_primary)
+            : null
+        ),
         seniority_level: stringOrNull(row.seniority_level),
         region: stringOrNull(row.region),
         work_model: stringOrNull(row.work_model),
@@ -166,6 +171,7 @@ async function loadCanonicalData(db: SupabaseClient, asOf: Date) {
     submitted_at: String(row.submitted_at),
     survey_year: Number(row.survey_year),
     role_family: stringOrNull(row.role_family),
+    module: stringOrNull(row.module),
     seniority_level: stringOrNull(row.seniority_level),
     role_key: stringOrNull(row.role_key),
     region: stringOrNull(row.region),
@@ -221,7 +227,7 @@ export async function refreshPublishedMarketData(
       db,
       'benchmark_published',
       cells.map((cell) => ({ ...cell, updated_at: updatedAt })),
-      'role_key,region,work_model,employer_type,credential,period',
+      'role_key,module,region,work_model,employer_type,credential,period',
     );
     const { error: staleBenchmarkError } = await db
       .from('benchmark_published')

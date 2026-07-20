@@ -33,7 +33,7 @@ export function HeroBenchmarkSection() {
   const availableLevels = LEVEL_OPTIONS.filter(
     (l) =>
       l.value === 'ALL' ||
-      data.benchmarks.some((b) => b.roleFamily === profile.roleKey && b.seniority === l.value),
+      data.benchmarks.some((b) => b.roleFamily === profile.roleKey && b.module === 'all' && b.seniority === l.value),
   );
 
   function commitComp(value: string) {
