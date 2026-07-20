@@ -2,8 +2,11 @@ import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase/admin';
 import { deliverLead } from '@/lib/leads';
 import { makeUnlockCookie } from '@/lib/unlock';
+import {
+  compensationBounds,
+  normalizedRespondentKey,
+} from '@/lib/insights/survey-quality';
 
-const MANAGEMENT_FAMILIES = new Set(['MGR', 'DIR', 'VP', 'EXEC']);
 const DISPOSABLE_DOMAINS = new Set([
   'mailinator.com', 'guerrillamail.com', '10minutemail.com', 'tempmail.com', 'temp-mail.org',
   'yopmail.com', 'sharklasers.com', 'trashmail.com', 'getnada.com', 'dispostable.com',
@@ -28,8 +31,7 @@ export async function POST(request: Request) {
     }
 
     const base = Number(baseComp);
-    const isMgmt = MANAGEMENT_FAMILIES.has(roleFamily);
-    const [lo, hi] = isMgmt ? [60000, 700000] : [40000, 300000];
+    const [lo, hi] = compensationBounds(String(roleFamily));
     if (!Number.isFinite(base) || base < lo || base > hi) {
       return NextResponse.json(
         { error: `Base salary looks off — expected between $${(lo / 1000).toFixed(0)}k and $${(hi / 1000).toFixed(0)}k for this role` },
@@ -42,6 +44,8 @@ export async function POST(request: Request) {
     }
 
     const db = supabaseAdmin();
+    const providerSubmissionId = crypto.randomUUID();
+    const respondentKey = await normalizedRespondentKey(email);
 
     // Rate limit: max 5 codes per email per day
     const dayAgo = new Date(Date.now() - 86400000).toISOString();
@@ -54,8 +58,40 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Too many requests today — use the code we emailed you' }, { status: 429 });
     }
 
-    // Quarantined contribution: unlocks instantly, but never moves the public
-    // number until the promotion job accepts it.
+    const submittedAt = new Date().toISOString();
+    const rawPayload = {
+      roleFamily,
+      seniority,
+      employerType,
+      region,
+      baseComp: base,
+      bonusComp: bonus,
+      workModel: workModel ?? null,
+      module: module ?? null,
+      credential: credential ?? null,
+      contributedAt: submittedAt,
+    };
+    const { data: rawSubmission, error: rawError } = await db
+      .from('survey_submissions_raw')
+      .insert({
+        provider: 'bloomforce',
+        provider_form_id: 'report-contribution',
+        provider_submission_id: providerSubmissionId,
+        instrument_key: 'continuous_comp_contribution',
+        instrument_version: 1,
+        submitted_at: submittedAt,
+        payload: rawPayload,
+        processing_status: 'normalized',
+      })
+      .select('id')
+      .single();
+    if (rawError) {
+      console.error('[contribute] raw insert failed', rawError.message);
+      return NextResponse.json({ error: 'Something went wrong — try again' }, { status: 500 });
+    }
+
+    // Quarantined contribution: access unlocks immediately, while benchmark
+    // inclusion waits for the promotion and quality checks.
     const seniorityLevel = String(seniority);
     const roleKey = `${roleFamily}.${seniorityLevel}`;
     const { data: inserted, error: insertError } = await db
@@ -77,12 +113,24 @@ export async function POST(request: Request) {
         status: 'pending',
         verified: false,
         survey_year: new Date().getFullYear(),
-        raw: { contributed_at: new Date().toISOString() },
+        raw: { contributed_at: submittedAt },
+        instrument_key: 'continuous_comp_contribution',
+        instrument_version: 1,
+        provider_submission_id: providerSubmissionId,
+        raw_submission_id: rawSubmission.id,
+        respondent_key: respondentKey,
+        baseline_cohort: 'continuous',
+        is_baseline: false,
+        validation_notes: [],
       })
       .select('id')
       .single();
     if (insertError) {
       console.error('[contribute] insert failed', insertError.message);
+      await db
+        .from('survey_submissions_raw')
+        .update({ processing_status: 'error', processing_error: insertError.message })
+        .eq('id', rawSubmission.id);
       return NextResponse.json({ error: 'Something went wrong — try again' }, { status: 500 });
     }
 

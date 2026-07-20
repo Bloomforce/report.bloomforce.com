@@ -38,6 +38,11 @@ async function main() {
   console.log('— building observations');
   const obs = buildObservations(surveys, um, jobs, asOf);
   const posted = obs.filter((o) => o.observation_type === 'posted');
+  const surveyObservationByRef = new Map(
+    obs
+      .filter((o) => o.source === 'survey' && o.external_ref)
+      .map((o) => [o.external_ref!, o]),
+  );
   console.log(`observations=${obs.length} (actual=${obs.length - posted.length}, posted=${posted.length}, in_benchmark=${obs.filter((o) => o.in_benchmark).length})`);
 
   console.log('— publishing');
@@ -68,6 +73,7 @@ delete from public.freshness_published;`,
     surveys.map((s) => {
       const id = crypto.randomUUID();
       surveyIds.set(s.external_id, id);
+      const observation = surveyObservationByRef.get(s.external_id);
       return {
         id,
         submitted_at: s.submitted_at,
@@ -90,6 +96,12 @@ delete from public.freshness_published;`,
         survey_year: s.survey_year,
         credential: s.credential,
         external_id: s.external_id,
+        instrument_key: `baseline_${s.survey_year}`,
+        instrument_version: 1,
+        baseline_cohort: `baseline_${s.survey_year}`,
+        is_baseline: true,
+        validation_notes: observation?.quality_flags ?? [],
+        accepted_at: s.submitted_at,
       };
     }),
     60,
@@ -165,6 +177,10 @@ delete from public.freshness_published;`,
       external_ref: o.external_ref,
       raw_job_id: o.raw_job_id ? jobIds.get(o.raw_job_id) ?? null : null,
       survey_response_id: o.external_ref && o.source === 'survey' ? surveyIds.get(o.external_ref) ?? null : null,
+      benchmark_cohort: o.benchmark_cohort,
+      measure_type: o.measure_type,
+      quality_flags: o.quality_flags,
+      source_observed_at: `${o.period}T00:00:00Z`,
     })),
     150,
   );

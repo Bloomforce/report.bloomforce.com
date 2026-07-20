@@ -7,7 +7,10 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "seed": "tsx scripts/seed/run-all.ts"
+    "seed": "tsx scripts/seed/run-all.ts",
+    "data:backfill": "node --env-file=.env.local --import tsx scripts/backfill-canonical-data.ts",
+    "data:refresh": "node --env-file=.env.local --import tsx scripts/refresh-market-data.ts",
+    "typecheck": "tsc --noEmit"
   },
   "keywords": [],
   "author": "",

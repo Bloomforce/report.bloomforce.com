@@ -4,6 +4,7 @@ import type { SurveyRecord } from './load-survey';
 import type { UmObservation } from './load-um';
 import type { JobRecord } from './load-jobs';
 import { postedMidpoint } from './load-jobs';
+import { majorOutlierBounds } from '../../src/lib/insights/survey-quality';
 
 export interface Observation {
   id: string;
@@ -25,6 +26,9 @@ export interface Observation {
   external_ref: string | null;
   raw_job_id: string | null;
   company: string | null; // not persisted; used for per-employer caps
+  benchmark_cohort: string;
+  measure_type: 'base_salary' | 'posted_range_midpoint';
+  quality_flags: string[];
 }
 
 export const MIN_CELL_N = 5;
@@ -43,10 +47,10 @@ export function buildObservations(
 ): Observation[] {
   const obs: Observation[] = [];
   const period = `${asOf.toISOString().slice(0, 7)}-01`;
+  const postedCutoff = monthsBack(asOf, 12);
 
   for (const s of surveys) {
     if (s.base_comp === null || !s.role_family || !s.role_key) continue;
-    const total = s.base_comp + (s.bonus_comp ?? 0);
     obs.push({
       id: crypto.randomUUID(),
       source: 'survey',
@@ -59,14 +63,19 @@ export function buildObservations(
       employer_type: s.employer_type,
       credential: s.credential,
       period: `${s.submitted_at.slice(0, 7)}-01`,
-      value: total,
+      value: s.base_comp,
       low: null,
       high: null,
-      in_benchmark: s.survey_year === 2025, // the 2024 wave feeds trends, not the current benchmark
+      // The two completed survey waves are the permanent actual-pay baseline.
+      // New accepted contributions are added separately and never replace it.
+      in_benchmark: s.survey_year === 2024 || s.survey_year === 2025,
       survey_year: s.survey_year,
       external_ref: s.external_id,
       raw_job_id: null,
       company: null,
+      benchmark_cohort: `baseline_${s.survey_year}`,
+      measure_type: 'base_salary',
+      quality_flags: [],
     });
   }
 
@@ -91,6 +100,9 @@ export function buildObservations(
       external_ref: u.external_ref,
       raw_job_id: null,
       company: 'university_of_michigan',
+      benchmark_cohort: 'public_record_baseline',
+      measure_type: 'base_salary',
+      quality_flags: [],
     });
   }
 
@@ -121,12 +133,29 @@ export function buildObservations(
       value: mid.value,
       low: mid.low,
       high: mid.high,
-      in_benchmark: seen < 3,
+      in_benchmark: seen < 3 && Boolean(j.posted_date && j.posted_date >= postedCutoff),
       survey_year: null,
       external_ref: null,
       raw_job_id: j.source_job_id, // remapped to the raw_jobs uuid by run-all
       company: j.company,
+      benchmark_cohort: 'rolling_posted_12m',
+      measure_type: 'posted_range_midpoint',
+      quality_flags: [],
     });
+  }
+
+  // Keep the historical survey waves intact, excluding only major 3x-IQR
+  // anomalies within a role family. Rows remain stored for audit and review.
+  for (const family of new Set(obs.filter((o) => o.source === 'survey').map((o) => o.role_family))) {
+    const rows = obs.filter((o) => o.source === 'survey' && o.role_family === family && o.in_benchmark);
+    const bounds = majorOutlierBounds(rows.map((o) => o.value));
+    if (!bounds) continue;
+    for (const row of rows) {
+      if (row.value < bounds.low || row.value > bounds.high) {
+        row.in_benchmark = false;
+        row.quality_flags.push('major_outlier_3iqr');
+      }
+    }
   }
 
   // Per-family 1.5×IQR trim on the benchmark-eligible posted values
@@ -620,11 +649,12 @@ export function publishPulse(cells: BenchmarkCell[], jobs: JobRecord[], surveys:
       delta_unit: null,
     });
   }
-  const surveyN = surveys.filter((s) => s.survey_year === 2025).length;
+  const baselineN = surveys.filter((s) => s.survey_year === 2024 || s.survey_year === 2025).length;
+  const continuousN = surveys.length - baselineN;
   items.push({
     ts: iso(9),
     kind: 'new_data',
-    text: `${surveyN} verified survey responses anchor the current benchmark. The 2026 survey is collecting now`,
+    text: `${baselineN} verified responses form the permanent 2024-2025 baseline${continuousN ? `, with ${continuousN} newer responses added` : ''}`,
     role_key: null,
     delta_value: null,
     delta_unit: null,
@@ -644,6 +674,6 @@ export function publishFreshness(cells: BenchmarkCell[], surveys: SurveyRecord[]
     last_survey_ingest: surveys.map((s) => s.submitted_at).sort().at(-1) ?? null,
     last_pulse_refresh: postedDates.at(-1) ? `${postedDates.at(-1)}T00:00:00Z` : null,
     as_of: asOf.toISOString(),
-    window_label: `rolling 12 months · ${fmt(windowStart)} – ${fmt(asOf)}`,
+    window_label: `2024-2025 survey baseline + postings ${fmt(windowStart)} - ${fmt(asOf)}`,
   };
 }
