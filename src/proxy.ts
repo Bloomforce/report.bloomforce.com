@@ -8,8 +8,8 @@ function unauthorized(message = 'Authentication required') {
 }
 
 export function proxy(request: NextRequest) {
-  const expectedUser = process.env.INSIGHTS_ADMIN_USER;
-  const expectedPassword = process.env.INSIGHTS_ADMIN_PASSWORD;
+  const expectedUser = process.env.INSIGHTS_ADMIN_USER?.trim();
+  const expectedPassword = process.env.INSIGHTS_ADMIN_PASSWORD?.trim();
 
   if (!expectedUser || !expectedPassword) {
     if (process.env.NODE_ENV !== 'production') return NextResponse.next();
