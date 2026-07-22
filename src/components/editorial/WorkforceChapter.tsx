@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 import { DotSwarm, type SwarmDot, type SwarmLayout } from '@/components/scrolly/DotSwarm';
 import { EditorialChapter, type EditorialStoryStep } from './EditorialChapter';
 import { useBenchmark } from '@/hooks/useBenchmark';
+import { apportionWholePercentages } from '@/lib/insights/format';
 import type { SentimentCut } from '@/lib/insights/types';
 import styles from './editorial.module.css';
 
@@ -18,6 +19,7 @@ interface Group {
   key: string;
   label: string;
   value: number;
+  displayPercent: number;
   color: string;
 }
 
@@ -35,10 +37,15 @@ function broadCut(sentiment: SentimentCut[], metricKey: string): SentimentCut | 
 }
 
 function makeGroups(cut: SentimentCut | undefined, colors: string[]): Group[] {
-  return (cut?.values ?? []).map((item, index) => ({
+  const values = cut?.values ?? [];
+  const total = values.reduce((sum, item) => sum + Math.max(0, item.value), 0);
+  const normalized = values.map((item) => total > 0 ? Math.max(0, item.value) / total : 0);
+  const displayed = apportionWholePercentages(normalized);
+  return values.map((item, index) => ({
     key: item.key,
     label: item.label,
-    value: item.value,
+    value: normalized[index],
+    displayPercent: displayed[index],
     color: colors[index] ?? MIST,
   }));
 }
@@ -81,7 +88,7 @@ function WorkforceVisual({ frame, dots, mobile }: { frame: WorkforceFrame; dots:
           <div key={group.key}>
             <span>{group.label}</span>
             <i><b style={{ width: `${group.value * 100}%`, backgroundColor: group.color }} /></i>
-            <strong>{Math.round(group.value * 100)}%</strong>
+            <strong>{group.displayPercent}%</strong>
           </div>
         ))}
       </figure>
@@ -131,7 +138,7 @@ function WorkforceVisual({ frame, dots, mobile }: { frame: WorkforceFrame; dots:
         {frame.groups.map((group) => (
           <div key={group.key}>
             <i style={{ backgroundColor: group.color }} />
-            <strong>{Math.round(group.value * 100)}%</strong>
+            <strong>{group.displayPercent}%</strong>
             <span>{group.label}</span>
           </div>
         ))}

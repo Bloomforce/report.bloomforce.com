@@ -15,6 +15,27 @@ export function formatPct(value: number, digits = 0): string {
   return `${(value * 100).toFixed(digits)}%`;
 }
 
+export function apportionWholePercentages(values: number[]): number[] {
+  if (!values.length) return [];
+
+  const safeValues = values.map((value) => Math.max(0, Number.isFinite(value) ? value : 0));
+  const total = safeValues.reduce((sum, value) => sum + value, 0);
+  if (total === 0) return safeValues.map(() => 0);
+
+  const scaled = safeValues.map((value) => (value / total) * 100);
+  const rounded = scaled.map(Math.floor);
+  let remaining = 100 - rounded.reduce((sum, value) => sum + value, 0);
+  const remainderOrder = scaled
+    .map((value, index) => ({ index, remainder: value - Math.floor(value) }))
+    .sort((a, b) => b.remainder - a.remainder || a.index - b.index);
+
+  for (let index = 0; index < remaining; index += 1) {
+    rounded[remainderOrder[index].index] += 1;
+  }
+
+  return rounded;
+}
+
 export function formatDate(iso: string): string {
   return new Date(iso).toLocaleDateString('en-US', {
     month: 'short',

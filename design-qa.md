@@ -67,6 +67,8 @@
   - `/Users/zacha/.codex/visualizations/2026/05/11/019e175b-46a1-78a2-ac63-462fcd4acb44/report-editorial-qa/58-editorial-grouped-leadership-centered.png`
   - `/Users/zacha/.codex/visualizations/2026/05/11/019e175b-46a1-78a2-ac63-462fcd4acb44/report-editorial-qa/60-editorial-grouped-leadership-mobile-chart.png`
   - `/Users/zacha/.codex/visualizations/2026/05/11/019e175b-46a1-78a2-ac63-462fcd4acb44/report-editorial-qa/61-editorial-grouped-leadership-mobile-top.png`
+  - `/Users/zacha/.codex/visualizations/2026/05/11/019e175b-46a1-78a2-ac63-462fcd4acb44/report-editorial-qa/62-editorial-balanced-percentages-mobile.png`
+  - `/Users/zacha/.codex/visualizations/2026/05/11/019e175b-46a1-78a2-ac63-462fcd4acb44/report-editorial-qa/63-editorial-balanced-layoff-total.png`
 - Viewports: 1280x720 desktop, 1440x900 desktop, and 390x844 mobile.
 - State: public preview, live Supabase-backed benchmark data, national market, all levels, Application Analyst and BI / Reporting Developer selections tested.
 
@@ -79,6 +81,7 @@
 - Expanded leadership-level comparison: `/Users/zacha/.codex/visualizations/2026/05/11/019e175b-46a1-78a2-ac63-462fcd4acb44/report-editorial-qa/comparison-leadership-levels-expanded.png`
 - Employer-evidence leadership comparison: `/Users/zacha/.codex/visualizations/2026/05/11/019e175b-46a1-78a2-ac63-462fcd4acb44/report-editorial-qa/comparison-leadership-exa-evidence.png`
 - Grouped leadership-level comparison: `/Users/zacha/.codex/visualizations/2026/05/11/019e175b-46a1-78a2-ac63-462fcd4acb44/report-editorial-qa/comparison-leadership-grouped-levels.png`
+- Balanced-percentage comparison: `/Users/zacha/.codex/visualizations/2026/05/11/019e175b-46a1-78a2-ac63-462fcd4acb44/report-editorial-qa/comparison-balanced-percentages.png`
 - The full view confirms the intended adaptation: a persistent report frame, decisive headline scale, and immediate utility, expressed with Bloomforce's lighter palette and data density.
 - The focused view confirms the chapter pattern: narrative copy remains readable while the right-side visualization changes with the active step. The focused comparison was necessary because chart labels and sticky proportions were too small to judge in the full-width composite.
 
@@ -113,6 +116,7 @@
 12. Leadership-level expansion, P2: Associate Director, Senior Director, and Associate Vice President were initially grouped into adjacent title bands. Split all three into dedicated rows. Associate Director and Senior Director use direct salary-survey observations with early-signal labels; Associate VP uses a current Stony Brook Medicine Enterprise Applications posting with a visible source link and directional-data warning.
 13. Employer-evidence refinement, P2: the three added leadership levels relied on very small survey samples or a single posting. Re-ran the Exa search against exact healthcare IT titles and salary-bearing postings. Associate Director now shows a current MSK Epic range, Senior Director shows the observed span and median midpoint across University of Rochester and Sutter Health postings, and Associate VP combines Stony Brook Medicine and Advocate Health. Posting spans, midpoint methodology, annualization, links, sample sizes, and confidence remain explicit.
 14. Leadership-progression refinement, P2: the single Associate Director posting produced a midpoint above the mature Director and Executive Director benchmarks, making unlike evidence look directly comparable. Removed Associate Director and consolidated the ladder into three shared-scale tracks: Manager to Senior Manager, Director to Senior / Executive Director, and Associate / Assistant VP to Vice President. The Senior / Executive Director reference visibly combines 27 public records with three survey observations rather than presenting a synthetic median as a mature benchmark.
+15. Percentage-total correction, P2: categorical shares were rounded independently, allowing complete distributions such as the Layoff / RIF split to display as 101%. Added normalized largest-remainder rounding for whole-number display percentages. Work location, RTO response, AI impact, Layoff / RIF, and work-model workforce-share distributions now each total exactly 100% while their visual widths continue to use normalized underlying values.
 
 ## Tests
 
@@ -128,6 +132,7 @@
 - Leadership salary ladder: checked at 1280x720 and 390x844. Long Executive Director and Associate Vice President labels wrap or truncate safely, all ranges remain on-scale, and mobile `scrollWidth` remains 390px.
 - Grouped leadership levels: three progression tracks checked at 1280x720 and 390x844. Paired levels share one salary scale, labels remain legible, the Stony Brook and Advocate source links remain keyboard-accessible, and mobile `scrollWidth` remains 390px.
 - Employer-evidence refinement: Exa returned successful `200` responses after the account credit update. Exact-title salary results were reviewed before use; source links, posting-span labels, midpoint labels, and the 2,080-hour AVP annualization note were verified. Updated desktop and mobile salary rows remain on-scale, and mobile `scrollWidth` remains 390px.
+- Percentage totals: mobile editorial distributions verified as Work location `69 + 25 + 6 = 100`, RTO `62 + 28 + 10 = 100`, AI impact `45 + 43 + 12 = 100`, Layoff / RIF `70 + 30 = 100`, and work-model workforce share `50 + 22 + 28 = 100`. Mobile `scrollWidth` remains 390px.
 - Performance check: route entry JavaScript is approximately 89 KB gzip across shared and route chunks.
 
 ## Implementation Checklist

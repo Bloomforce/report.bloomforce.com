@@ -5,7 +5,7 @@ import { Lock } from 'lucide-react';
 import { EditorialChapter, type EditorialStoryStep } from './EditorialChapter';
 import { useBenchmark } from '@/hooks/useBenchmark';
 import { useGate } from '@/hooks/useGate';
-import { formatK } from '@/lib/insights/format';
+import { apportionWholePercentages, formatK } from '@/lib/insights/format';
 import { EMPLOYER_TYPE_LABELS, WORK_MODEL_LABELS } from '@/lib/insights/employer-types';
 import type { BenchmarkRow, Seniority } from '@/lib/insights/types';
 import styles from './editorial.module.css';
@@ -143,13 +143,14 @@ export function CostChapter() {
 
     if (step === 2) {
       const workModels = data.workModels.filter((item) => item.median !== null);
+      const workModelPercents = apportionWholePercentages(workModels.map((item) => item.share));
       return (
         <figure aria-label="Compensation and workforce share by work model">
           <figcaption className={styles.figureTitle}>Work model changes the market</figcaption>
-          {renderBars(workModels.map((item) => ({
+          {renderBars(workModels.map((item, index) => ({
             label: WORK_MODEL_LABELS[item.workModel] ?? item.workModel,
             value: item.median ?? 0,
-            note: `${Math.round(item.share * 100)}% of workforce`,
+            note: `${workModelPercents[index]}% of workforce`,
           })))}
           <p className={styles.visualFootnote}>National median compensation · all published roles</p>
         </figure>
