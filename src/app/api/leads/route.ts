@@ -2,6 +2,9 @@ import { NextResponse } from 'next/server';
 import { deliverLead, type Lead } from '@/lib/leads';
 
 export async function POST(request: Request) {
+  const startedAt = Date.now();
+  const requestId = request.headers.get('x-vercel-id') || crypto.randomUUID();
+
   try {
     const data = await request.json();
 
@@ -23,7 +26,7 @@ export async function POST(request: Request) {
       role,
       phone: phone || '',
       page: page || request.headers.get('referer') || 'https://report.bloomforce.com',
-      source: 'bloomforce-insights-2025',
+      source: 'bloomforce-insights-2026',
       timestamp: new Date().toISOString(),
       ...(typeof intent === 'string' && intent
         ? { notes: `Looking at the data for: ${intent === 'career' ? 'their own career' : intent === 'team' ? 'a team they are building' : 'their career and their team'}` }
@@ -31,11 +34,32 @@ export async function POST(request: Request) {
     };
 
     const { ok, deliveries } = await deliverLead(lead, request);
+    console.log(JSON.stringify({
+      level: ok ? 'info' : 'error',
+      message: 'Report access lead delivery completed',
+      route: '/api/leads',
+      requestId,
+      durationMs: Date.now() - startedAt,
+      deliveries: deliveries.map(({ target, ok: delivered, status, captureOnly }) => ({
+        target,
+        ok: delivered,
+        status,
+        captureOnly: Boolean(captureOnly),
+      })),
+    }));
     if (!ok) {
       return NextResponse.json({ error: 'Lead delivery failed', deliveries }, { status: 502 });
     }
     return NextResponse.json({ success: true });
-  } catch {
+  } catch (error) {
+    console.error(JSON.stringify({
+      level: 'error',
+      message: 'Report access lead submission failed',
+      route: '/api/leads',
+      requestId,
+      durationMs: Date.now() - startedAt,
+      error: error instanceof Error ? error.message : String(error),
+    }));
     return NextResponse.json({ error: 'Internal error' }, { status: 500 });
   }
 }

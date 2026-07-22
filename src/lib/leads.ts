@@ -194,7 +194,7 @@ async function sendToWebsiteLeadApi(lead: Lead): Promise<Delivery> {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      type: lead.source === 'insights-contribution' ? 'insights_contribution' : 'report_access_2025',
+      type: lead.source === 'insights-contribution' ? 'insights_contribution' : 'report_access_2026',
       source: lead.source,
       sourceDetail: 'report.bloomforce.com',
       name: `${lead.firstName} ${lead.lastName}`.trim(),
