@@ -36,11 +36,6 @@ function getErrorMessage(payload: unknown) {
   return '';
 }
 
-function isExplicitFailure(payload: unknown) {
-  if (!payload || typeof payload !== 'object' || !('success' in payload)) return false;
-  return payload.success === false || payload.success === 'false';
-}
-
 function escapeHtml(value: string) {
   return value
     .replaceAll('&', '&amp;')
@@ -238,40 +233,6 @@ export async function deliverLead(lead: Lead, request?: Request): Promise<{ ok: 
       body: JSON.stringify(lead),
     }).catch(() => null);
     deliveries.push({ target: 'crm', ok: Boolean(webhookResponse?.ok), status: webhookResponse?.status });
-  }
-
-  const formSubmitEndpoint =
-    process.env.FORMSUBMIT_REPORT_ENDPOINT ||
-    `https://formsubmit.co/ajax/${encodeURIComponent(FORM_SUBMIT_EMAIL)}`;
-  if (formSubmitEndpoint) {
-    const formSubmitResponse = await fetch(formSubmitEndpoint, {
-      method: 'POST',
-      headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        _subject: subjectFor(lead),
-        _template: 'table',
-        _captcha: 'false',
-        _replyto: lead.email,
-        name: `${lead.firstName} ${lead.lastName}`.trim(),
-        first_name: lead.firstName,
-        last_name: lead.lastName,
-        email: lead.email,
-        company: lead.company,
-        role: lead.role,
-        phone: lead.phone,
-        page: lead.page,
-        source: lead.source,
-        submitted_at: lead.timestamp,
-        ...(lead.notes ? { details: lead.notes } : {}),
-      }),
-    }).catch(() => null);
-    const payload = await formSubmitResponse?.json().catch(() => ({}));
-    deliveries.push({
-      target: 'formsubmit',
-      ok: Boolean(formSubmitResponse?.ok && !isExplicitFailure(payload)),
-      status: formSubmitResponse?.status,
-      message: getErrorMessage(payload),
-    });
   }
 
   if (!deliveries.some((delivery) => delivery.ok)) {
