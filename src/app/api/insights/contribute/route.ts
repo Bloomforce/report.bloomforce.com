@@ -142,14 +142,14 @@ export async function POST(request: Request) {
       survey_response_id: inserted.id,
     });
 
-    // Lead fan-out (fire-and-forget) — the contribution makes this a rich lead
+    // Lead fan-out — await it so serverless execution cannot end before CRM delivery.
     const notes = [
       'Insights contribution (tier-2 unlock):',
       `Role family: ${roleFamily} · Level: ${seniorityLevel}`,
       `Region: ${region} · Employer type: ${employerType}${workModel ? ` · ${workModel}` : ''}`,
       'Comp shared: yes (in benchmark quarantine)',
     ].join('\n');
-    deliverLead(
+    const leadDelivery = await deliverLead(
       {
         firstName: '',
         lastName: '',
@@ -163,7 +163,18 @@ export async function POST(request: Request) {
         notes,
       },
       request,
-    ).catch(() => {});
+    ).catch(() => ({ ok: false, deliveries: [] }));
+    console.log(JSON.stringify({
+      level: leadDelivery.ok ? 'info' : 'error',
+      message: 'Insights contribution lead delivery completed',
+      route: '/api/insights/contribute',
+      deliveries: leadDelivery.deliveries.map(({ target, ok, status, captureOnly }) => ({
+        target,
+        ok,
+        status,
+        captureOnly: Boolean(captureOnly),
+      })),
+    }));
 
     // Return-visit code email via Resend (best effort)
     if (process.env.RESEND_API_KEY) {
