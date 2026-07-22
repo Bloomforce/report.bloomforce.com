@@ -9,7 +9,14 @@ export interface SwarmDot {
 
 export interface SwarmLayout {
   /** Returns target position (0..1 space) + color + alpha for a dot. */
-  place: (dot: SwarmDot, index: number, total: number) => { x: number; y: number; color: string; alpha: number; r?: number };
+  place: (dot: SwarmDot, index: number, total: number) => {
+    x: number;
+    y: number;
+    color: string;
+    alpha: number;
+    r?: number;
+    shape?: 'dot' | 'person';
+  };
 }
 
 interface DotSwarmProps {
@@ -80,9 +87,24 @@ export function DotSwarm({ dots, layout, className }: DotSwarmProps) {
         if (Math.abs(t.x - s.x) + Math.abs(t.y - s.y) > 0.0005) moving++;
         ctx!.globalAlpha = Math.max(0, Math.min(1, s.alpha));
         ctx!.fillStyle = s.color;
-        ctx!.beginPath();
-        ctx!.arc(s.x * w, s.y * h, s.r * dpr, 0, Math.PI * 2);
-        ctx!.fill();
+        const x = s.x * w;
+        const y = s.y * h;
+        const radius = s.r * dpr;
+        if (t.shape === 'person') {
+          ctx!.beginPath();
+          ctx!.arc(x, y - radius * 0.72, radius * 0.5, 0, Math.PI * 2);
+          ctx!.fill();
+          ctx!.beginPath();
+          ctx!.arc(x, y + radius * 0.92, radius, Math.PI, 0);
+          ctx!.lineTo(x + radius, y + radius * 1.35);
+          ctx!.lineTo(x - radius, y + radius * 1.35);
+          ctx!.closePath();
+          ctx!.fill();
+        } else {
+          ctx!.beginPath();
+          ctx!.arc(x, y, radius, 0, Math.PI * 2);
+          ctx!.fill();
+        }
       });
       ctx!.globalAlpha = 1;
       if (moving > 0) raf = requestAnimationFrame(frame);

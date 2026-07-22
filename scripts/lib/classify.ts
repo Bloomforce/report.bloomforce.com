@@ -48,6 +48,39 @@ export const MODULE_KEYWORDS: Record<string, string[]> = {
   dorothy: ['dorothy', 'home health'], compass_rose: ['compass rose', 'care management'],
 };
 
+export const MODULE_LABELS: Record<string, string> = {
+  willow: 'Willow',
+  beaker: 'Beaker',
+  cadence: 'Cadence',
+  prelude: 'Prelude',
+  grand_central: 'Grand Central',
+  resolute_hb: 'Hospital Billing',
+  resolute_pb: 'Professional Billing',
+  ambulatory: 'Ambulatory',
+  clindoc: 'Clinical Documentation',
+  orders: 'Orders',
+  asap: 'ASAP',
+  optime: 'OpTime',
+  anesthesia: 'Anesthesia',
+  radiant: 'Radiant',
+  cupid: 'Cupid',
+  stork: 'Stork',
+  beacon: 'Beacon',
+  mychart: 'MyChart',
+  healthy_planet: 'Healthy Planet',
+  tapestry: 'Tapestry',
+  him: 'HIM',
+  claims: 'Claims',
+  cogito: 'Cogito',
+  bridges: 'Bridges',
+  security: 'Security',
+  wisdom: 'Wisdom',
+  kaleidoscope: 'Kaleidoscope',
+  bones: 'Bones',
+  dorothy: 'Dorothy',
+  compass_rose: 'Compass Rose',
+};
+
 const EPIC_SIGNAL = /\bepic\b|hyperspace|epiccare|mychart|cogito|caboodle|willow|beaker|clindoc|optime|radiant|cupid|tapestry|resolute|slicer\s?dicer|grand central|healthy planet|bridges\b/i;
 
 const HARD_EXCLUDE = /\b(rn|nurse|physician|therapist|pharmacist|technician|phlebotom|medical assistant|patient care|crna|paramedic|dietitian|surgeon|dentist|hygienist|social worker|case manager|chaplain|housekeep|custodian|food service|security officer|patient access rep|registrar|scheduler\b|front desk|call center|medical records clerk)\b/i;

@@ -1,4 +1,4 @@
-import { FAMILY_LABEL } from '../lib/classify';
+import { FAMILY_LABEL, MODULE_LABELS } from '../lib/classify';
 import { iqrTrim, median, percentile } from '../lib/normalize';
 import type { SurveyRecord } from './load-survey';
 import type { UmObservation } from './load-um';
@@ -653,7 +653,7 @@ export function publishDemand(jobs: JobRecord[], asOf: Date) {
   const prev30 = epic.filter((j) => j.posted_date! >= monthsBack(asOf, 2) && j.posted_date! < monthsBack(asOf, 1));
   const share = (arr: JobRecord[], fam: string) => (arr.length ? arr.filter((j) => j.classification.family === fam).length / arr.length : 0);
   const families = [...new Set(win.map((j) => j.classification.family!))];
-  return families
+  const roleRows = families
     .map((fam) => ({
       key: fam,
       label: FAMILY_LABEL[fam] ?? fam,
@@ -663,6 +663,31 @@ export function publishDemand(jobs: JobRecord[], asOf: Date) {
     }))
     .filter((d) => d.share >= 0.01)
     .sort((a, b) => b.share - a.share);
+
+  const applicationJobs = epic.filter((job) => job.classification.family === 'AA' && job.classification.module);
+  const moduleWindow = applicationJobs.filter((job) => job.posted_date! >= monthsBack(asOf, 12));
+  const moduleLast30 = applicationJobs.filter((job) => job.posted_date! >= monthsBack(asOf, 1));
+  const modulePrevious30 = applicationJobs.filter(
+    (job) => job.posted_date! >= monthsBack(asOf, 2) && job.posted_date! < monthsBack(asOf, 1),
+  );
+  const modules = [...new Set(moduleWindow.map((job) => job.classification.module!))];
+  const moduleShare = (rows: JobRecord[], module: string) => (
+    rows.length ? rows.filter((job) => job.classification.module === module).length / rows.length : 0
+  );
+  const moduleRows = modules
+    .map((module) => ({
+      key: module,
+      label: MODULE_LABELS[module] ?? module,
+      dimension: 'module',
+      share: Math.round(moduleShare(moduleWindow, module) * 1000) / 1000,
+      delta_30d: moduleLast30.length >= 20 && modulePrevious30.length >= 20
+        ? Math.round((moduleShare(moduleLast30, module) - moduleShare(modulePrevious30, module)) * 1000) / 1000
+        : null,
+    }))
+    .filter((row) => row.share >= 0.01)
+    .sort((a, b) => (b.delta_30d ?? -1) - (a.delta_30d ?? -1));
+
+  return [...roleRows, ...moduleRows];
 }
 
 export function publishPulse(cells: BenchmarkCell[], jobs: JobRecord[], surveys: SurveyRecord[], asOf: Date) {

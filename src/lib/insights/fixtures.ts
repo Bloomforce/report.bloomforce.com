@@ -364,13 +364,30 @@ const PULSE: PulseItem[] = [
 ];
 
 const DEMAND: DemandCell[] = [
-  { key: 'AA', label: 'Application Analyst', share: 0.31, delta30d: 0.04 },
-  { key: 'INT', label: 'Integration', share: 0.14, delta30d: 0.02 },
-  { key: 'BI', label: 'BI / Reporting', share: 0.12, delta30d: -0.01 },
-  { key: 'TECH', label: 'Technical / Infra', share: 0.16, delta30d: 0.01 },
-  { key: 'PM', label: 'Project Mgmt', share: 0.09, delta30d: 0.0 },
-  { key: 'CI', label: 'Clinical Informatics', share: 0.06, delta30d: 0.01 },
-  { key: 'MGR', label: 'Manager+', share: 0.12, delta30d: 0.03 },
+  { key: 'AA', label: 'Application Analyst', dimension: 'role_family', share: 0.31, delta30d: 0.04 },
+  { key: 'INT', label: 'Integration', dimension: 'role_family', share: 0.14, delta30d: 0.02 },
+  { key: 'BI', label: 'BI / Reporting', dimension: 'role_family', share: 0.12, delta30d: -0.01 },
+  { key: 'TECH', label: 'Technical / Infra', dimension: 'role_family', share: 0.16, delta30d: 0.01 },
+  { key: 'PM', label: 'Project Mgmt', dimension: 'role_family', share: 0.09, delta30d: 0.0 },
+  { key: 'CI', label: 'Clinical Informatics', dimension: 'role_family', share: 0.06, delta30d: 0.01 },
+  { key: 'MGR', label: 'Manager+', dimension: 'role_family', share: 0.12, delta30d: 0.03 },
+];
+
+// Latest classified Application Analyst market snapshot. The publishing job
+// replaces this fallback as soon as module-level demand rows are available.
+const MODULE_DEMAND: DemandCell[] = [
+  { key: 'willow', label: 'Willow', dimension: 'module', share: 0.084, delta30d: 0.086 },
+  { key: 'mychart', label: 'MyChart', dimension: 'module', share: 0.023, delta30d: 0.06 },
+  { key: 'healthy_planet', label: 'Healthy Planet', dimension: 'module', share: 0.027, delta30d: 0.036 },
+  { key: 'tapestry', label: 'Tapestry', dimension: 'module', share: 0.027, delta30d: 0.036 },
+  { key: 'orders', label: 'Orders', dimension: 'module', share: 0.015, delta30d: 0.036 },
+  { key: 'resolute_pb', label: 'Professional Billing', dimension: 'module', share: 0.072, delta30d: 0.026 },
+  { key: 'optime', label: 'OpTime', dimension: 'module', share: 0.019, delta30d: 0.013 },
+  { key: 'bridges', label: 'Bridges', dimension: 'module', share: 0.019, delta30d: 0.012 },
+  { key: 'ambulatory', label: 'Ambulatory', dimension: 'module', share: 0.152, delta30d: -0.02 },
+  { key: 'beaker', label: 'Beaker', dimension: 'module', share: 0.095, delta30d: -0.01 },
+  { key: 'cadence', label: 'Cadence', dimension: 'module', share: 0.114, delta30d: -0.009 },
+  { key: 'cogito', label: 'Cogito', dimension: 'module', share: 0.076, delta30d: -0.094 },
 ];
 
 const WORK_MODELS: WorkModelCut[] = [
@@ -396,6 +413,7 @@ export const FIXTURE_DATA: InsightsData = {
   sentiment: SENTIMENT,
   pulse: PULSE,
   demand: DEMAND,
+  moduleDemand: MODULE_DEMAND,
   workModels: WORK_MODELS,
   freshness: FRESHNESS,
   roles: ROLE_OPTIONS,

@@ -68,6 +68,7 @@ export interface PulseItem {
 export interface DemandCell {
   key: string;
   label: string;
+  dimension: 'role_family' | 'module';
   share: number;
   delta30d: number | null;
 }
@@ -100,6 +101,7 @@ export interface InsightsData {
   sentiment: SentimentCut[];
   pulse: PulseItem[];
   demand: DemandCell[];
+  moduleDemand: DemandCell[];
   workModels: WorkModelCut[];
   freshness: FreshnessMeta;
   roles: RoleOption[];

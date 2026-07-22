@@ -83,14 +83,17 @@ export async function fetchLiveInsightsData(): Promise<InsightsData> {
     deltaUnit: r.delta_unit ?? undefined,
   }));
 
-  const demandCells: DemandCell[] = (demand.data as Record<string, any>[])
+  const publishedDemand: DemandCell[] = (demand.data as Record<string, any>[])
     .filter((r) => r.key !== 'EXEC')
     .map((r) => ({
     key: r.key,
     label: ROLE_LABELS[r.key]?.label ?? r.label,
+    dimension: r.dimension === 'module' ? 'module' : 'role_family',
     share: Number(r.share),
     delta30d: r.delta_30d === null ? null : Number(r.delta_30d),
   }));
+  const demandCells = publishedDemand.filter((item) => item.dimension === 'role_family');
+  const moduleDemand = publishedDemand.filter((item) => item.dimension === 'module');
 
   const f = fresh.data as Record<string, any>;
   const freshness: FreshnessMeta = {
@@ -113,7 +116,17 @@ export async function fetchLiveInsightsData(): Promise<InsightsData> {
 
   const workModels: WorkModelCut[] = buildWorkModels(benchmarks);
 
-  return { benchmarks, sentiment, pulse: pulseItems, demand: demandCells, workModels, freshness, roles, regions };
+  return {
+    benchmarks,
+    sentiment,
+    pulse: pulseItems,
+    demand: demandCells,
+    moduleDemand: moduleDemand.length ? moduleDemand : FIXTURE_DATA.moduleDemand,
+    workModels,
+    freshness,
+    roles,
+    regions,
+  };
 }
 
 function groupSentiment(rows: Record<string, any>[]): SentimentCut[] {

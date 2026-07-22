@@ -52,15 +52,29 @@ function findCell(
   return { row: null, note: null };
 }
 
-export function BenchmarkProvider({ data, children }: { data: InsightsData; children: React.ReactNode }) {
-  const defaultRole = data.roles[0]?.roleKey ?? 'AA';
+interface BenchmarkProviderProps {
+  data: InsightsData;
+  children: React.ReactNode;
+  initialProfile?: BenchmarkProfile;
+  persistProfile?: boolean;
+}
+
+export function BenchmarkProvider({
+  data,
+  children,
+  initialProfile,
+  persistProfile = true,
+}: BenchmarkProviderProps) {
+  const defaultRole = initialProfile?.roleKey ?? data.roles[0]?.roleKey ?? 'AA';
   const [profile, setProfileState] = useState<BenchmarkProfile>({
     roleKey: defaultRole,
-    seniority: 'ALL',
-    region: 'National',
+    seniority: initialProfile?.seniority ?? 'ALL',
+    region: initialProfile?.region ?? 'National',
+    comp: initialProfile?.comp,
   });
 
   useEffect(() => {
+    if (!persistProfile) return;
     try {
       const stored = localStorage.getItem(PROFILE_STORAGE_KEY);
       if (stored) {
@@ -70,18 +84,19 @@ export function BenchmarkProvider({ data, children }: { data: InsightsData; chil
         }
       }
     } catch {}
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [data.roles, persistProfile]);
 
   const setProfile = useCallback((patch: Partial<BenchmarkProfile>) => {
     setProfileState((prev) => {
       const next = { ...prev, ...patch };
-      try {
-        localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(next));
-      } catch {}
+      if (persistProfile) {
+        try {
+          localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(next));
+        } catch {}
+      }
       return next;
     });
-  }, []);
+  }, [persistProfile]);
 
   const value = useMemo<BenchmarkContextValue>(() => {
     const guardedRole = profile.roleKey in GUARDED_ROLE_LABELS;
