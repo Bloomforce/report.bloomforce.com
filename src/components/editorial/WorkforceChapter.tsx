@@ -149,33 +149,27 @@ function WorkforceVisual({ frame, dots, mobile }: { frame: WorkforceFrame; dots:
 
 export function WorkforceChapter() {
   const { data } = useBenchmark();
-  const trainerMovement = data.demand
-    .filter((item) => item.key === 'PT' || item.key === 'CT')
-    .filter((item) => item.delta30d !== null);
-  const trainersCooling = trainerMovement.length > 0 && trainerMovement.every((item) => (item.delta30d ?? 0) < 0);
   const steps: EditorialStoryStep[] = [
     {
       label: 'Where work happens',
-      title: 'Flexibility shapes the offer.',
-      body: 'Remote and hybrid work now define the available talent market. Changing the work model changes both reach and the number of people willing to listen.',
+      title: 'The work model determines how many candidates you can reach.',
+      body: 'Remote roles can reach a national talent pool. Hybrid and on-site requirements reduce that pool to people who already live nearby or are willing to relocate.',
     },
     {
       label: 'The RTO response',
-      title: 'A return mandate creates a recruiting event.',
-      body: 'Most professionals would negotiate or begin looking rather than simply comply. A return mandate can quickly expand the candidate market for every competing health system.',
+      title: 'A return-to-office mandate can push employees into the job market.',
+      body: 'Most surveyed professionals said they would negotiate or begin looking for another role rather than simply comply. Employers planning a return mandate should expect some employees to reconsider whether they want to stay.',
     },
     {
-      label: 'Training roles',
-      title: 'Training professionals are watching the shift toward vendor-led instruction.',
-      body: 'Principal Trainers and Credentialed Trainers are weighing what AI-assisted content and more vendor-led instruction mean for their roles. Health systems still need people who can translate standard training into local workflows, adoption, and at-the-elbow support.',
-      evidence: trainersCooling
-        ? 'Both trainer role families cooled in the latest 30-day demand read. The visualization reflects the broader workforce view of AI.'
-        : 'The visualization reflects the broader workforce view of AI. Training-specific sentiment will deepen in the next survey wave.',
+      label: 'How employees view AI',
+      title: 'Most respondents expect AI to change the work, not simply replace it.',
+      body: 'The survey shows whether professionals expect AI to enhance their work, fundamentally change their role, have little impact, or replace part of the work. Hiring leaders should explain how AI will affect responsibilities, required skills, and career paths.',
+      evidence: 'This chart reflects responses from the broader surveyed EHR workforce.',
     },
     {
-      label: 'Organizational change',
-      title: 'The market may look stable while the people inside it are moving.',
-      body: 'Mergers, acquisitions, and reductions in force create experienced talent pools before job-seeking activity becomes visible in public channels.',
+      label: 'Layoffs and reductions in force',
+      title: 'Organizational changes can put experienced talent into the market.',
+      body: 'Layoffs and reductions in force can make experienced professionals available before they appear in applicant databases or begin applying publicly. Employers that understand where change is occurring can reach that talent earlier.',
     },
   ];
   const frames = useMemo<WorkforceFrame[]>(() => {
@@ -199,9 +193,9 @@ export function WorkforceChapter() {
     <EditorialChapter
       id="briefing-workforce"
       number="03"
-      eyebrow="What the workforce will accept"
-      title="The people behind the benchmark are making choices, too."
-      intro="Compensation opens the conversation. Flexibility, confidence in the work, and organizational stability determine who keeps listening."
+      eyebrow="Workforce expectations"
+      title="What candidates consider before accepting or leaving a role."
+      intro="Salary gets a candidate's attention, but it is not the only decision. Work location, return-to-office policies, AI, and organizational change all affect who will consider a role and who may enter the market."
       steps={steps}
       tone="ink"
       renderVisual={(step, mobile) => <WorkforceVisual frame={frames[step]} dots={dots} mobile={mobile} />}

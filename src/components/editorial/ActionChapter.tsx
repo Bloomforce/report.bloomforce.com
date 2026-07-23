@@ -12,18 +12,18 @@ import styles from './editorial.module.css';
 const STEPS: EditorialStoryStep[] = [
   {
     label: 'Price the real search',
-    title: 'Start with the market you are entering.',
-    body: 'Set the range around current evidence, the level of independence required, and the organizations competing for the same expertise.',
+    title: 'Price the role against the current market.',
+    body: 'Set the salary range using current evidence, the experience the work requires, and the employers competing for the same expertise.',
   },
   {
     label: 'Design the whole offer',
-    title: 'Treat flexibility and scope as hiring variables.',
-    body: 'Candidates compare where they work, what they own, and what comes next alongside compensation. Those choices determine the reachable market.',
+    title: 'Decide the work model and scope before recruiting begins.',
+    body: 'Candidates evaluate where they will work, what they will own, and where the role can lead. Making those decisions early gives the search team a clear and credible offer to take to the market.',
   },
   {
-    label: 'Move before the posting does',
-    title: 'Reach the people who are open but not applying.',
-    body: 'The strongest market is often quiet. Context, credible outreach, and a clear reason to move reach talent before a public job search begins.',
+    label: 'Reach beyond applicants',
+    title: 'Do not rely on the job posting alone.',
+    body: 'Many qualified professionals are willing to listen but are not actively applying. Direct outreach should explain why the role is relevant, what makes it different, and why it may be worth considering now.',
   },
 ];
 
@@ -347,9 +347,9 @@ export function ActionChapter() {
     <EditorialChapter
       id="briefing-actions"
       number="04"
-      eyebrow="What leaders should do"
-      title="Better market intelligence should change the search."
-      intro="The benchmark gives leaders a clearer foundation for decisions made before time, budget, and candidate attention are spent."
+      eyebrow="Hiring decisions"
+      title="Turn the market data into a better hiring plan."
+      intro="The compensation, demand, and workforce data point to three practical decisions: how to price the role, how to structure the offer, and how to reach the right candidates."
       steps={STEPS}
       renderVisual={(step) => renderVisual(step)}
       after={closing}

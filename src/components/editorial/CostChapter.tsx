@@ -21,26 +21,26 @@ const LEVEL_LABELS: Partial<Record<Seniority, string>> = {
 const STEPS: EditorialStoryStep[] = [
   {
     label: 'Application Analyst pay',
-    title: 'Start with the full Application Analyst salary range.',
-    body: 'The median provides a useful reference. The middle half shows where most qualified Application Analyst offers are competing, while the broader range captures meaningful differences in experience and scope.',
-    evidence: 'Every compensation figure in this chapter reflects the national Application Analyst benchmark.',
+    title: 'Start with the full salary distribution, not one average.',
+    body: 'The median is the midpoint of the market, but it does not describe every competitive offer. The middle 50% shows where most qualified candidates are paid, while the wider range reflects real differences in experience, responsibility, and specialization.',
+    evidence: 'All compensation figures in this chapter use the national Application Analyst benchmark.',
   },
   {
     label: 'The experience premium',
-    title: 'Application Analyst pay rises sharply with experience.',
-    body: 'Senior and lead-level analysts command a meaningful premium as specialized knowledge, independent delivery, and ownership of complex application work increase.',
-    evidence: 'Each rung is a national Application Analyst benchmark from the ongoing survey.',
+    title: 'Experience changes the salary a role can command.',
+    body: 'Senior and lead analysts are paid more because they can work independently, own complex applications, and solve problems that require deeper technical and operational knowledge.',
+    evidence: 'Each level is a national Application Analyst benchmark from the ongoing salary survey.',
   },
   {
-    label: 'Location as compensation',
-    title: 'Work model changes who you compete with.',
-    body: 'Remote roles enter a national market. Hybrid and on-site roles trade some reach for local availability, making flexibility part of the compensation decision.',
+    label: 'The work model',
+    title: 'Remote work expands the market you compete in.',
+    body: 'A remote role competes for talent nationally. Hybrid and on-site roles draw from a smaller geographic pool, so the required work model directly affects candidate reach and salary expectations.',
   },
   {
-    label: 'The employer effect',
-    title: 'Employer type can change the competitive range.',
-    body: 'Academic medical centers, children\'s hospitals, community health systems, and consulting firms often pay differently for similar Application Analyst work. The right peer group helps leaders set a range candidates will take seriously.',
-    evidence: 'The detailed employer comparison is available with report access.',
+    label: 'The peer group',
+    title: 'Compare your range with similar employers.',
+    body: 'Academic medical centers, children\'s hospitals, community health systems, and consulting firms may pay differently for similar work. Comparing the role with the right type of organization produces a more realistic hiring range.',
+    evidence: 'The detailed comparison by organization type is available with report access.',
   },
 ];
 
@@ -185,9 +185,9 @@ export function CostChapter() {
     <EditorialChapter
       id="briefing-cost"
       number="01"
-      eyebrow="What talent costs now"
-      title="A practical compensation view for Epic Application Analysts."
-      intro="This chapter uses Application Analyst as its reference role, showing how experience, flexibility, and employer type shape the salary range."
+      eyebrow="Compensation"
+      title="What health systems should expect to pay Epic Application Analysts."
+      intro="We begin with Application Analysts because they represent a large share of Epic hiring. Their market shows how experience, work model, and organization type change a competitive salary range."
       steps={STEPS}
       renderVisual={(step) => renderVisual(step)}
     />

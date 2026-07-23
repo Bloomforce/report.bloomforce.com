@@ -38,13 +38,13 @@ export function EditorialBriefing({ data }: { data: InsightsData }) {
           <EditorialHeader freshness={data.freshness} />
           <main>
             <EditorialHero />
-            <ChapterTransition number="01">A competitive offer starts with the market around the role.</ChapterTransition>
+            <ChapterTransition number="01">First, understand what qualified Epic talent costs today.</ChapterTransition>
             <CostChapter />
-            <ChapterTransition number="02">The next hiring challenge may already be inside the team.</ChapterTransition>
+            <ChapterTransition number="02">Then, see which roles and Epic applications are drawing more demand.</ChapterTransition>
             <DemandChapter />
-            <ChapterTransition number="03">The workforce is making its own calculation.</ChapterTransition>
+            <ChapterTransition number="03">Demand matters, but candidates are also deciding which opportunities they will consider.</ChapterTransition>
             <WorkforceChapter />
-            <ChapterTransition number="04">Use the market to make a better decision.</ChapterTransition>
+            <ChapterTransition number="04">Together, these signals show how to structure and run the search.</ChapterTransition>
             <ActionChapter />
           </main>
           <footer className={styles.editorialFooter}>

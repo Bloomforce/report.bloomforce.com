@@ -50,22 +50,22 @@ export function DemandChapter() {
   const steps: EditorialStoryStep[] = [
     {
       label: 'Thirty-day functional movement',
-      title: `${hottestFunction?.label ?? 'Specialized Epic demand'} is gaining momentum.`,
-      body: 'The 30-day view separates broad role volume from the specialized functions that are becoming harder to hire. It gives leaders an earlier signal of where competition is building.',
+      title: `${hottestFunction?.label ?? 'Specialized Epic demand'} increased the most among the functions we track.`,
+      body: 'The 30-day comparison shows which types of EHR work are taking a larger share of current job postings. A rising share is an early sign that more employers may soon be competing for the same talent.',
       evidence: hottestFunction
-        ? `${hottestFunction.label} moved ${points(hottestFunction.delta30d)} in the latest market comparison.`
+        ? `${hottestFunction.label} changed ${points(hottestFunction.delta30d)} in the latest 30-day comparison.`
         : 'Functional movement will publish when the next market comparison clears review.',
     },
     {
       label: 'The manager bottleneck',
-      title: 'Strong Epic Application Managers are hard to find.',
-      body: 'Management is often the clearest internal path for high-performing senior analysts who want more scope and compensation. The move requires a different skill set: coaching, delegation, accountability, and the judgment to lead through pressure.',
+      title: 'Epic Application Managers require two different kinds of experience.',
+      body: 'The strongest candidates need enough Epic depth to understand the work and enough leadership experience to coach, delegate, set priorities, and hold a team accountable. That combination makes the qualified pool smaller than the analyst pool.',
       evidence: `${managerDemand?.label ?? 'IT Manager'} roles account for ${managerShare}% of demand in the current market sample.`,
     },
     {
       label: 'Inside Application Analyst demand',
-      title: `${hottestModule?.label ?? 'Willow'} is the fastest-moving Epic application in the latest 30-day read.`,
-      body: `${hottestModule?.label ?? 'Willow'} moved ${points(hottestModule?.delta30d ?? null)} within Application Analyst demand${nextModules ? `, followed by ${nextModules}` : ''}. The detailed view shows which modules are accelerating, holding steady, or cooling.`,
+      title: `${hottestModule?.label ?? 'Willow'} demand increased the fastest among the Epic applications we track.`,
+      body: `${hottestModule?.label ?? 'Willow'} changed ${points(hottestModule?.delta30d ?? null)} within Application Analyst postings${nextModules ? `, followed by ${nextModules}` : ''}. This module-level view shows where competition is increasing, holding steady, or declining.`,
       evidence: 'Share one anonymous salary data point to unlock the full application-level movement view.',
     },
   ];
@@ -174,9 +174,9 @@ export function DemandChapter() {
     <EditorialChapter
       id="briefing-demand"
       number="02"
-      eyebrow="Where hiring gets difficult"
-      title="Where the Epic market is tightening."
-      intro="Broad demand establishes the market. Functional and application-level movement shows leaders where the next difficult search may come from."
+      eyebrow="Hiring demand"
+      title="Which Epic roles are becoming harder to fill."
+      intro="Next, we look at changes in current job postings. The 30-day view shows which functions, leadership roles, and Epic applications are taking a larger share of demand."
       steps={steps}
       renderVisual={(step) => renderVisual(step)}
       after={contribution}
